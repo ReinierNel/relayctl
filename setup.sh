@@ -120,13 +120,13 @@ dl_loading_bar=0
 {
         for dl_item in ${!download_urls[@]}
         do
-                export file_name="$dl_item"
+                dl_loading_bar=$(($dl_loading_bar + $dl_loading_bar_cunks))
                 echo "$dl_loading_bar"
                 curl --silent "${download_urls[$dl_item]}" --output "/etc/relayctl/$dl_item"
                 chmod +x "/etc/relayctl/$dl_item"
                 dl_loading_bar=$(($dl_loading_bar + $dl_loading_bar_cunks))
         done
-} | whiptail --gauge "Downloading $file_name from Github..." 6 50 0
+} | whiptail --gauge "Downloading files from Github..." 6 50 0
 
 chmod -x /etc/relayctl/schedule.list
 chmod -x /etc/relayctl/LICENSE
