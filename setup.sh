@@ -1,12 +1,23 @@
 #!/bin/bash
 
+if [ "$(whoami)" != "root" ]
+then
+        echo "[error] you must be root or run using sudo $0"
+        exit 1
+fi
+
 tui_h=20
 tui_w=75
 tui_t=4
 
-#declate -a download_urls=(
-#       "https://"
-#)
+declare -A download_urls=(
+        ["LICENSE"]="https://raw.githubusercontent.com/ReinierNel/relayctl/main/LICENSE"
+        ["functions.sh"]="https://raw.githubusercontent.com/ReinierNel/relayctl/main/functions.sh"
+        ["relayctl.sh"]="https://raw.githubusercontent.com/ReinierNel/relayctl/main/relayctl.sh"
+        ["schedule.list"]="https://raw.githubusercontent.com/ReinierNel/relayctl/main/schedule.list"
+        ["scheduler.sh"]="https://raw.githubusercontent.com/ReinierNel/relayctl/main/scheduler.sh"
+        ["settings.sh"]="https://raw.githubusercontent.com/ReinierNel/relayctl/main/settings.sh"
+)
 
 function check_exit_status() {
         if [ ! "$exitstatus" = 0 ]
@@ -15,6 +26,40 @@ function check_exit_status() {
                 exit 1
         fi
 }
+
+# licence agreement
+
+read -r -d '' licence_msg <<'EOF'
+MIT License
+
+Copyright (c) 2021 ReinierNel
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+Do you Agree?
+EOF
+
+licence_agreement=$(whiptail --title "Setup Relayctl" --yesno "$licence_msg" 40 75 3>&1 1>&2 2>&3)
+
+exitstatus=$?
+
+check_exit_status
 
 # relays connected?
 
@@ -64,5 +109,71 @@ exitstatus=$?
 
 check_exit_status
 
-echo ${gpio_select[@]}
-echo $schedule_frequency
+# setup folders
+mkdir /etc/relayctl
+
+# download needed files
+dl_count=${#download_urls[@]}
+dl_loading_bar_cunks=$((100 / 6))
+dl_loading_bar=0
+
+{
+        for dl_item in ${!download_urls[@]}
+        do
+                export file_name="$dl_item"
+                echo "$dl_loading_bar"
+                curl --silent "${download_urls[$dl_item]}" --output "/etc/relayctl/$dl_item"
+                chmod +x "/etc/relayctl/$dl_item"
+                dl_loading_bar=$(($dl_loading_bar + $dl_loading_bar_cunks))
+        done
+} | whiptail --gauge "Downloading $file_name from Github..." 6 50 0
+
+chmod -x /etc/relayctl/schedule.list
+chmod -x /etc/relayctl/LICENSE
+
+# update settings.sh
+
+sed -i "s/__GPIO_PIN__/${gpio_select[@]}/g" /etc/relayctl/settings.sh
+sed -i "s/__SCHEDULAR_FREQUEMCY__/$schedule_frequency/g" /etc/relayctl/settings.sh
+
+# testing relays
+read -r -d '' test_msg <<'EOF'
+We are running a test agains the relays to check if everting is conencted and woring.
+
+You should hear your relays clicking on and off
+
+see /etc/relayctl.log for more details
+
+Press OK to continue with the test
+EOF
+whiptail --title "Setup Relayctl" --msgbox "$test_msg" "$tui_h" "$tui_w"
+/etc/relayctl/relayctl.sh test
+
+# update rc.local
+cat > /tmp/rc.local <<EOF
+$(head -n -1 /etc/rc.local)
+
+sudo /etc/relayctl/relayctl.sh test
+sudo /etc/relayctl/scheduler.sh &
+
+exit 0
+EOF
+
+rm -f /etc/rc.local
+mv /tmp/rc.local /etc/rc.local
+chmod 755 /etc/rc.local
+
+# good bye
+read -r -d '' bye_msg <<'EOF'
+The Instilation was sucessfull...
+
+relayctl installed @ /etc/relayctl
+
+update your schedule @ /etc/relayct/schedule.list
+
+for more info goto https://github.com/ReinierNel/relayctl#readme
+
+Press OK to continue
+EOF
+whiptail --title "Setup Relayctl" --msgbox "$bye_msg" "$tui_h" "$tui_w"
+clear
