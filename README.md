@@ -82,8 +82,8 @@ Add an ```#``` in front of a schedule to disable it. To add a new schedule add a
 
 |**schedule name**|**start time**|**end time**|**day of week**|**month**|**relay_index**|**on cmd**|**off cmd**|
 |-----------------|--------------|------------|---------------|---------|---------------|----------|-----------|
-|Geyser1|10:25:00|11:45:00|1 2 3 4 5 6 7|1 2 3 4 5 6 7 8 9 10 11 12|0|/home/pi/relayctl.sh -r=0 on|/home/pi/relayctl.sh -r=0 off
-|Geyser2|15:00:00|16:30:00|1 2 3 4 5 6 7|1 2 3 4 5 6 7 8 9 10 11 12|1|/home/pi/relayctl.sh -r=1 on|/home/pi/relayctl.sh -r=1 off
+|Geyser1|10:25:00|11:45:00|1 2 3 4 5 6 7|1 2 3 4 5 6 7 8 9 10 11 12|0|/etc/relayctl/relayctl.sh -r=0 on|/etc/relayctl/relayctl.sh -r=0 off
+|Geyser2|15:00:00|16:30:00|1 2 3 4 5 6 7|1 2 3 4 5 6 7 8 9 10 11 12|1|/etc/relayctl/relayctl.sh -r=1 on|/etc/relayctl/relayctl.sh -r=1 off
 
 ### schedule name
 
