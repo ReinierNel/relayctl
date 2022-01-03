@@ -23,7 +23,7 @@ Simple bash scripts to control relays connected to your raspberry pi with a cron
 ## Installation
 ### Connect
 
-Connect your relay’s control circuit to one of the GPIO pins marked an **X** and GND, max 4 relays at this time.
+Connect your relay’s control circuit to one of the GPIO pins marked an **O** and GND, max 4 relays at this time.
 
 ```
               Pin 1 Pin2
@@ -34,16 +34,16 @@ Connect your relay’s control circuit to one of the GPIO pins marked an **X** a
             GND [ ] [ ] GPIO 15 / RXD0
         GPIO 17 [ ] [ ] GPIO 18
         GPIO 27 [ ] [ ] GND
-        GPIO 22 [x] [x] GPIO 23
-           +3V3 [ ] [x] GPIO 24
+        GPIO 22 [O] [O] GPIO 23
+           +3V3 [ ] [O] GPIO 24
  MOSI / GPIO 10 [ ] [ ] GND
- MISO / GPIO  9 [ ] [x] GPIO 25
+ MISO / GPIO  9 [ ] [O] GPIO 25
  SCLK / GPIO 11 [ ] [ ] GPIO  8 / CE0#
             GND [ ] [ ] GPIO  7 / CE1#
 ID_SD / GPIO  0 [ ] [ ] GPIO  1 / ID_SC
-        GPIO  5 [ ] [ ] GND
-        GPIO  6 [ ] [ ] GPIO 12
-        GPIO 13 [ ] [ ] GND
+        GPIO  5 [I] [ ] GND
+        GPIO  6 [I] [I] GPIO 12
+        GPIO 13 [I] [ ] GND
  MISO / GPIO 19 [ ] [ ] GPIO 16 / CE2#
         GPIO 26 [ ] [ ] GPIO 20 / MOSI
             GND [ ] [ ] GPIO 21 / SCLK
