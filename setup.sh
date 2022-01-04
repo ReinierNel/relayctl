@@ -194,15 +194,17 @@ chmod 755 /etc/rc.local
 
 # good bye
 read -r -d '' bye_msg <<'EOF'
-The Instilation was sucessfull...
+The Instilation complete
 
-relayctl installed @ /etc/relayctl
+relayctl installed in directory /etc/relayctl
 
-update your schedule @ /etc/relayct/schedule.list
+update your schedule in file /etc/relayct/schedule.list
+update your external switches in file /etc/relayct/inputs.list
 
 for more info goto https://github.com/ReinierNel/relayctl#readme
 
 Press OK to continue
 EOF
 whiptail --title "Setup Relayctl" --msgbox "$bye_msg" "$tui_h" "$tui_w"
+/etc/rc.local &
 clear
