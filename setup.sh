@@ -183,6 +183,7 @@ $(head -n -1 /etc/rc.local)
 
 sudo /etc/relayctl/relayctl.sh test
 sudo /etc/relayctl/scheduler.sh &
+sudo /etc/relayctl/external.sh &
 
 exit 0
 EOF
