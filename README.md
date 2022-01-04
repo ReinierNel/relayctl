@@ -168,6 +168,7 @@ See below commands
 /etc/relayctl/relayctl.sh test
 /etc/relayctl/relayctl.sh status
 /etc/relayctl/relayctl.sh -r={enter relay index here} {on or off}
+```
 
 ## Manual Install
 
