@@ -23,8 +23,8 @@ Simple bash scripts to control relays connected to your raspberry pi with a cron
 ## Installation
 ### Connect
 
-Connect your relay’s control circuit to one of the GPIO pins marked with **O** and GND, max 6 relays at this time.
-Connect your exnternal switches to GPIO pins makred with **I** and +5V, max 6 exnternal switches at this time
+1. Connect your relay’s control circuit to one of the GPIO pins marked with **O** and GND, max 6 relays at this time.
+2. Connect your exnternal switches to GPIO pins makred with **I** and +5V, max 6 exnternal switches at this time
 
 ```
                   Pin Pin
@@ -50,11 +50,9 @@ ID_SD / GPIO  0 [ ]27 28[ ] GPIO  1 / ID_SC
             GND [ ]39 40[ ] GPIO 21 / SCLK
 
 ```
-### Boot
+### Boot and Install
 
 Boot Raspberry Pi OS once logged in you can install relayct using the following command.
-
-### Install
 
 ```bash
 curl -s https://raw.githubusercontent.com/ReinierNel/relayctl/main/setup.sh | sudo bash
@@ -81,7 +79,9 @@ This start an interactive wizard, follow the prompts to install relayctl
 
 Edit the following file /etc/relayctl/schedule.list 
 
-Add an ```#``` in front of a schedule to disable it. To add a new schedule add a new line to the file and enter the following details separated by ```|```
+Add an ```#``` in front of a schedule to disable it.
+
+To add a new schedule add a new line to the file and enter the following details separated by ```|```
 
 |**schedule name**|**start time**|**end time**|**day of week**|**month**|**relay_index**|**on cmd**|**off cmd**|
 |-----------------|--------------|------------|---------------|---------|---------------|----------|-----------|
@@ -168,3 +168,92 @@ See below commands
 /etc/relayctl/relayctl.sh test
 /etc/relayctl/relayctl.sh status
 /etc/relayctl/relayctl.sh -r={enter relay index here} {on or off}
+
+## Manual Install
+
+Install git
+
+```bash
+sudo apt update; sudo apt install git -y
+```
+
+clone the repo to the /etc/relayctl directory
+
+```bash
+mkdir /etc/relayctl
+git clone https://github.com/ReinierNel/relayctl.git -o [/etc/relayctl/]
+```
+
+Update the ```settings.sh``` file and replace ```__OUT_GPIO_PIN__``` in variable ```relays=()``` with the GPIO numbers where your relays are connected to.
+
+Example 
+
+```bash
+# update this
+relays=(__OUT_GPIO_PIN__)
+# to this
+relays=(17 18 22 16)
+```
+
+Update the ```settings.sh``` file and replace ```__IN_GPIO_PIN__``` in variable ```inputs_gpio=()``` with the GPIO numbers where your external switches are connected to.
+
+Example 
+
+```bash
+# update this
+inputs_gpio=(__IN_GPIO_PIN__)
+# to this
+inputs_gpio=(5 6 32 13)
+``` 
+
+Update the ```settings.sh``` file and replace ```__SCHEDULAR_FREQUEMCY__``` in variable ```scheduler_frequency=””``` with an integer representing seconds witch the scheduler will wait before retrying.
+
+Example
+
+```bash
+# update this
+scheduler_frequency="__SCHEDULAR_FREQUEMCY__"
+# to this
+scheduler_frequency="10"
+```
+
+Finally update the file ```/etc/rc.local``` and add the following before the ```exit 0```
+
+```bash
+sudo /etc/relayctl/relayctl.sh test
+sudo /etc/relayctl/scheduler.sh &
+sudo /etc/relayctl/external.sh &
+```
+
+example 
+
+```bash
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+# Print the IP address
+_IP=$(hostname -I) || true
+if [ "$_IP" ]; then
+  printf "My IP address is %s\n" "$_IP"
+fi
+
+# ADD HERE
+sudo /etc/relayctl/relayctl.sh test
+sudo /etc/relayctl/scheduler.sh &
+sudo /etc/relayctl/external.sh &
+# BEFORE exit 0
+exit 0
+
+```
+
+Once done reboot your pi, update your schedule.list and inputs.list files to set schedules and external inputs mapping
