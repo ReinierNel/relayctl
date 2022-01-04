@@ -23,31 +23,31 @@ Simple bash scripts to control relays connected to your raspberry pi with a cron
 ## Installation
 ### Connect
 
-Connect your relay’s control circuit to one of the GPIO pins marked an **X** and GND, max 4 relays at this time.
+Connect your relay’s control circuit to one of the GPIO pins marked with **O** and GND, max 6 relays at this time.
+Connect your exnternal switches to GPIO pins makred with **I** and +5V, max 6 exnternal switches at this time
 
 ```
-              Pin 1 Pin2
-           +3V3 [ ] [ ] +5V
- SDA1 / GPIO  2 [ ] [ ] +5V
- SCL1 / GPIO  3 [ ] [ ] GND
-        GPIO  4 [ ] [ ] GPIO 14 / TXD0
-            GND [ ] [ ] GPIO 15 / RXD0
-        GPIO 17 [ ] [ ] GPIO 18
-        GPIO 27 [ ] [ ] GND
-        GPIO 22 [x] [x] GPIO 23
-           +3V3 [ ] [x] GPIO 24
- MOSI / GPIO 10 [ ] [ ] GND
- MISO / GPIO  9 [ ] [x] GPIO 25
- SCLK / GPIO 11 [ ] [ ] GPIO  8 / CE0#
-            GND [ ] [ ] GPIO  7 / CE1#
-ID_SD / GPIO  0 [ ] [ ] GPIO  1 / ID_SC
-        GPIO  5 [ ] [ ] GND
-        GPIO  6 [ ] [ ] GPIO 12
-        GPIO 13 [ ] [ ] GND
- MISO / GPIO 19 [ ] [ ] GPIO 16 / CE2#
-        GPIO 26 [ ] [ ] GPIO 20 / MOSI
-            GND [ ] [ ] GPIO 21 / SCLK
-             Pin 39 Pin 40
+                  Pin Pin
+           +3V3 [ ]1   2[ ] +5V
+ SDA1 / GPIO  2 [ ]3   4[ ] +5V
+ SCL1 / GPIO  3 [ ]5   6[ ] GND
+        GPIO  4 [ ]7   8[ ] GPIO 14 / TXD0
+            GND [ ]9   0[ ] GPIO 15 / RXD0
+        GPIO 17 [O]11 12[O] GPIO 18
+        GPIO 27 [O]13 14[ ] GND
+        GPIO 22 [O]15 16[O] GPIO 23
+           +3V3 [ ]17 18[O] GPIO 24
+ MOSI / GPIO 10 [ ]19 20[ ] GND
+ MISO / GPIO  9 [ ]21 22[I] GPIO 25
+ SCLK / GPIO 11 [ ]23 24[ ] GPIO  8 / CE0#
+            GND [ ]25 26[ ] GPIO  7 / CE1#
+ID_SD / GPIO  0 [ ]27 28[ ] GPIO  1 / ID_SC
+        GPIO  5 [I]29 30[ ] GND
+        GPIO  6 [I]31 32[I] GPIO 12
+        GPIO 13 [I]33 34[ ] GND
+ MISO / GPIO 19 [ ]35 36[ ] GPIO 16 / CE2#
+        GPIO 26 [I]37 38[ ] GPIO 20 / MOSI
+            GND [ ]39 40[ ] GPIO 21 / SCLK
 ```
 ### Boot
 
@@ -117,6 +117,44 @@ Command to execute when the start time, day of week and month conditions are met
 
 Command to execute when start time, day of week and month conditions are not met
 
+## Setup enxternal switches
+
+External switches are used to put on or off a relay if the switch state is open or closed
+
+Edit the following file /etc/relayctl/inputs.list to map switches to relays
+
+|**name**|**input index**|**relay index**|**mode**|**cmd**|
+|jojo 2400L ball valve|0|0|on|echo "hello world"|
+
+### name
+
+The name of the index mapping, arbitrary string to will appear in log files
+
+### input index
+
+The index of the input as set in ```settings.sh``` under variable ```inputs_gpio=()``` for instance if ```inputs_gpio=(5 6)``` 5 would be index 0 and 6 will be index 1
+
+## relay index
+
+The index of the relay as set in ```settings.sh``` under variable ```relays=()``` for instance if ```relays=(17 18)``` 17 would be index 0 and 18 would be index 1
+
+The input index is mapped to the relay index.
+
+## mode
+
+Action to perform when external input is closed open.
+
+mode **on** will switch on a relay if the external input is closed
+mode **off** will switch off an relay if the external input is closed
+mode **cmd** will run a command if the external input is closed and the cmd field is populated with a command
+
+## cmd
+
+This runs a command set under the cmd field if the external input is closed
+
+|:wanring:|**WIll only run if mode is set to cmd**|
+|---|---|
+
 ## Running Manual Relay Actions
 
 > :warning: if there is a schedule running it will overwrite your manual action
@@ -127,5 +165,3 @@ See below commands
 /etc/relayctl/relayctl.sh test
 /etc/relayctl/relayctl.sh status
 /etc/relayctl/relayctl.sh -r={enter relay index here} {on or off}
-
-

@@ -1,0 +1,2 @@
+#| name | input index | relay index | mode [on, off or cmd] | cmd
+jojo 2400L|0|0|on|echo "hello world"

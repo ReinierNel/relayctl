@@ -8,7 +8,7 @@ fi
 
 tui_h=20
 tui_w=75
-tui_t=4
+tui_t=6
 
 declare -A download_urls=(
         ["LICENSE"]="https://raw.githubusercontent.com/ReinierNel/relayctl/main/LICENSE"
@@ -17,6 +17,8 @@ declare -A download_urls=(
         ["schedule.list"]="https://raw.githubusercontent.com/ReinierNel/relayctl/main/schedule.list"
         ["scheduler.sh"]="https://raw.githubusercontent.com/ReinierNel/relayctl/main/scheduler.sh"
         ["settings.sh"]="https://raw.githubusercontent.com/ReinierNel/relayctl/main/settings.sh"
+	["external.sh"]="https://raw.githubusercontent.com/ReinierNel/relayctl/main/external.sh"
+	["inputs.list"]="https://raw.githubusercontent.com/ReinierNel/relayctl/main/external.sh"
 )
 
 function check_exit_status() {
@@ -75,7 +77,7 @@ exitstatus=$?
 
 check_exit_status
 
-# select gpio
+# select relay gpio
 
 read -r -d '' gpio_select_msg <<'EOF'
 Select which GPIO pins your relays control circuit are connected to.
@@ -86,10 +88,35 @@ EOF
 
 gpio_select=$(whiptail --title "Setup Relayctl" --checklist \
 "$gpio_select_msg" "$tui_h" "$tui_w" "$tui_t" \
+"17" "PIN 11" OFF \
+"18" "PIN 12" OFF \
+"27" "PIN 13" OFF \
 "22" "PIN 15" OFF \
 "23" "PIN 16" OFF \
 "24" "PIN 18" OFF \
+3>&1 1>&2 2>&3)
+
+exitstatus=$?
+
+check_exit_status
+
+# select inputs gpio
+
+read -r -d '' input_gpio_select_msg <<'EOF'
+Select which GPIO pins your external swicthes are connected to.
+https://www.raspberrypi.com/documentation/computers/os.html#gpio-pin
+
+      GPIO PIN
+EOF
+
+input_gpio_select=$(whiptail --title "Setup Relayctl" --checklist \
+"$input_gpio_select_msg" "$tui_h" "$tui_w" "$tui_t" \
 "25" "PIN 22" OFF \
+"5 " "PIN 29" OFF \
+"6 " "PIN 31" OFF \
+"12" "PIN 32" OFF \
+"13" "PIN 33" OFF \
+"26" "PIN 37" OFF \
 3>&1 1>&2 2>&3)
 
 exitstatus=$?
@@ -133,7 +160,8 @@ chmod -x /etc/relayctl/LICENSE
 
 # update settings.sh
 
-sed -i "s/__GPIO_PIN__/${gpio_select[@]}/g" /etc/relayctl/settings.sh
+sed -i "s/__OUT_GPIO_PIN__/${gpio_select[@]}/g" /etc/relayctl/settings.sh
+sed -i "s/__IN_GPIO_PIN__/${input_gpio_select[@]}/g" /etc/relayctl/settings.sh
 sed -i "s/__SCHEDULAR_FREQUEMCY__/$schedule_frequency/g" /etc/relayctl/settings.sh
 
 # testing relays
