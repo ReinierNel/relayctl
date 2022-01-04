@@ -18,7 +18,7 @@ declare -A download_urls=(
         ["scheduler.sh"]="https://raw.githubusercontent.com/ReinierNel/relayctl/main/scheduler.sh"
         ["settings.sh"]="https://raw.githubusercontent.com/ReinierNel/relayctl/main/settings.sh"
 	["external.sh"]="https://raw.githubusercontent.com/ReinierNel/relayctl/main/external.sh"
-	["inputs.list"]="https://raw.githubusercontent.com/ReinierNel/relayctl/main/external.sh"
+	["inputs.list"]="https://raw.githubusercontent.com/ReinierNel/relayctl/main/inputs.list"
 )
 
 function check_exit_status() {
@@ -141,7 +141,7 @@ mkdir /etc/relayctl
 
 # download needed files
 dl_count=${#download_urls[@]}
-dl_loading_bar_cunks=$((100 / 6))
+dl_loading_bar_cunks=$((100 / 8))
 dl_loading_bar=0
 
 {
