@@ -46,7 +46,7 @@ function load_inputs() {
                 	        on)
 					if [ "$gpio_pin_value" = "1" ]
 					then
-						log all i "[ load_inputs() ] switching on relay $relay_index on gpio pin ${relays[$relay_index]} on" "$log_file"
+						log file i "[ load_inputs() ] switching on relay $relay_index on gpio pin ${relays[$relay_index]} on" "$log_file"
 						"$wokring_dir"/relayctl.sh -r="$relay_index" on
 					else
 						"$wokring_dir"/relayctl.sh -r="$relay_index" off
@@ -56,7 +56,7 @@ function load_inputs() {
 					if [ "$gpio_pin_value" = "0" ]
 					then
                                                 "$wokring_dir"/relayctl.sh -r="$relay_index" on
-						log all i "[ load_inputs() ] switching on relay $relay_index on gpio pin ${relays[$relay_index]} on" "$log_file"
+						log file i "[ load_inputs() ] switching on relay $relay_index on gpio pin ${relays[$relay_index]} on" "$log_file"
                                         else
                                                 "$wokring_dir"/relayctl.sh -r="$relay_index" off
                                         fi
@@ -65,7 +65,7 @@ function load_inputs() {
                                 	cmd=$(cut -d '|' -f 5 <<< "$inputs")
 					if [ "$gpio_pin_value" = "1" ]
                                         then
-						log all i "[ load_inputs() ] mode set to cmd running command \"$cmd\"" "$log_file"
+						log file i "[ load_inputs() ] mode set to cmd running command \"$cmd\"" "$log_file"
 						evel "$cmd"
                                         fi
                         	;;
