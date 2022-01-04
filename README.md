@@ -183,8 +183,8 @@ sudo apt update; sudo apt install git -y
 clone the repo to the /etc/relayctl directory
 
 ```bash
-mkdir /etc/relayctl
-git clone https://github.com/ReinierNel/relayctl.git -o [/etc/relayctl/]
+cd /etc
+sudo git clone https://github.com/ReinierNel/relayctl.git
 ```
 
 Update the ```settings.sh``` file and replace ```__OUT_GPIO_PIN__``` in variable ```relays=()``` with the GPIO numbers where your relays are connected to.
