@@ -85,8 +85,8 @@ To add a new schedule add a new line to the file and enter the following details
 
 |**schedule name**|**start time**|**end time**|**day of week**|**month**|**relay_index**|**on cmd**|**off cmd**|
 |-----------------|--------------|------------|---------------|---------|---------------|----------|-----------|
-|Geyser1|10:25:00|11:45:00|1 2 3 4 5 6 7|1 2 3 4 5 6 7 8 9 10 11 12|0|/etc/relayctl/relayctl.sh -r=0 on|/etc/relayctl/relayctl.sh -r=0 off
-|Geyser2|15:00:00|16:30:00|1 2 3 4 5 6 7|1 2 3 4 5 6 7 8 9 10 11 12|1|/etc/relayctl/relayctl.sh -r=1 on|/etc/relayctl/relayctl.sh -r=1 off
+|Geyser1|10:25:00|11:45:00|1 2 3 4 5 6 7|01 02 03 04 05 06 07 08 09 10 11 12|0|/etc/relayctl/relayctl.sh -r=0 on|/etc/relayctl/relayctl.sh -r=0 off
+|Geyser2|15:00:00|16:30:00|1 2 3 4 5 6 7|01 02 03 04 05 06 07 08 09 10 11 12|1|/etc/relayctl/relayctl.sh -r=1 on|/etc/relayctl/relayctl.sh -r=1 off
 
 ### schedule name
 
@@ -106,7 +106,9 @@ The day of the week to execute on e.g. 1 = Monday, 2 = Tuesday etc.
 
 ### month
 
-The month to execute on e.g. 1 = January 2 = February, etc.
+The month to execute on e.g. 01 = January 02 = February, etc.
+
+> ⚠️ Note that month when in the single digets needs to be set with a 0 infront 01 for Jan 02 for Feb 03 March etc,
 
 ### relay_index
 
