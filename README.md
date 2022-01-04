@@ -125,6 +125,7 @@ External switches are used to put on or off a relay if the switch state is open 
 Edit the following file /etc/relayctl/inputs.list to map switches to relays
 
 |**name**|**input index**|**relay index**|**mode**|**cmd**|
+|---|---|---|---|---|
 |jojo 2400L ball valve|0|0|on|echo "hello world"|
 
 ### name
@@ -153,8 +154,7 @@ mode **cmd** will run a command if the external input is closed and the cmd fiel
 
 This runs a command set under the cmd field if the external input is closed
 
-|:wanring:|**WIll only run if mode is set to cmd**|
-|---|---|
+> :warning: WIll only run if mode is set to cmd
 
 ## Running Manual Relay Actions
 
