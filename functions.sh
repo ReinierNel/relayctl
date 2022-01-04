@@ -9,17 +9,19 @@ function log() {
                 [d]="[ $(date) ] [ debug ]"
                 [h]="[ $(date) ] [ hint ]"
         )
-
-        case "$1" in
-                screen)
-                        echo "${level[$2]} $3"
-                ;;
-                file)
-                        echo "${level[$2]} $3" >> "$4"
-                ;;
-                *)
-                        echo "${level[$2]} $3" | tee -a "$4"
-        esac
+        if [ "logging" = "enable" ]
+        then
+                case "$1" in
+                        screen)
+                                echo "${level[$2]} $3"
+                        ;;
+                        file)
+                                echo "${level[$2]} $3" >> "$4"
+                        ;;
+                        *)
+                                echo "${level[$2]} $3" | tee -a "$4"
+                esac
+        fi
 }
 
 function create_file() {
