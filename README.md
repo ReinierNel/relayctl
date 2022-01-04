@@ -68,12 +68,14 @@ This start an interactive wizard, follow the prompts to install relayctl
 ![Acknowledge that your Relays are connected](https://github.com/ReinierNel/relayctl/blob/main/docs/2.PNG?raw=true)
 #### 3. Select the GPIO Pins your relays are connected to
 ![Select the GPIO Pins your relays are connected to](https://github.com/ReinierNel/relayctl/blob/main/docs/3.PNG?raw=true)
-#### 4. Enter an integer to represent how often the scheduler sould poll recommended is 10 seconds
-![Select the GPIO Pins your relays are connected to](https://github.com/ReinierNel/relayctl/blob/main/docs/4.PNG?raw=true)
-#### 5. The next step will run a test to check if all your relays are working
-![run a test](https://github.com/ReinierNel/relayctl/blob/main/docs/5.PNG?raw=true)
-#### 6. End of installation wizard
-![End](https://github.com/ReinierNel/relayctl/blob/main/docs/6.PNG?raw=true)
+#### 4. Select the GPIO Pins your external switches are conencted to
+![Select the GPIO Pins your external switches are conencted to](https://github.com/ReinierNel/relayctl/blob/main/docs/4.PNG?raw=true)
+#### 5. Enter an integer to represent how often the scheduler sould poll recommended is 10 seconds
+![Select the GPIO Pins your relays are connected to](https://github.com/ReinierNel/relayctl/blob/main/docs/5.PNG?raw=true)
+#### 6. The next step will run a test to check if all your relays are working
+![run a test](https://github.com/ReinierNel/relayctl/blob/main/docs/6.PNG?raw=true)
+#### 7. End of installation wizard
+![End](https://github.com/ReinierNel/relayctl/blob/main/docs/7.PNG?raw=true)
 
 ## Update Schedule
 
@@ -158,7 +160,7 @@ This runs a command set under the cmd field if the external input is closed
 
 ## Running Manual Relay Actions
 
-> :warning: if there is a schedule running it will overwrite your manual action
+> :warning: if there is a schedule running or an external switch mapped thats on, this will overwrite your manual action
 
 See below commands
 
