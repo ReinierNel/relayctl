@@ -9,7 +9,7 @@ function log() {
                 [d]="[ $(date) ] [ debug ]"
                 [h]="[ $(date) ] [ hint ]"
         )
-        if [ "logging" = "enable" ]
+        if [ "$logging" = "enable" ]
         then
                 case "$1" in
                         screen)
