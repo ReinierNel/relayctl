@@ -192,6 +192,50 @@ rm -f /etc/rc.local
 mv /tmp/rc.local /etc/rc.local
 chmod 755 /etc/rc.local
 
+# ask sould we setup an API or not
+read -r -d '' api_msg <<'EOF'
+Sould we enable the API so that an authentecated remote client cant access this system
+
+Select Yes to install or No to continue without installing
+EOF
+
+licence_agreement=$(whiptail --title "Setup Relayctl" --yesno "$api_msg" 40 75 3>&1 1>&2 2>&3)
+
+exitstatus=$?
+
+if [ "$exitstatus" = 0 ]
+then
+	apt-get update
+
+	apt-get install -y nginx fcgiwrap
+
+	cp /usr/share/doc/fcgiwrap/examples/nginx.conf /etc/nginx/fcgiwrap.conf
+	mkdir /usr/lib/cgi-bin -p
+
+	cat > /etc/nginx/sites-available/default <<'EOF'
+server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+
+        root /var/www/html;
+
+        index index.html index.htm index.nginx-debian.html;
+
+        server_name _;
+
+        location / {
+                try_files $uri $uri/ =404;
+        }
+
+	include fcgiwrap.conf;
+}
+EOF
+
+	service nginx restart
+
+
+fi
+
 # good bye
 read -r -d '' bye_msg <<'EOF'
 The Instilation complete

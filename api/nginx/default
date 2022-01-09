@@ -1,0 +1,51 @@
+server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+
+        root /var/www/html;
+
+        index index.html index.htm index.nginx-debian.html;
+
+        server_name _;
+
+	# WEB UI
+	location / {
+                try_files $uri $uri/ =404;
+        }
+	# API
+	## Health
+        location /api/health { proxy_pass http://127.0.0.1/cgi-bin/health.cgi; }
+        ## Relay
+	location /api/relay/0/on { proxy_pass http://127.0.0.1/cgi-bin/relay.cgi?relay=0&action=on; }
+	location /api/relay/0/off { proxy_pass http://127.0.0.1/cgi-bin/relay.cgi?relay=0&action=off; }
+	location /api/relay/1/status { proxy_pass http://127.0.0.1/cgi-bin/relay.cgi?relay=1&action=status; }
+	location /api/relay/1/on { proxy_pass http://127.0.0.1/cgi-bin/relay.cgi?relay=1&action=on; }
+	location /api/relay/1/off { proxy_pass http://127.0.0.1/cgi-bin/relay.cgi?relay=1&action=off; }
+	location /api/relay/1/status { proxy_pass http://127.0.0.1/cgi-bin/relay.cgi?relay=1&action=status; }
+	location /api/relay/2/on { proxy_pass http://127.0.0.1/cgi-bin/relay.cgi?relay=2&action=on; }
+	location /api/relay/2/off { proxy_pass http://127.0.0.1/cgi-bin/relay.cgi?relay=2&action=off; }
+	location /api/relay/2/status { proxy_pass http://127.0.0.1/cgi-bin/relay.cgi?relay=2&action=status; }
+	location /api/relay/3/on { proxy_pass http://127.0.0.1/cgi-bin/relay.cgi?relay=3&action=on; }
+	location /api/relay/3/off { proxy_pass http://127.0.0.1/cgi-bin/relay.cgi?relay=3&action=off; }
+	location /api/relay/3/status { proxy_pass http://127.0.0.1/cgi-bin/relay.cgi?relay=3&action=status; }
+	location /api/relay/4/on { proxy_pass http://127.0.0.1/cgi-bin/relay.cgi?relay=4&action=on; }
+	location /api/relay/4/off { proxy_pass http://127.0.0.1/cgi-bin/relay.cgi?relay=4&action=off; }
+	location /api/relay/4/status { proxy_pass http://127.0.0.1/cgi-bin/relay.cgi?relay=4&action=status; }
+	location /api/relay/5/on { proxy_pass http://127.0.0.1/cgi-bin/relay.cgi?relay=5&action=on; }
+	location /api/relay/5/off { proxy_pass http://127.0.0.1/cgi-bin/relay.cgi?relay=5&action=off; }
+	location /api/relay/5/status { proxy_pass http://127.0.0.1/cgi-bin/relay.cgi?relay=5&action=status; }
+	## Schedule
+	location /api/schedule/list { proxy_pass http://127.0.0.1/cgi-bin/schedule.cgi?action=list; }
+	location /api/schedule/add { proxy_pass http://127.0.0.1/cgi-bin/schedule.cgi?action=add; }
+	location /api/schedule/delete { proxy_pass http://127.0.0.1/cgi-bin/schedule.cgi?action=delete; }
+	location /api/schedule/update { proxy_pass http://127.0.0.1/cgi-bin/schedule.cgi?action=update; }
+	location /api/schedule/disable { proxy_pass http://127.0.0.1/cgi-bin/schedule.cgi?action=disable; }
+	## External Swicthes
+	location /api/external-inputs/list { proxy_pass http://127.0.0.1/cgi-bin/external.cgi?action=list; }
+        location /api/external-inputs/add { proxy_pass http://127.0.0.1/cgi-bin/external.cgi?action=add; }
+        location /api/external-inputs/delete { proxy_pass http://127.0.0.1/cgi-bin/external.cgi?action=add; }
+        location /api/external-inputs/update { proxy_pass http://127.0.0.1/cgi-bin/external.cgi?action=add; }
+        location /api/external-inputs/disable { proxy_pass http://127.0.0.1/cgi-bin/external.cgi?action=add; }
+	
+        include fcgiwrap.conf;
+}

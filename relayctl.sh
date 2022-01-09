@@ -120,12 +120,15 @@ function check_gpio() {
 
                 if [ "$status" = "1" ]
                 then
-                        log all i "[ check_gpio() ] GPIO $1 on" "$log_file"
+                        log file i "[ check_gpio() ] GPIO $1 on" "$log_file"
+			echo "on"
                 else
-                        log all i "[ check_gpio() ] GPIO $1 off" "$log_file"
+                        log file i "[ check_gpio() ] GPIO $1 off" "$log_file"
+			echo "off"
                 fi
         else
-                log all i "[ check_gpio() ] GPIO $1 off" "$log_file"
+                log file i "[ check_gpio() ] GPIO $1 off" "$log_file"
+		echo "error"
         fi
 }
 
@@ -141,10 +144,7 @@ then
         relay_test
 elif [ -n "$check_status" ]
 then
-        for pin in "${relays[@]}"
-        do
-                check_gpio "$pin"
-        done
+        check_gpio "${relays[$relay_index]}"
 else
         main
 fi
