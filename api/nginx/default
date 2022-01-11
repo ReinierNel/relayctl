@@ -16,7 +16,7 @@ server {
         # API
         ## Health
         location /api/v1/health { proxy_pass http://127.0.0.1/cgi-bin/api.cgi?health; }
-	## Relay
+	## Relays
         location /api/v1/relays/0/on { proxy_pass http://127.0.0.1/cgi-bin/api.cgi?relays/0/on; }
 	location /api/v1/relays/0/off { proxy_pass http://127.0.0.1/cgi-bin/api.cgi?relays/0/off; }
 	location /api/v1/relays/0/status { proxy_pass http://127.0.0.1/cgi-bin/api.cgi?relays/0/status; }
@@ -35,10 +35,16 @@ server {
 	location /api/v1/relays/5/on { proxy_pass http://127.0.0.1/cgi-bin/api.cgi?relays/5/on; }
         location /api/v1/relays/5/off { proxy_pass http://127.0.0.1/cgi-bin/api.cgi?relays/5/off; }
         location /api/v1/relays/5/status { proxy_pass http://127.0.0.1/cgi-bin/api.cgi?relays/5/status; }
-        ## Schedule
+        ## Schedules
         location /api/v1/schedules { proxy_pass http://127.0.0.1/cgi-bin/api.cgi?schedules; }
+	location /api/v1/schedules/add { proxy_pass http://127.0.0.1/cgi-bin/api.cgi?schedules/add; }
+	location /api/v1/schedules/delete { proxy_pass http://127.0.0.1/cgi-bin/api.cgi?schedules/delete; }
+	location /api/v1/schedules/update { proxy_pass http://127.0.0.1/cgi-bin/api.cgi?schedules/update; }
         ## External Swicthes
         location /api/v1/switches { proxy_pass http://127.0.0.1/cgi-bin/api.cgi?switches; }
+	location /api/v1/switches/add { proxy_pass http://127.0.0.1/cgi-bin/api.cgi?switches/add; }
+	location /api/v1/switches/delete { proxy_pass http://127.0.0.1/cgi-bin/api.cgi?switches/delete; }
+	location /api/v1/switches/update { proxy_pass http://127.0.0.1/cgi-bin/api.cgi?switches/update; }
         
 	include fcgiwrap.conf;
 }
