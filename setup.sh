@@ -65,6 +65,10 @@ check_exit_status
 
 # relays connected?
 read -r -d '' welcome_msg <<'EOF'
+____ ____ _    ____ _   _ ____ ___ _    
+|__/ |___ |    |__|  \_/  |     |  |    
+|  \ |___ |___ |  |   |   |___  |  |___ 
+                                        
 This wizard will help you set up your relays on your Pi.
 
 Have you connected your relays to the Pi?.
