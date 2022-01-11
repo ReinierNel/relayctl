@@ -219,6 +219,7 @@ then
 	curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/main/api/nginx/default" --output "/etc/nginx/sites-available/default"
 	curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/main/api/nginx/fastcgi_params" --output "/etc/nginx/fastcgi_params"
 	cp /usr/share/doc/fcgiwrap/examples/nginx.conf /etc/nginx/fcgiwrap.conf
+	sed -i "s/user www-data/user root/g" /etc/nginx/nginx.conf
 	service nginx restart
 
 	api_key=$(hexdump -n 16 -e '4/4 "%08X" 1 "\n"' /dev/urandom)
