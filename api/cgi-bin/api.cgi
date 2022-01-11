@@ -3,110 +3,127 @@
 response_json="{"
 
 declare -A status_code=(
-	[200]="200 OK"
-	[201]="201 Created"
-	[202]="202 Accepted"
-	[400]="400 Bad Request"
-	[401]="401 Unauthorized"
-	[403]="403 Forbidden"
-	[404]="404 Not Found"
-	[405]="405 Method Not Allowed"
+        [200]="200 OK"
+        [201]="201 Created"
+        [202]="202 Accepted"
+        [400]="400 Bad Request"
+        [401]="401 Unauthorized"
+        [403]="403 Forbidden"
+        [404]="404 Not Found"
+        [405]="405 Method Not Allowed"
 )
 
 function content {
-	declare -a headers=(
-		"Content-Type: application/json"
-		"Status: $1"
-	)
+        declare -a headers=(
+                "Content-Type: application/json"
+                "Status: $1"
+        )
 
-	for header in "${headers[@]}"
-	do
-		printf "$header \n"
-	done
+        for header in "${headers[@]}"
+        do
+                printf "$header \n"
+        done
 
-	printf "\n $2"
+        printf "\n $2"
 }
 
 function request() {
 
-	case "$REQUEST_METHOD" in
-		GET)
-			status="${status_code[200]}"
+        case "$REQUEST_METHOD" in
+                GET)
+                        status="${status_code[200]}"
                         response_json+="\"status\": \"200 OK\","
                         response_json+="\"message\": {$1}"
-		;;
-		POST)
-			if [ "$CONTENT_LENGTH" -gt 0 ]
-	                then
-	                        data_in="$(cat)"
-	                        status="${status_code[200]}"
-	                        response_json+="\"status\": \"200 OK\","
-	                        response_json+="\"message\": {$1}"
-	                else
-	                        status="${status_code[400]}"
-	                        response_json+="\"status\": \"400 Bad Request\""
-	                fi
-		;;
-		*)
-			status="${status_code[405]}"
-	                response_json+="\"status\": \"405 Method Not Allowed\""
-		;;
-	esac
+                ;;
+                POST)
+                        if [ "$CONTENT_LENGTH" -gt 0 ]
+                        then
+                                data_in="$(cat)"
+                                status="${status_code[200]}"
+                                response_json+="\"status\": \"200 OK\","
+                                response_json+="\"message\": {$1}"
+                        else
+                                status="${status_code[400]}"
+                                response_json+="\"status\": \"400 Bad Request\""
+                        fi
+                ;;
+                *)
+                        status="${status_code[405]}"
+                        response_json+="\"status\": \"405 Method Not Allowed\""
+                ;;
+        esac
+}
+
+function auth() {
+        if [ -n "$HTTP_AUTHORIZATION" ]
+        then
+                stored_hash=$(</etc/relayctl/api.key)
+                sault=$(</etc/machine-id)
+                hash=$(echo "$sault-$HTTP_AUTHORIZATION" | openssl dgst -sha512 | sed 's/(stdin)= //g')
+                if [ "Bearer $stored_hash" = "Bearer $hash" ]
+                then
+                        no_auth="false"
+                else
+                        status="${status_code[403]}"
+                        response_json+="\"status\": \"403 Forbidden\""
+                        no_auth="true"
+                fi
+        fi
 }
 
 function router() {
-	if [ "$QUERY_STRING" = "" ]
-	then
-		status="${status_code[400]}"
-		response_json+="\"status\": \"400 Bad Request\""
-	else
-		path=$(echo -n "$QUERY_STRING" | cut -d '/' -f 1)
-		slug=$(echo -n "$QUERY_STRING" | cut -d '/' -f 2)
-		action=$(echo -n "$QUERY_STRING" | cut -d '/' -f 3)
+        if [ "$QUERY_STRING" = "" ]
+        then
+                status="${status_code[400]}"
+                response_json+="\"status\": \"400 Bad Request\""
+        else
+                path=$(echo -n "$QUERY_STRING" | cut -d '/' -f 1)
+                slug=$(echo -n "$QUERY_STRING" | cut -d '/' -f 2)
+                action=$(echo -n "$QUERY_STRING" | cut -d '/' -f 3)
 
-		case "$path" in
-			relays)
-				if ! [[ "$slug" =~ '^[0-9]+$' ]]
-				then
-					if [ "$action" = "on" ] || [ "$action" = "off" ] || [ "$action" = "status" ]
-					then
-						relays_output=$(/etc/relayctl/relayctl.sh -r="$slug" "$action")
-                                                request "\"$path\": \"$slug\", \"action\": \"$action\", \"log\": $relays_output"
-					else
-						status="${status_code[400]}"
-	                                        response_json+="\"status\": \"400 Bad Request\""
-					fi
-				else
-					status="${status_code[400]}"
+                case "$path" in
+                        relays)
+                                if ! [[ "$slug" =~ ^[0-9]+$ ]]
+                                then
+                                        if [ "$action" = "on" ] || [ "$action" = "off" ] || [ "$action" = "status" ]
+                                        then
+                                                relays_output=$(/etc/relayctl/relayctl.sh -r="$slug" "$action")
+                                                request "\"$path\": \"$slug\", \"action\": \"$action\", \"output\": $relays_output"
+                                        else
+                                                status="${status_code[400]}"
+                                                response_json+="\"status\": \"400 Bad Request\""
+                                        fi
+                                else
+                                        status="${status_code[400]}"
                                         response_json+="\"status\": \"400 Bad Request\""
-				fi
-			;;
-			schedules)
-				if [ "$slug" = "" ]
-				then
-					schedule_list="["
-					while read -r schedule
-				        do
-				                if [[ "$schedule" != "#"* ]]
-				                then
-				                        name=$(cut -d '|' -f 1 <<< "$schedule")
-				                        start_time=$(cut -d '|' -f 2 <<< "$schedule")
-				                        end_time=$(cut -d '|' -f 3 <<< "$schedule")
-				                        days=$(cut -d '|' -f 4 <<< "$schedule")
-				                        relay_index=$(cut -d '|' -f 5 <<< "$schedule")
-				                        action=$(cut -d '|' -f 6 <<< "$schedule")
+                                fi
+                        ;;
+                        schedules)
+                                if [ "$slug" = "" ]
+                                then
+                                        schedule_list="["
+                                        while read -r schedule
+                                        do
+                                                if [[ "$schedule" != "#"* ]]
+                                                then
+                                                        name=$(cut -d '|' -f 1 <<< "$schedule")
+                                                        start_time=$(cut -d '|' -f 2 <<< "$schedule")
+                                                        end_time=$(cut -d '|' -f 3 <<< "$schedule")
+                                                        days=$(cut -d '|' -f 4 <<< "$schedule")
+                                                        relay_index=$(cut -d '|' -f 5 <<< "$schedule")
+                                                        action=$(cut -d '|' -f 6 <<< "$schedule")
 
-							schedule_list+="{\"name\": \"$name\", \"start_time\": \"$start_time\", \"end_time\": \"$end_time\", \"days\": \"$days\", \"$relay_index\": \"$relay_index\", \"action\": \"$action\"},"
-				                fi
-				        done < "/etc/relayctl/schedule.list"
+                                                        schedule_list+="{\"name\": \"$name\", \"start_time\": \"$start_time\", \"end_time\": \"$end_time\", \"days\": \"$days\", \"$relay_index\": \"$relay_index\", \"action\": \"$action\"},"
+                                                fi
+                                        done < "/etc/relayctl/schedule.list"
 
-					schedule_list+="]"
-					schedule_list=$(echo "$schedule_list" | sed 's/\(.*\),/\1 /')
-					request "\"$path\": $schedule_list, \"action\": \"list\""
-				fi
-			;;
-			switches)
-				if [ "$slug" = "" ]
+                                        schedule_list+="]"
+                                        schedule_list=$(echo "$schedule_list" | sed 's/\(.*\),/\1 /')
+                                        request "\"$path\": $schedule_list, \"action\": \"list\""
+                                fi
+                        ;;
+                        switches)
+                                if [ "$slug" = "" ]
                                 then
                                         switches_list="["
                                         while read -r switches
@@ -127,24 +144,27 @@ function router() {
                                         switches_list=$(echo "$switches_list" | sed 's/\(.*\),/\1 /')
                                         request "\"$path\": $switches_list, \"action\": \"list\""
                                 fi
-			;;
-			health)
-				request "\"$path\": \"$(uptime)\""
-			;;
-			*)
-				status="${status_code[404]}"
-                        	response_json+="\"status\": \"404 Not Found\""
-			;;
-		esac
+                        ;;
+                        health)
+                                request "\"$path\": \"$(uptime)\""
+                        ;;
+                        *)
+                                status="${status_code[404]}"
+                                response_json+="\"status\": \"404 Not Found\""
+                        ;;
+                esac
 
-	fi
+        fi
 }
 
 function main() {
-	#request "\"testing\": \"true\", \"data\": {$data_in}"
-	router
-	response_json+="}"
-	content "$status" "$response_json"
+        auth
+        if [ "$no_auth" = "false" ]
+        then
+                router
+        fi
+        response_json+="}"
+        content "$status" "$response_json"
 }
 
 main
