@@ -64,7 +64,6 @@ exitstatus=$?
 check_exit_status
 
 # relays connected?
-
 read -r -d '' welcome_msg <<'EOF'
 This wizard will help you set up your relays on your Pi.
 
@@ -78,7 +77,6 @@ exitstatus=$?
 check_exit_status
 
 # select relay gpio
-
 read -r -d '' gpio_select_msg <<'EOF'
 Select which GPIO pins your relays control circuit are connected to.
 https://www.raspberrypi.com/documentation/computers/os.html#gpio-pin
@@ -101,7 +99,6 @@ exitstatus=$?
 check_exit_status
 
 # select inputs gpio
-
 read -r -d '' input_gpio_select_msg <<'EOF'
 Select which GPIO pins your external swicthes are connected to.
 https://www.raspberrypi.com/documentation/computers/os.html#gpio-pin
@@ -124,7 +121,6 @@ exitstatus=$?
 check_exit_status
 
 # set scheduler frequency
-
 read -r -d '' schedule_msg1 <<'EOF'
 Enter a value in seconds how often should the scheduler check
 if a relay sould be on or off recommended 10 seconds
@@ -159,7 +155,6 @@ chmod -x /etc/relayctl/schedule.list
 chmod -x /etc/relayctl/LICENSE
 
 # update settings.sh
-
 sed -i "s/__OUT_GPIO_PIN__/${gpio_select[@]}/g" /etc/relayctl/settings.sh
 sed -i "s/__IN_GPIO_PIN__/${input_gpio_select[@]}/g" /etc/relayctl/settings.sh
 sed -i "s/__SCHEDULAR_FREQUEMCY__/$schedule_frequency/g" /etc/relayctl/settings.sh
@@ -194,7 +189,12 @@ chmod 755 /etc/rc.local
 
 # ask sould we setup an API or not
 read -r -d '' api_msg <<'EOF'
-Sould we enable the API so that an authentecated remote client cant access this system
+Sould we enable the the REST API required by UniPi
+
+The following software will be install
+
+* nginx    - web server
+* fcgiwrap - fastCGI wrapper
 
 Select Yes to install or No to continue without installing
 EOF
@@ -206,34 +206,23 @@ exitstatus=$?
 if [ "$exitstatus" = 0 ]
 then
 	apt-get update
-
 	apt-get install -y nginx fcgiwrap
 
-	cp /usr/share/doc/fcgiwrap/examples/nginx.conf /etc/nginx/fcgiwrap.conf
-	mkdir /usr/lib/cgi-bin -p
+	usermod -a -G gpio www-data
+	mkdir -p /usr/lib/cgi-bin
 
-	cat > /etc/nginx/sites-available/default <<'EOF'
-server {
-        listen 80 default_server;
-        listen [::]:80 default_server;
-
-        root /var/www/html;
-
-        index index.html index.htm index.nginx-debian.html;
-
-        server_name _;
-
-        location / {
-                try_files $uri $uri/ =404;
-        }
-
-	include fcgiwrap.conf;
-}
-EOF
+	curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/feature/api-server/api/cgi-bin/api.cgi" --output "/usr/lib/cgi-bin/api.cgi"
+	chmow www-data:www-data /usr/lib/cgi-bin/api.cgi
+	chmod +x /usr/lib/cgi-bin/api.cgi
+	rm -f /etc/nginx/sites-available/default
+	curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/feature/api-server/api/nginx/default" --output "/etc/nginx/sites-available/default"
+	curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/feature/api-server/api/nginx/fastcgi.conf" --output "/etc/nginx/fastcgi.conf"
 
 	service nginx restart
 
+	api-key=$(hexdump -n 16 -e '4/4 "%08X" 1 "\n"' /dev/urandom)
 
+	echo -n "$api-key" > /etc/relayctl/api.key
 fi
 
 # good bye
@@ -244,6 +233,8 @@ relayctl installed in directory /etc/relayctl
 
 update your schedule in file /etc/relayct/schedule.list
 update your external switches in file /etc/relayct/inputs.list
+
+API key: "$api-key"
 
 for more info goto https://github.com/ReinierNel/relayctl#readme
 
