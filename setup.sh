@@ -211,12 +211,12 @@ then
 	usermod -a -G gpio www-data
 	mkdir -p /usr/lib/cgi-bin
 
-	curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/feature/api-server/api/cgi-bin/api.cgi" --output "/usr/lib/cgi-bin/api.cgi"
+	curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/main/api/cgi-bin/api.cgi" --output "/usr/lib/cgi-bin/api.cgi"
 	chmow www-data:www-data /usr/lib/cgi-bin/api.cgi
 	chmod +x /usr/lib/cgi-bin/api.cgi
 	rm -f /etc/nginx/sites-available/default
-	curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/feature/api-server/api/nginx/default" --output "/etc/nginx/sites-available/default"
-	curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/feature/api-server/api/nginx/fastcgi_params" --output "/etc/nginx/fastcgi_params"
+	curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/main/api/nginx/default" --output "/etc/nginx/sites-available/default"
+	curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/main/api/nginx/fastcgi_params" --output "/etc/nginx/fastcgi_params"
 	cp /usr/share/doc/fcgiwrap/examples/nginx.conf /etc/nginx/fcgiwrap.conf
 	service nginx restart
 
