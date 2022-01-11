@@ -39,3 +39,28 @@ function string_2_array() {
 
 	done
 }
+
+
+# must redeclare array as input array-2-json "$(declare -p some_array)"
+function array-2-json() {
+
+        declare -A input_array=${1#*=}
+        json_string="{"
+        loop_counter=0
+        array_counter="${#input_array[@]}"
+
+        for element in "${!input_array[@]}"
+        do
+                ((loop_counter="$loop_counter" + 1))
+                if [ "$loop_counter" = "$array_counter" ]
+                then
+                        json_string+="\"$element\":\"${input_array[$element]}\""
+                else
+                        json_string+="\"$element\":\"${input_array[$element]}\","
+                fi
+        done
+
+        json_string+="}"
+
+        echo "$json_string"
+}

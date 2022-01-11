@@ -50,10 +50,10 @@ then
                 then
                         case "$arg_to_check" in
                                 relay_index)
-					log "$log_where" e "{ \"script\": \"$0\", \"validation\": \"argument --relay= missing\" }" "$log_file"
+					log "all" e "{ \"script\": \"$0\", \"validation\": \"argument --relay= missing\" }" "$log_file"
                                 ;;
                                 action)
-					log "$log_where" e "{ \"script\": \"$0\", \"validation\": \"no action set use 'on' or 'off'\" }" "$log_file"
+					log "all" e "{ \"script\": \"$0\", \"validation\": \"no action set use 'on' or 'off'\" }" "$log_file"
                                 ;;
                         esac
                         log screen h "{ \"usage\": \"$0 --relay=0 on\" }"

@@ -1,31 +1,31 @@
 #!/bin/bash
 
-SCRIPT_DIR=$(cd $(dirname "${BASH_SOURCE[0]}") &> /dev/null && pwd)
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 
 # setup share variables
-. "$SCRIPT_DIR"/settings.sh
+source "$SCRIPT_DIR"/settings.sh
 
 # setup shared functions
-. "$SCRIPT_DIR"/functions.sh
+source "$SCRIPT_DIR"/functions.sh
 
 log_file="$log_file_path"
 
 # inti logfile
 create_file "$log_file"
-log file i "[ log() ] $0 executied by $(whoami)" "$log_file"
+log "$log_where" i "{ \"script\": \"$0\", \"executied_by\": \"$(whoami)\" }" "$log_file"
 
 # init gpio
 function init_gpio() {
         if [ ! -d "/sys/class/gpio/gpio$1" ]
         then
                 echo "$1" > /sys/class/gpio/export
-                echo "in" > /sys/class/gpio/gpio$1/direction
-		echo "0" > /sys/class/gpio/gpio$1/active_low
+                echo "in" > /sys/class/gpio/gpio"$1"/direction
+		echo "0" > /sys/class/gpio/gpio"$1"/active_low
         fi
 }
 
 function read_gpio_value() {
-	cat /sys/class/gpio/gpio$1/value
+	cat /sys/class/gpio/gpio"$1"/value
 }
 
 # read input map file
@@ -46,7 +46,7 @@ function load_inputs() {
                 	        on)
 					if [ "$gpio_pin_value" = "1" ]
 					then
-						log file i "[ load_inputs() ] switching on relay $relay_index on gpio pin ${relays[$relay_index]} on" "$log_file"
+						log "$log_where" i "{ \"script\": \"$0\", \"function\": \"load_inputs()\",\"input_index\":\"$input_index\", \"relay_index\": \"$relay_index\", \"mode\": \"on\" }" "$log_file"
 						"$wokring_dir"/relayctl.sh -r="$relay_index" on
 					else
 						"$wokring_dir"/relayctl.sh -r="$relay_index" off
@@ -55,8 +55,8 @@ function load_inputs() {
                         	off)
 					if [ "$gpio_pin_value" = "0" ]
 					then
+						log "$log_where" i "{ \"script\": \"$0\", \"function\": \"load_inputs()\",\"input_index\":\"$input_index\", \"relay_index\": \"$relay_index\", \"mode\": \"off\" }" "$log_file"
                                                 "$wokring_dir"/relayctl.sh -r="$relay_index" on
-						log file i "[ load_inputs() ] switching on relay $relay_index on gpio pin ${relays[$relay_index]} on" "$log_file"
                                         else
                                                 "$wokring_dir"/relayctl.sh -r="$relay_index" off
                                         fi
@@ -65,7 +65,7 @@ function load_inputs() {
                                 	cmd=$(cut -d '|' -f 5 <<< "$inputs")
 					if [ "$gpio_pin_value" = "1" ]
                                         then
-						log file i "[ load_inputs() ] mode set to cmd running command \"$cmd\"" "$log_file"
+						log "$log_where" i "{ \"script\": \"$0\", \"function\": \"load_inputs()\",\"input_index\":\"$input_index\", \"relay_index\": \"$relay_index\", \"mode\": \"cmd\" }" "$log_file"
 						evel "$cmd"
                                         fi
                         	;;
