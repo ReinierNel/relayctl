@@ -227,7 +227,8 @@ then
 	service nginx restart
 
 	api_key=$(hexdump -n 16 -e '4/4 "%08X" 1 "\n"' /dev/urandom)
-	echo "$api_key" > /etc/relayctl/api.key
+	stored_hash=$(echo "$(cat /etc/machine-id)-$api_key" | openssl dgst -sha512 | sed 's/(stdin)= //g')
+	echo "$stored_hash" > /etc/relayctl/api.key
 	chown root:gpio /etc/relayctl/api.key
 fi
 
@@ -241,6 +242,8 @@ update your schedule in file /etc/relayct/schedule.list
 update your external switches in file /etc/relayct/inputs.list
 
 API key: "$api_key"
+
+Please copy some where save.
 
 for more info goto https://github.com/ReinierNel/relayctl#readme
 
