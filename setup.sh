@@ -147,6 +147,7 @@ dl_loading_bar=0
                 echo "$dl_loading_bar"
                 curl --silent "${download_urls[$dl_item]}" --output "/etc/relayctl/$dl_item"
                 chmod +x "/etc/relayctl/$dl_item"
+		chown root:gpio "/etc/relayctl/$dl_item"
                 dl_loading_bar=$(($dl_loading_bar + $dl_loading_bar_cunks))
         done
 } | whiptail --gauge "Downloading files from Github..." 6 50 0
@@ -226,7 +227,7 @@ then
 fi
 
 # good bye
-read -r -d '' bye_msg <<'EOF'
+read -r -d '' bye_msg << EOF
 The Instilation complete
 
 relayctl installed in directory /etc/relayctl
