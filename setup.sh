@@ -240,8 +240,10 @@ API key: "$api_key"
 
 for more info goto https://github.com/ReinierNel/relayctl#readme
 
-Press OK to continue
+your Pi will now reboot
+
+Press OK to reboot
 EOF
 whiptail --title "Setup Relayctl" --msgbox "$bye_msg" "$tui_h" "$tui_w"
-/etc/rc.local &
-clear
+reboot
+
