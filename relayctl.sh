@@ -124,7 +124,7 @@ function check_gpio() {
 			log "all" i "{ \"script\": \"$0\", \"function\": \"check_gpio()\", \"gpio\": \"$1\", \"status\"=\"low\" }" "$log_file"
                 fi
         else
-		log "all" w "{ \"script\": \"$0\", \"function\": \"check_gpio()\", \"gpio\": \"$1\", \"status\"=\"low\" }" "$log_file"
+		log "all" w "{ \"script\": \"$0\", \"function\": \"check_gpio()\", \"gpio\": \"$1\", \"status\"=\"unexported\" }" "$log_file"
         fi
 }
 
