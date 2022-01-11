@@ -15,4 +15,6 @@ scheduler_frequency="__SCHEDULAR_FREQUEMCY__"
 # external input map file
 external_input_file="/etc/relayctl/inputs.list"
 # enable or disable logging
+logging="enable"
+# set where to log to by default
 log_where="file"
