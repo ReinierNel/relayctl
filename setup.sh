@@ -216,8 +216,8 @@ then
 	chmod +x /usr/lib/cgi-bin/api.cgi
 	rm -f /etc/nginx/sites-available/default
 	curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/feature/api-server/api/nginx/default" --output "/etc/nginx/sites-available/default"
-	curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/feature/api-server/api/nginx/fastcgi.conf" --output "/etc/nginx/fastcgi.conf"
-
+	curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/feature/api-server/api/nginx/fastcgi_params" --output "/etc/nginx/fastcgi_params"
+	cp /usr/share/doc/fcgiwrap/examples/nginx.conf /etc/nginx/fcgiwrap.conf
 	service nginx restart
 
 	api-key=$(hexdump -n 16 -e '4/4 "%08X" 1 "\n"' /dev/urandom)
