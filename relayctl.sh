@@ -83,13 +83,13 @@ function remove_gpio() {
 function relay_ctl() {
         if [ "$2" = "on" ]
         then
-                log "$log_where" i "{ \"script\": \"$0\", \"function\": \"relay_ctl()\", \"gpio\": \"$1\", \"status\"=\"high\" }" "$log_file"
+                log "all" i "{ \"script\": \"$0\", \"function\": \"relay_ctl()\", \"gpio\": \"$1\", \"status\"=\"high\" }" "$log_file"
 		echo "1" > /sys/class/gpio/gpio"$1"/value
         fi
 
         if [ "$2" = "off" ]
         then
-		log "$log_where" i "{ \"script\": \"$0\", \"function\": \"relay_ctl()\", \"gpio\": \"$1\", \"status\"=\"low\" }" "$log_file"
+		log "all" i "{ \"script\": \"$0\", \"function\": \"relay_ctl()\", \"gpio\": \"$1\", \"status\"=\"low\" }" "$log_file"
                 echo "0" > /sys/class/gpio/gpio"$1"/value
         fi
 }
@@ -119,9 +119,9 @@ function check_gpio() {
 
                 if [ "$status" = "1" ]
                 then
-			log "all" w "{ \"script\": \"$0\", \"function\": \"check_gpio()\", \"gpio\": \"$1\", \"status\"=\"high\" }" "$log_file"
+			log "all" i "{ \"script\": \"$0\", \"function\": \"check_gpio()\", \"gpio\": \"$1\", \"status\"=\"high\" }" "$log_file"
                 else
-			log "all" w "{ \"script\": \"$0\", \"function\": \"check_gpio()\", \"gpio\": \"$1\", \"status\"=\"low\" }" "$log_file"
+			log "all" i "{ \"script\": \"$0\", \"function\": \"check_gpio()\", \"gpio\": \"$1\", \"status\"=\"low\" }" "$log_file"
                 fi
         else
 		log "all" w "{ \"script\": \"$0\", \"function\": \"check_gpio()\", \"gpio\": \"$1\", \"status\"=\"low\" }" "$log_file"
