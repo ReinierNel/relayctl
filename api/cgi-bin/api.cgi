@@ -68,7 +68,7 @@ function router() {
 			relays)
 				if ! [[ "$slug" =~ '^[0-9]+$' ]]
 				then
-					if [ "$action" = "on" ] || [ "$action" = "off" ]
+					if [ "$action" = "on" ] || [ "$action" = "off" ] || [ "$action" = "status" ]
 					then
 						request "\"$path\": \"$slug\", \"action\": \"$action\""
 						/etc/relayctl/relayctl.sh -r="$slug" "$action"
