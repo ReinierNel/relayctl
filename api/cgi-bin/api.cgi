@@ -33,7 +33,7 @@ function request() {
                 GET)
                         status="${status_code[200]}"
                         response_json+="\"status\": \"200 OK\","
-                        response_json+="\"message\": {$1}"
+                        response_json+="$1"
                 ;;
                 POST)
                         if [ "$CONTENT_LENGTH" -gt 0 ]
@@ -41,7 +41,7 @@ function request() {
                                 data_in="$(cat)"
                                 status="${status_code[200]}"
                                 response_json+="\"status\": \"200 OK\","
-                                response_json+="\"message\": {$1}"
+                                response_json+="\"message\": $1"
                         else
                                 status="${status_code[400]}"
                                 response_json+="\"status\": \"400 Bad Request\""
@@ -60,10 +60,10 @@ function auth() {
                 hash=$(</etc/relayctl/api.key)
                 algorithm=$(echo $hash | cut -d '$' -f 2)
                 salt=$(echo $hash | cut -d '$' -f 3)
-                
+
                 key_received=$(openssl passwd -$algorithm -salt $salt -stdin -noverify <<< $(echo $HTTP_AUTHORIZATION | cut -d " " -f 2))
-                
-                if [ "$key_received" = "hash" ]
+
+                if [ "$key_received" = "$hash" ]
                 then
                         no_auth="false"
                 else
@@ -71,6 +71,10 @@ function auth() {
                         response_json+="\"status\": \"403 Forbidden\""
                         no_auth="true"
                 fi
+        else
+                status="${status_code[403]}"
+                response_json+="\"status\": \"403 Forbidden\""
+                no_auth="true"
         fi
 }
 
@@ -86,12 +90,24 @@ function router() {
 
                 case "$path" in
                         relays)
-                                if ! [[ "$slug" =~ ^[0-9]+$ ]]
+                                if [ "$slug" = "" ]
+                                then
+                                        gpio_in_use=""
+                                        source /etc/relayctl/settings.sh
+                                        for pins in "${!relays[@]}"
+                                        do
+                                                relays_output=$(/etc/relayctl/relayctl.sh -r="$pins" status)
+                                                gpio_in_use+="\"$pins\": $relays_output,"
+                                        done
+
+                                        gpio_in_use=$(echo "$gpio_in_use" | sed 's/\(.*\),/\1 /')
+                                        request "$gpio_in_use"
+                                elif ! [[ "$slug" =~ "^[0-9]+$" ]]
                                 then
                                         if [ "$action" = "on" ] || [ "$action" = "off" ] || [ "$action" = "status" ]
                                         then
                                                 relays_output=$(/etc/relayctl/relayctl.sh -r="$slug" "$action")
-                                                request "\"$path\": \"$slug\", \"action\": \"$action\", \"output\": $relays_output"
+                                                request "\"$slug\": $relays_output"
                                         else
                                                 status="${status_code[400]}"
                                                 response_json+="\"status\": \"400 Bad Request\""
@@ -104,7 +120,7 @@ function router() {
                         schedules)
                                 if [ "$slug" = "" ]
                                 then
-                                        schedule_list="["
+                                        schedule_list=""
                                         while read -r schedule
                                         do
                                                 if [[ "$schedule" != "#"* ]]
@@ -116,19 +132,18 @@ function router() {
                                                         relay_index=$(cut -d '|' -f 5 <<< "$schedule")
                                                         action=$(cut -d '|' -f 6 <<< "$schedule")
 
-                                                        schedule_list+="{\"name\": \"$name\", \"start_time\": \"$start_time\", \"end_time\": \"$end_time\", \"days\": \"$days\", \"$relay_index\": \"$relay_index\", \"action\": \"$action\"},"
+                                                        schedule_list+="\"$name\": {\"start_time\": \"$start_time\", \"end_time\": \"$end_time\", \"days\": \"$days\", \"relay\": \"$relay_index\", \"action\": \"$action\"},"
                                                 fi
                                         done < "/etc/relayctl/schedule.list"
 
-                                        schedule_list+="]"
                                         schedule_list=$(echo "$schedule_list" | sed 's/\(.*\),/\1 /')
-                                        request "\"$path\": $schedule_list, \"action\": \"list\""
+                                        request "$schedule_list"
                                 fi
                         ;;
                         switches)
                                 if [ "$slug" = "" ]
                                 then
-                                        switches_list="["
+                                        switches_list=""
                                         while read -r switches
                                         do
                                                 if [[ "$switches" != "#"* ]]
@@ -139,13 +154,12 @@ function router() {
                                                         mode=$(cut -d '|' -f 4 <<< "$switches")
                                                         cmd=$(cut -d '|' -f 5 <<< "$switches")
 
-                                                        switches_list+="{\"name\": \"$name\", \"input_index\": \"$input_index\", \"relay_index\": \"$relay_index\", \"mode\": \"$mode\", \"cmd\": \"$cmd\"},"
+                                                        switches_list+="\"$name\": { \"input_index\": \"$input_index\", \"relay_index\": \"$relay_index\", \"mode\": \"$mode\", \"cmd\": \"$cmd\"},"
                                                 fi
                                         done < "/etc/relayctl/inputs.list"
 
-                                        switches_list+="]"
                                         switches_list=$(echo "$switches_list" | sed 's/\(.*\),/\1 /')
-                                        request "\"$path\": $switches_list, \"action\": \"list\""
+                                        request "$switches_list"
                                 fi
                         ;;
                         health)
