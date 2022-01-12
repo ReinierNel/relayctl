@@ -1,5 +1,15 @@
 # relayctl
-Simple bash scripts to control relays connected to your raspberry pi with a cron like scheduler to switch ac appliances on or off based on time of day, day of week and month of year. Useful to automate switching appliances on and off based on schedule.
+
+```
+██████╗ ███████╗██╗      █████╗ ██╗   ██╗ ██████╗████████╗██╗     
+██╔══██╗██╔════╝██║     ██╔══██╗╚██╗ ██╔╝██╔════╝╚══██╔══╝██║     
+██████╔╝█████╗  ██║     ███████║ ╚████╔╝ ██║        ██║   ██║     
+██╔══██╗██╔══╝  ██║     ██╔══██║  ╚██╔╝  ██║        ██║   ██║     
+██║  ██║███████╗███████╗██║  ██║   ██║   ╚██████╗   ██║   ███████╗
+╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝   ╚═╝    ╚═════╝   ╚═╝   ╚══════╝
+```
+
+Simple shell scripts to control relays connected to your raspberry pi with a via CLI, cron like scheduler, external switches and a REST API. 
 
 ## Requirements
 
