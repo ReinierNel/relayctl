@@ -159,7 +159,8 @@ dl_loading_bar=0
         done
 } | whiptail --gauge "Downloading files from Github..." 6 50 0
 
-chmod -x /etc/relayctl/schedule.list
+chmod 664 /etc/relayctl/schedule.list
+chmod 664 /etc/relayctl/inputs.list
 chmod -x /etc/relayctl/LICENSE
 
 # update settings.sh
