@@ -57,10 +57,13 @@ function request() {
 function auth() {
         if [ -n "$HTTP_AUTHORIZATION" ]
         then
-                stored_hash=$(</etc/relayctl/api.key)
-                sault=$(</etc/machine-id)
-                hash=$(echo "$sault-$HTTP_AUTHORIZATION" | openssl dgst -sha512 | sed 's/(stdin)= //g')
-                if [ "Bearer $stored_hash" = "Bearer $hash" ]
+                hash=$(</etc/relayctl/api.key)
+                algorithm=$(openssl passwd -6 -salt $(tr -dc A-Za-z0-9 </dev/urandom | head -c 13 ; echo '') -stdin -noverify <<< $(</etc/relayctl/api.key) | cut -d '$' -f 2)
+                salt=$(openssl passwd -6 -salt $(tr -dc A-Za-z0-9 </dev/urandom | head -c 13 ; echo '') -stdin -noverify <<< $(</etc/relayctl/api.key) | cut -d '$' -f 3)
+                
+                key_received=$(openssl passwd -$algorithm -salt $salt -stdin -noverify <<< $(echo $HTTP_AUTHORIZATION | cut -d " " -f 2))
+                
+                if [ "$key_received" = "hash" ]
                 then
                         no_auth="false"
                 else
