@@ -11,15 +11,22 @@ function log() {
         )
         if [ "$logging" = "enable" ]
         then
+                if [ "$logging_metadata" = "enable"]
+                then
+                        log_msg="${level[$2]} \"message\": $3}"
+                else
+                        log_msg="$3"
+                fi
+
                 case "$1" in
                         screen)
-                                echo "${level[$2]} \"message\": $3}"
+                                echo "$log_msg"
                         ;;
                         file)
-                                echo "${level[$2]} \"message\": $3}" >> "$4"
+                                echo "$log_msg" >> "$4"
                         ;;
                         *)
-                                echo "${level[$2]} \"message\": $3}" | tee -a "$4"
+                                echo "$log_msg" | tee -a "$4"
                 esac
         fi
 }
@@ -31,13 +38,13 @@ function create_file() {
 }
 
 function string_2_array() {
-	mapfile -t -d "$2" array <<< "$1"
-	s2a_output=()
-	for i in "${array[@]}"
-	do
-        	s2a_output+=("$( echo "$i" | tr --delete '\n')")
+        mapfile -t -d "$2" array <<< "$1"
+        s2a_output=()
+        for i in "${array[@]}"
+        do
+                s2a_output+=("$( echo "$i" | tr --delete '\n')")
 
-	done
+        done
 }
 
 
