@@ -58,8 +58,8 @@ function auth() {
         if [ -n "$HTTP_AUTHORIZATION" ]
         then
                 hash=$(</etc/relayctl/api.key)
-                algorithm=$(openssl passwd -6 -salt $(tr -dc A-Za-z0-9 </dev/urandom | head -c 13 ; echo '') -stdin -noverify <<< $(</etc/relayctl/api.key) | cut -d '$' -f 2)
-                salt=$(openssl passwd -6 -salt $(tr -dc A-Za-z0-9 </dev/urandom | head -c 13 ; echo '') -stdin -noverify <<< $(</etc/relayctl/api.key) | cut -d '$' -f 3)
+                algorithm=$(echo $hash | cut -d '$' -f 2)
+                salt=$(echo $hash | cut -d '$' -f 3)
                 
                 key_received=$(openssl passwd -$algorithm -salt $salt -stdin -noverify <<< $(echo $HTTP_AUTHORIZATION | cut -d " " -f 2))
                 
