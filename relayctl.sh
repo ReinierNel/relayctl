@@ -50,10 +50,10 @@ then
                 then
                         case "$arg_to_check" in
                                 relay_index)
-					log "all" e "{ \"script\": \"$0\", \"validation\": \"argument --relay= missing\" }" "$log_file"
+                                        log "all" e "{ \"script\": \"$0\", \"validation\": \"argument --relay= missing\" }" "$log_file"
                                 ;;
                                 action)
-					log "all" e "{ \"script\": \"$0\", \"validation\": \"no action set use 'on' or 'off'\" }" "$log_file"
+                                        log "all" e "{ \"script\": \"$0\", \"validation\": \"no action set use 'on' or 'off'\" }" "$log_file"
                                 ;;
                         esac
                         log screen h "{ \"usage\": \"$0 --relay=0 on\" }"
@@ -67,7 +67,7 @@ function init_gpio() {
         if [ ! -d "/sys/class/gpio/gpio$1" ]
         then
                 log file i "[ init_gpio() ] initializing gpio pin $1" "$log_file"
-		log "$log_where" i "{ \"script\": \"$0\", \"function\": \"init_gpio()\", \"gpio\": \"$1\", \"status\"=\"exported\" }" "$log_file"
+                log "$log_where" i "{ \"script\": \"$0\", \"function\": \"init_gpio()\", \"gpio\": \"$1\", \"state\": \"exported\" }" "$log_file"
                 echo "$1" > /sys/class/gpio/export
                 echo "out" > /sys/class/gpio/gpio"$1"/direction
         fi
@@ -75,7 +75,7 @@ function init_gpio() {
 
 # unset gpio pins
 function remove_gpio() {
-	log "$log_where" i "{ \"script\": \"$0\", \"function\": \"remove_gpio()\", \"gpio\": \"$1\", \"status\"=\"unexported\" }" "$log_file"
+        log "$log_where" i "{ \"script\": \"$0\", \"function\": \"remove_gpio()\", \"gpio\": \"$1\", \"state\": \"unexported\" }" "$log_file"
         echo "$1" > /sys/class/gpio/unexport
 }
 
@@ -83,21 +83,21 @@ function remove_gpio() {
 function relay_ctl() {
         if [ "$2" = "on" ]
         then
-                log "all" i "{ \"script\": \"$0\", \"function\": \"relay_ctl()\", \"gpio\": \"$1\", \"status\"=\"high\" }" "$log_file"
-		echo "1" > /sys/class/gpio/gpio"$1"/value
+                log "all" i "{ \"script\": \"$0\", \"function\": \"relay_ctl()\", \"gpio\": \"$1\", \"state\": \"high\" }" "$log_file"
+                echo "1" > /sys/class/gpio/gpio"$1"/value
         fi
 
         if [ "$2" = "off" ]
         then
-		log "all" i "{ \"script\": \"$0\", \"function\": \"relay_ctl()\", \"gpio\": \"$1\", \"status\"=\"low\" }" "$log_file"
+                log "all" i "{ \"script\": \"$0\", \"function\": \"relay_ctl()\", \"gpio\": \"$1\", \"state\": \"low\" }" "$log_file"
                 echo "0" > /sys/class/gpio/gpio"$1"/value
         fi
 }
 
 # test relays one by one
 function relay_test() {
-        log "all" w "{ \"script\": \"$0\", \"function\": \"relay_test()\", \"status\"=\"start\" }" "$log_file"
-	for relay in "${!relays[@]}"
+        log "all" w "{ \"script\": \"$0\", \"function\": \"relay_test()\", \"state\"=\"start\" }" "$log_file"
+        for relay in "${!relays[@]}"
         do
                 init_gpio "${relays[$relay]}"
                 relay_ctl "${relays[$relay]}" "on"
@@ -106,7 +106,7 @@ function relay_test() {
                 sleep 0.5
                 remove_gpio "${relays[$relay]}"
         done
-	log "all" w "{ \"script\": \"$0\", \"function\": \"relay_test()\", \"status\"=\"end\" }" "$log_file"
+        log "all" w "{ \"script\": \"$0\", \"function\": \"relay_test()\", \"state\"=\"end\" }" "$log_file"
 
 }
 
@@ -119,12 +119,12 @@ function check_gpio() {
 
                 if [ "$status" = "1" ]
                 then
-			log "all" i "{ \"script\": \"$0\", \"function\": \"check_gpio()\", \"gpio\": \"$1\", \"status\"=\"high\" }" "$log_file"
+                        log "all" i "{ \"script\": \"$0\", \"function\": \"check_gpio()\", \"gpio\": \"$1\", \"state\": \"high\" }" "$log_file"
                 else
-			log "all" i "{ \"script\": \"$0\", \"function\": \"check_gpio()\", \"gpio\": \"$1\", \"status\"=\"low\" }" "$log_file"
+                        log "all" i "{ \"script\": \"$0\", \"function\": \"check_gpio()\", \"gpio\": \"$1\", \"state\": \"low\" }" "$log_file"
                 fi
         else
-		log "all" w "{ \"script\": \"$0\", \"function\": \"check_gpio()\", \"gpio\": \"$1\", \"status\"=\"unexported\" }" "$log_file"
+                log "all" w "{ \"script\": \"$0\", \"function\": \"check_gpio()\", \"gpio\": \"$1\", \"state\": \"unexported\" }" "$log_file"
         fi
 }
 
