@@ -11,6 +11,7 @@ declare -A status_code=(
         [403]="403 Forbidden"
         [404]="404 Not Found"
         [405]="405 Method Not Allowed"
+        [422]="422 Unprocessable Entity"
 )
 
 function content {
@@ -35,13 +36,13 @@ function request() {
                         response_json+="\"status\": \"200 OK\","
                         response_json+="$1"
                 ;;
-                POST)
+                POST|DELETE)
                         if [ "$CONTENT_LENGTH" -gt 0 ]
                         then
                                 data_in="$(cat)"
                                 status="${status_code[200]}"
                                 response_json+="\"status\": \"200 OK\","
-                                response_json+="\"message\": $1"
+                                response_json+="$1"
                         else
                                 status="${status_code[400]}"
                                 response_json+="\"status\": \"400 Bad Request\""
@@ -118,27 +119,80 @@ function router() {
                                 fi
                         ;;
                         schedules)
-                                if [ "$slug" = "" ]
-                                then
-                                        schedule_list=""
-                                        while read -r schedule
-                                        do
-                                                if [[ "$schedule" != "#"* ]]
+                                case "$slug" in
+                                        add)
+                                                if [ "$REQUEST_METHOD" = "POST" ]
                                                 then
-                                                        name=$(cut -d '|' -f 1 <<< "$schedule")
-                                                        start_time=$(cut -d '|' -f 2 <<< "$schedule")
-                                                        end_time=$(cut -d '|' -f 3 <<< "$schedule")
-                                                        days=$(cut -d '|' -f 4 <<< "$schedule")
-                                                        relay_index=$(cut -d '|' -f 5 <<< "$schedule")
-                                                        action=$(cut -d '|' -f 6 <<< "$schedule")
+                                                        request "\"schedule\": \"added\","
 
-                                                        schedule_list+="\"$name\": {\"start_time\": \"$start_time\", \"end_time\": \"$end_time\", \"days\": \"$days\", \"relay\": \"$relay_index\", \"action\": \"$action\"},"
+                                                        name=$(echo "$data_in" | jq -r ."name")
+                                                        start_time=$(echo "$data_in" | jq -r ."start_time")
+                                                        end_time=$(echo "$data_in" | jq -r ."end_time")
+                                                        days=$(echo "$data_in" | jq -r ."days")
+                                                        relay_index=$(echo "$data_in" | jq -r ."relay_index")
+                                                        action=$(echo "$data_in" | jq -r ."action")
+
+                                                        if grep "$name|" /etc/relayctl/schedule.list
+                                                        then
+                                                                status="${status_code[422]}"
+                                                                response_json="{\"status\": \"422 Unprocessable Entity\", \"hint\": \"name already exist please use a unique name for the scedule\""
+                                                        else
+                                                                echo "$name|$start_time|$end_time|$days|$relay_index|$action" >> /etc/relayctl/schedule.list
+
+                                                                response_json+="\"name\": \"$name\","
+                                                                response_json+="\"start_time\": \"$start_time\","
+                                                                response_json+="\"end_time\": \"$end_time\","
+                                                                response_json+="\"days\": \"$days\","
+                                                                response_json+="\"relay_index\": \"$relay_index\","
+                                                                response_json+="\"action\": \"$action\""
+                                                        fi
+
+                                                else
+                                                        status="${status_code[405]}"
+                                                        response_json+="\"status\": \"405 Method Not Allowed\""
                                                 fi
-                                        done < "/etc/relayctl/schedule.list"
+                                        ;;
+                                        delete)
+                                                if [ "$REQUEST_METHOD" = "DELETE" ]
+                                                then
+                                                        request "\"schedule\": \"deleted\","
 
-                                        schedule_list=$(echo "$schedule_list" | sed 's/\(.*\),/\1 /')
-                                        request "$schedule_list"
-                                fi
+                                                        name=$(echo "$data_in" | jq -r ."name")
+
+                                                        if grep "$name|" /etc/relayctl/schedule.list
+                                                        then
+                                                                sed -i "/$name|/d" /etc/relayctl/schedule.list
+                                                                response_json+="\"name\": \"$name\","
+                                                        else
+                                                                status="${status_code[422]}"
+                                                                response_json="{\"status\": \"422 Unprocessable Entity\", \"hint\": \"scedule name does not exist\""
+                                                        fi
+                                                else
+                                                        status="${status_code[405]}"
+                                                        response_json+="\"status\": \"405 Method Not Allowed\""
+                                                fi
+                                        ;;
+                                        *)
+                                                schedule_list=""
+                                                while read -r schedule
+                                                do
+                                                        if [[ "$schedule" != "#"* ]]
+                                                        then
+                                                                name=$(cut -d '|' -f 1 <<< "$schedule")
+                                                                start_time=$(cut -d '|' -f 2 <<< "$schedule")
+                                                                end_time=$(cut -d '|' -f 3 <<< "$schedule")
+                                                                days=$(cut -d '|' -f 4 <<< "$schedule")
+                                                                relay_index=$(cut -d '|' -f 5 <<< "$schedule")
+                                                                action=$(cut -d '|' -f 6 <<< "$schedule")
+
+                                                                schedule_list+="\"$name\": {\"start_time\": \"$start_time\", \"end_time\": \"$end_time\", \"days\": \"$days\", \"relay\": \"$relay_index\", \"action\": \"$action\""
+                                                        fi
+                                                done < "/etc/relayctl/schedule.list"
+
+                                                schedule_list=$(echo "$schedule_list" | sed 's/\(.*\),/\1 /')
+                                                request "$schedule_list"
+                                        ;;
+                                        esac
                         ;;
                         switches)
                                 if [ "$slug" = "" ]
