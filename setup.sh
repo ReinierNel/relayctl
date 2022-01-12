@@ -217,7 +217,7 @@ then
 	mkdir -p /usr/lib/cgi-bin
 
 	curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/main/api/cgi-bin/api.cgi" --output "/usr/lib/cgi-bin/api.cgi"
-	chmow www-data:www-data /usr/lib/cgi-bin/api.cgi
+	chown www-data:www-data /usr/lib/cgi-bin/api.cgi
 	chmod +x /usr/lib/cgi-bin/api.cgi
 	rm -f /etc/nginx/sites-available/default
 	curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/main/api/nginx/default" --output "/etc/nginx/sites-available/default"
@@ -227,8 +227,7 @@ then
 	service nginx restart
 
 	api_key=$(hexdump -n 16 -e '4/4 "%08X" 1 "\n"' /dev/urandom)
-	stored_hash=$(echo "$(cat /etc/machine-id)-$api_key" | openssl dgst -sha512 | sed 's/(stdin)= //g')
-	echo "$stored_hash" > /etc/relayctl/api.key
+	openssl passwd -6 -salt $(tr -dc A-Za-z0-9 </dev/urandom | head -c 13 ; echo '') -stdin -noverify <<< $(echo $api_key) >> /etc/relayctl/api.key
 	chown root:gpio /etc/relayctl/api.key
 fi
 
