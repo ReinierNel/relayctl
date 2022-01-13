@@ -11,7 +11,7 @@ function log() {
         )
         if [ "$logging" = "enable" ]
         then
-                if [ "$logging_metadata" = "enable"]
+                if [ "$logging_metadata" = "enable" ]
                 then
                         log_msg="${level[$2]} \"message\": $3}"
                 else

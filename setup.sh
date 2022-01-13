@@ -65,16 +65,16 @@ check_exit_status
 
 # relays connected?
 read -r -d '' welcome_msg <<'EOF'
-██████╗ ███████╗██╗      █████╗ ██╗   ██╗ ██████╗████████╗██╗     
-██╔══██╗██╔════╝██║     ██╔══██╗╚██╗ ██╔╝██╔════╝╚══██╔══╝██║     
-██████╔╝█████╗  ██║     ███████║ ╚████╔╝ ██║        ██║   ██║     
-██╔══██╗██╔══╝  ██║     ██╔══██║  ╚██╔╝  ██║        ██║   ██║     
+██████╗ ███████╗██╗      █████╗ ██╗   ██╗ ██████╗████████╗██╗
+██╔══██╗██╔════╝██║     ██╔══██╗╚██╗ ██╔╝██╔════╝╚══██╔══╝██║
+██████╔╝█████╗  ██║     ███████║ ╚████╔╝ ██║        ██║   ██║
+██╔══██╗██╔══╝  ██║     ██╔══██║  ╚██╔╝  ██║        ██║   ██║
 ██║  ██║███████╗███████╗██║  ██║   ██║   ╚██████╗   ██║   ███████╗
 ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝   ╚═╝    ╚═════╝   ╚═╝   ╚══════╝
-                                        
+
 This wizard will help you set up your relays on your Pi.
 
-Have you connected your relays to the Pi?.
+Have you connected your relays to the Pi?. If not connect them now and hit OK.
 EOF
 
 relays_connected=$(whiptail --title "Setup Relayctl" --yesno "$welcome_msg" "$tui_h" "$tui_w" 3>&1 1>&2 2>&3)
@@ -86,6 +86,8 @@ check_exit_status
 # select relay gpio
 read -r -d '' gpio_select_msg <<'EOF'
 Select which GPIO pins your relays control circuit are connected to.
+
+Goto for GPIO pin layout and numbering.
 https://www.raspberrypi.com/documentation/computers/os.html#gpio-pin
 
       GPIO PIN
@@ -108,6 +110,8 @@ check_exit_status
 # select inputs gpio
 read -r -d '' input_gpio_select_msg <<'EOF'
 Select which GPIO pins your external swicthes are connected to.
+
+Goto for GPIO pin layout and numbering.
 https://www.raspberrypi.com/documentation/computers/os.html#gpio-pin
 
       GPIO PIN
@@ -130,7 +134,10 @@ check_exit_status
 # set scheduler frequency
 read -r -d '' schedule_msg1 <<'EOF'
 Enter a value in seconds how often should the scheduler check
-if a relay sould be on or off recommended 10 seconds
+if a relay sould be on or off recommended 10 seconds.
+
+A lower value will increase CPU load and also make the log files
+grow faster.
 EOF
 
 schedule_frequency=$(whiptail --title "Setup Relayctl" --inputbox "$schedule_msg1" "$tui_h" "$tui_w" 3>&1 1>&2 2>&3)
@@ -141,7 +148,8 @@ check_exit_status
 
 # setup folders
 mkdir /etc/relayctl
-
+chown root:gpio /etc/relayctl
+chmod 775 /etc/relayctl
 # download needed files
 dl_count=${#download_urls[@]}
 dl_loading_bar_cunks=$((100 / 8))
@@ -159,8 +167,8 @@ dl_loading_bar=0
         done
 } | whiptail --gauge "Downloading files from Github..." 6 50 0
 
-chmod 664 /etc/relayctl/schedule.list
-chmod 664 /etc/relayctl/inputs.list
+chmod 775 /etc/relayctl/schedule.list
+chmod 775 /etc/relayctl/inputs.list
 chmod -x /etc/relayctl/LICENSE
 
 # update settings.sh
@@ -172,9 +180,9 @@ sed -i "s/__SCHEDULAR_FREQUEMCY__/$schedule_frequency/g" /etc/relayctl/settings.
 read -r -d '' test_msg <<'EOF'
 We are running a test agains the relays to check if everting is conencted and woring.
 
-You should hear your relays clicking on and off
+You should hear your relays clicking on and off one at a time.
 
-see /etc/relayctl.log for more details
+see /etc/relayctl.log for more details.
 
 Press OK to continue with the test
 EOF
@@ -185,9 +193,9 @@ whiptail --title "Setup Relayctl" --msgbox "$test_msg" "$tui_h" "$tui_w"
 cat > /tmp/rc.local <<EOF
 $(head -n -1 /etc/rc.local)
 
-sudo /etc/relayctl/relayctl.sh test
-sudo /etc/relayctl/scheduler.sh &
-sudo /etc/relayctl/external.sh &
+/etc/relayctl/relayctl.sh test
+/etc/relayctl/scheduler.sh &
+/etc/relayctl/external.sh &
 
 exit 0
 EOF
@@ -200,10 +208,15 @@ chmod 755 /etc/rc.local
 read -r -d '' api_msg <<'EOF'
 Sould we enable the the REST API required by UniPi
 
+!NOTE! your API key will be show only once on the next screen.
+API key can not be retrieved once setup is done, so copy it
+and store it in a safe place before ending the setup.
+
 The following software will be install
 
-* nginx    - web server
-* fcgiwrap - fastCGI wrapper
+* nginx    - Web server that can also be used as a reverse proxy...
+* fcgiwrap - Simple FastCGI wrapper for CGI scripts
+* jq       - jq is like sed for JSON data
 
 Select Yes to install or No to continue without installing
 EOF
@@ -215,21 +228,24 @@ exitstatus=$?
 if [ "$exitstatus" = 0 ]
 then
 	apt-get update
-	apt-get install -y nginx fcgiwrap
+	apt-get upgrade -y
+	apt-get install -y nginx fcgiwrap jq
 
 	usermod -a -G gpio www-data
 	mkdir -p /usr/lib/cgi-bin
 
 	curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/main/api/cgi-bin/api.cgi" --output "/usr/lib/cgi-bin/api.cgi"
-	chown www-data:www-data /usr/lib/cgi-bin/api.cgi
+	chown www-data:gpio /usr/lib/cgi-bin/api.cgi
 	chmod +x /usr/lib/cgi-bin/api.cgi
 	rm -f /etc/nginx/sites-available/default
 	curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/main/api/nginx/default" --output "/etc/nginx/sites-available/default"
 	curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/main/api/nginx/fastcgi_params" --output "/etc/nginx/fastcgi_params"
+	curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/main/api-key.sh" --output "/etc/relayctl/api-key.sh"
+	chmod 600 /etc/relayctl/api-key.sh
+	chown root:root /etc/relayctl/api-key.sh
 	cp /usr/share/doc/fcgiwrap/examples/nginx.conf /etc/nginx/fcgiwrap.conf
 	sed -i "s/user www-data/user root/g" /etc/nginx/nginx.conf
 	service nginx restart
-
 	api_key=$(hexdump -n 16 -e '4/4 "%08X" 1 "\n"' /dev/urandom)
 	openssl passwd -6 -salt $(tr -dc A-Za-z0-9 </dev/urandom | head -c 13 ; echo '') -stdin -noverify <<< $(echo $api_key) >> /etc/relayctl/api.key
 	chown root:gpio /etc/relayctl/api.key
@@ -237,23 +253,26 @@ fi
 
 # good bye
 read -r -d '' bye_msg << EOF
-The Instilation complete
+The Instilation complete.
 
-relayctl installed in directory /etc/relayctl
++---------------------+----------------------------+
+| File / Folder Name  | Path                       |
++---------------------+----------------------------+
+| Installed Directory | /etc/relayctl/             |
+| relayctl            | /etc/relayctl/relayctl.sh  |
+| Schedule File       | /etc/relayct/schedule.list |
+| Switches File       | /etc/relayct/inputs.list   |
++---------------------+----------------------------+
 
-update your schedule in file /etc/relayct/schedule.list
-update your external switches in file /etc/relayct/inputs.list
+Pleaes copy the API Key and store in a safe place.
 
 API key: "$api_key"
 
-Please copy some where save.
-
 for more info goto https://github.com/ReinierNel/relayctl#readme
 
-your Pi will now reboot
+Your Pi will now reboot
 
 Press OK to reboot
 EOF
 whiptail --title "Setup Relayctl" --msgbox "$bye_msg" "$tui_h" "$tui_w"
 reboot
-
