@@ -135,7 +135,7 @@ function router() {
                                                         if grep "$name|" /etc/relayctl/schedule.list
                                                         then
                                                                 status="${status_code[422]}"
-                                                                response_json="{\"status\": \"422 Unprocessable Entity\", \"hint\": \"name already exist please use a unique name for the scedule\""
+                                                                response_json="{\"status\": \"422 Unprocessable Entity\", \"hint\": \"name already exist please use a unique name\""
                                                         else
                                                                 echo "$name|$start_time|$end_time|$days|$relay_index|$action" >> /etc/relayctl/schedule.list
 
@@ -158,14 +158,22 @@ function router() {
                                                         request "\"schedule\": \"deleted\","
 
                                                         name=$(echo "$data_in" | jq -r ."name")
+                                                        start_time=$(echo "$data_in" | jq -r ."start_time")
+                                                        end_time=$(echo "$data_in" | jq -r ."end_time")
+                                                        days=$(echo "$data_in" | jq -r ."days")
+                                                        relay_index=$(echo "$data_in" | jq -r ."relay_index")
+                                                        action=$(echo "$data_in" | jq -r ."action")
 
-                                                        if grep "$name|" /etc/relayctl/schedule.list
+                                                        if grep "$name|$start_time|$end_time|$days|$relay_index|$action" /etc/relayctl/schedule.list
                                                         then
-                                                                sed -i "/$name|/d" /etc/relayctl/schedule.list
-                                                                response_json+="\"name\": \"$name\","
+                                                                grep -v "$name|$start_time|$end_time|$days|$relay_index|$action" /etc/relayctl/schedule.list > /tmp/schedule.list.temp
+                                                                mv /tmp/schedule.list.temp /etc/relayctl/schedule.list
+                                                                rm -f /tmp/schedule.list.temp
+
+                                                                response_json+="\"entry\": \"$name|$start_time|$end_time|$days|$relay_index|$action\","
                                                         else
                                                                 status="${status_code[422]}"
-                                                                response_json="{\"status\": \"422 Unprocessable Entity\", \"hint\": \"scedule name does not exist\""
+                                                                response_json="{\"status\": \"422 Unprocessable Entity\", \"hint\": \"scedule does not exist\", \"entry\": \"$name|$start_time|$end_time|$days|$relay_index|$action\""
                                                         fi
                                                 else
                                                         status="${status_code[405]}"
@@ -185,7 +193,7 @@ function router() {
                                                                 relay_index=$(cut -d '|' -f 5 <<< "$schedule")
                                                                 action=$(cut -d '|' -f 6 <<< "$schedule")
 
-                                                                schedule_list+="\"$name\": {\"start_time\": \"$start_time\", \"end_time\": \"$end_time\", \"days\": \"$days\", \"relay\": \"$relay_index\", \"action\": \"$action\""
+                                                                schedule_list+="\"$name\": {\"start_time\": \"$start_time\", \"end_time\": \"$end_time\", \"days\": \"$days\", \"relay\": \"$relay_index\", \"action\": \"$action\"},"
                                                         fi
                                                 done < "/etc/relayctl/schedule.list"
 
@@ -195,26 +203,85 @@ function router() {
                                         esac
                         ;;
                         switches)
-                                if [ "$slug" = "" ]
-                                then
-                                        switches_list=""
-                                        while read -r switches
-                                        do
-                                                if [[ "$switches" != "#"* ]]
+                                case "$slug" in
+                                        add)
+                                                if [ "$REQUEST_METHOD" = "POST" ]
                                                 then
-                                                        name=$(cut -d '|' -f 1 <<< "$switches")
-                                                        input_index=$(cut -d '|' -f 2 <<< "$switches")
-                                                        relay_index=$(cut -d '|' -f 3 <<< "$switches")
-                                                        mode=$(cut -d '|' -f 4 <<< "$switches")
-                                                        cmd=$(cut -d '|' -f 5 <<< "$switches")
+                                                        request "\"switches\": \"added\","
 
-                                                        switches_list+="\"$name\": { \"input_index\": \"$input_index\", \"relay_index\": \"$relay_index\", \"mode\": \"$mode\", \"cmd\": \"$cmd\"},"
+                                                        name=$(echo "$data_in" | jq -r ."name")
+                                                        input_index=$(echo "$data_in" | jq -r ."input_index")
+                                                        relay_index=$(echo "$data_in" | jq -r ."relay_index")
+                                                        mode=$(echo "$data_in" | jq -r ."mode")
+                                                        cmd="#null"
+
+                                                        if grep "$name|" /etc/relayctl/inputs.list
+                                                        then
+                                                                status="${status_code[422]}"
+                                                                response_json="{\"status\": \"422 Unprocessable Entity\", \"hint\": \"name already exist please use a unique name\""
+                                                        else
+                                                                echo "$name|$input_index|$relay_index|$mode|$cmd" >> /etc/relayctl/inputs.list
+
+                                                                response_json+="\"name\": \"$name\","
+                                                                response_json+="\"start_time\": \"$start_time\","
+                                                                response_json+="\"end_time\": \"$end_time\","
+                                                                response_json+="\"days\": \"$days\","
+                                                                response_json+="\"relay_index\": \"$relay_index\","
+                                                                response_json+="\"action\": \"$action\""
+                                                        fi
+
+                                                else
+                                                        status="${status_code[405]}"
+                                                        response_json+="\"status\": \"405 Method Not Allowed\""
                                                 fi
-                                        done < "/etc/relayctl/inputs.list"
+                                        ;;
+                                        delete)
+                                                if [ "$REQUEST_METHOD" = "DELETE" ]
+                                                then
+                                                        request "\"switches\": \"deleted\","
 
-                                        switches_list=$(echo "$switches_list" | sed 's/\(.*\),/\1 /')
-                                        request "$switches_list"
-                                fi
+                                                        name=$(echo "$data_in" | jq -r ."name")
+                                                        input_index=$(echo "$data_in" | jq -r ."input_index")
+                                                        relay_index=$(echo "$data_in" | jq -r ."relay_index")
+                                                        mode=$(echo "$data_in" | jq -r ."mode")
+                                                        cmd="#null"
+
+                                                        if grep "$name|$input_index|$relay_index|$mode|$cmd" /etc/relayctl/inputs.list
+                                                        then
+                                                                grep -v "$name|$input_index|$relay_index|$mode|$cmd" /etc/relayctl/inputs.list > /tmp/inputs.list.temp
+                                                                mv /tmp/inputs.list.temp /etc/relayctl/inputs.list
+                                                                rm -f /tmp/inputs.list.temp
+
+                                                                response_json+="\"entry\": \"$name|$input_index|$relay_index|$mode|$cmd\","
+                                                        else
+                                                                status="${status_code[422]}"
+                                                                response_json="{\"status\": \"422 Unprocessable Entity\", \"hint\": \"switch does not exist\"}"
+                                                        fi
+                                                else
+                                                        status="${status_code[405]}"
+                                                        response_json+="\"status\": \"405 Method Not Allowed\""
+                                                fi
+                                        ;;
+                                        *)
+                                                switches_list=""
+                                                while read -r switches
+                                                do
+                                                        if [[ "$switches" != "#"* ]]
+                                                        then
+                                                                name=$(cut -d '|' -f 1 <<< "$switches")
+                                                                input_index=$(cut -d '|' -f 2 <<< "$switches")
+                                                                relay_index=$(cut -d '|' -f 3 <<< "$switches")
+                                                                mode=$(cut -d '|' -f 4 <<< "$switches")
+                                                                cmd=$(cut -d '|' -f 5 <<< "$switches")
+
+                                                                switches_list+="\"$name\": { \"input_index\": \"$input_index\", \"relay_index\": \"$relay_index\", \"mode\": \"$mode\", \"cmd\": \"$cmd\"},"
+                                                        fi
+                                                done < "/etc/relayctl/inputs.list"
+
+                                                switches_list=$(echo "$switches_list" | sed 's/\(.*\),/\1 /')
+                                                request "$switches_list"
+                                        ;;
+                                esac
                         ;;
                         health)
                                 request "\"$path\": \"$(uptime)\""
