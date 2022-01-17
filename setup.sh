@@ -155,7 +155,9 @@ if [ "$yes_2_all" = "true" ]
 then
         download_files "main"
         update_files "17 18 27 22 23 24" "25 5 6 12 13 26"
-
+        update_rc_local
+        install_api "main"
+        exit 0
 fi
 
 
