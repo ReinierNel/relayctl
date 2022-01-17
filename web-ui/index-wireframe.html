@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Relayctl</title>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <style>
+        /*body*/
+        body {
+            font: Inconsolata, monospace;
+            position: absolute;
+            margin: auto;
+            left: 0;
+            right: 0;
+        }
+
+        basic-spacer {
+            height: 25px;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="modal" id="addswtch">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">New Switch to Relay Mapping</h4>
+
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form action="#" method="post">
+                    <div class="form-group">
+                        <label for="switch">Enter Mapping Name</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="switch">Select Switch Index</label>
+                      <br>
+                      <div class="form-check-inline">
+                        <label class="form-check-label">
+                          <input type="radio" class="form-check-input" name="switch" value="0">0
+                        </label>
+                      </div>
+                      <div class="form-check-inline">
+                        <label class="form-check-label">
+                          <input type="radio" class="form-check-input" name="switch" value="1">1
+                        </label>
+                      </div>
+                      <div class="form-check-inline">
+                        <label class="form-check-label">
+                          <input type="radio" class="form-check-input" name="switch" value="2">2
+                        </label>
+                      </div>
+                      <div class="form-check-inline">
+                        <label class="form-check-label">
+                          <input type="radio" class="form-check-input" name="switch" value="3">3
+                        </label>
+                      </div>
+                      <div class="form-check-inline">
+                        <label class="form-check-label">
+                          <input type="radio" class="form-check-input" name="switch" value="4">4
+                        </label>
+                      </div>
+                      <div class="form-check-inline">
+                        <label class="form-check-label">
+                          <input type="radio" class="form-check-input" name="switch" value="5">5
+                        </label>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="relay">Select Relay Index</label>
+                      <br>
+                      <div class="form-check-inline">
+                        <label class="form-check-label">
+                          <input type="radio" class="form-check-input" name="relay" value="0">0
+                        </label>
+                      </div>
+                      <div class="form-check-inline">
+                        <label class="form-check-label">
+                          <input type="radio" class="form-check-input" name="relay" value="1">1
+                        </label>
+                      </div>
+                      <div class="form-check-inline">
+                        <label class="form-check-label">
+                          <input type="radio" class="form-check-input" name="relay" value="2">2
+                        </label>
+                      </div>
+                      <div class="form-check-inline">
+                        <label class="form-check-label">
+                          <input type="radio" class="form-check-input" name="relay" value="3">3
+                        </label>
+                      </div>
+                      <div class="form-check-inline">
+                        <label class="form-check-label">
+                          <input type="radio" class="form-check-input" name="relay" value="4">4
+                        </label>
+                      </div>
+                      <div class="form-check-inline">
+                        <label class="form-check-label">
+                          <input type="radio" class="form-check-input" name="relay" value="5">5
+                        </label>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="relay">Select Mode</label>
+                        <br>
+                        <div class="form-check-inline">
+                          <label class="form-check-label">
+                            <input type="radio" class="form-check-input" name="mode" value="on">On
+                          </label>
+                        </div>
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                              <input type="radio" class="form-check-input" name="mode" value="off">Off
+                            </label>
+                          </div>
+                    </div>
+                    <input type="hidden" value="switch" name="add">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+
+            
+            
+          </div>
+        </div>
+      </div>
+
+      <div class="modal" id="addschedule">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            
+            <div class="modal-header">
+              <h4 class="modal-title">New Schedule Entry</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+      
+            <div class="modal-body">
+                <form action="#" method="post">
+                    <div class="form-group">
+                      <label for="name">Enter a Schedule Name</label>
+                      <input type="text" class="form-control" id="name" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="start">Enter Start Time</label>
+                      <input type="time" class="form-control" id="start" name="start">
+                    </div>
+                    <div class="form-group">
+                        <label for="end">Enter End Time</label>
+                        <input type="time" class="form-control" id="end" name="end">
+                    </div>
+                    <div class="form-group">
+                        <label for="week">Select Days of the Week</label>
+                        <br>
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                              <input type="checkbox" class="form-check-input" name="days" value="1">Monday
+                            </label>
+                        </div>
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                              <input type="checkbox" class="form-check-input" name="days" value="2">Tuesday
+                            </label>
+                        </div>
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                              <input type="checkbox" class="form-check-input" name="days" value="3">Wednesday
+                            </label>
+                        </div>
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                              <input type="checkbox" class="form-check-input" name="days" value="4">Thursday
+                            </label>
+                        </div>
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                              <input type="checkbox" class="form-check-input" name="days" value="5">Friday
+                            </label>
+                        </div>
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                              <input type="checkbox" class="form-check-input" name="days" value="6">Saturday
+                            </label>
+                        </div>
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                              <input type="checkbox" class="form-check-input" name="days" value="7">Sunday
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="relay">Select Mode</label>
+                            <br>
+                            <div class="form-check-inline">
+                              <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="mode" value="on">On
+                              </label>
+                            </div>
+                            <div class="form-check-inline">
+                                <label class="form-check-label">
+                                  <input type="radio" class="form-check-input" name="mode" value="off">Off
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+      
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+      
+          </div>
+        </div>
+      </div>
+    <div class="container">
+        <div class="row">
+            <div class="col"></div>
+            <div class="col">
+                <pre>
+
+██████╗ ███████╗██╗      █████╗ ██╗   ██╗ ██████╗████████╗██╗     
+██╔══██╗██╔════╝██║     ██╔══██╗╚██╗ ██╔╝██╔════╝╚══██╔══╝██║     
+██████╔╝█████╗  ██║     ███████║ ╚████╔╝ ██║        ██║   ██║     
+██╔══██╗██╔══╝  ██║     ██╔══██║  ╚██╔╝  ██║        ██║   ██║     
+██║  ██║███████╗███████╗██║  ██║   ██║   ╚██████╗   ██║   ███████╗
+╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝   ╚═╝    ╚═════╝   ╚═╝   ╚══════╝</pre>
+            </div>
+            <div class="col"></div>       
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIIAAACCCAMAAAC93eDPAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkUzOEM5MzI1MTcyNjExRTdCMDQzQUQyMjk2MTI0MEMyIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkUzOEM5MzI2MTcyNjExRTdCMDQzQUQyMjk2MTI0MEMyIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6RTM4QzkzMjMxNzI2MTFFN0IwNDNBRDIyOTYxMjQwQzIiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6RTM4QzkzMjQxNzI2MTFFN0IwNDNBRDIyOTYxMjQwQzIiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6KHOaBAAAAMFBMVEUAAAD///8REREqKipDQ0NUVFRkZGR6enqUlJSioqK4uLjGxsbY2Njl5eXu7u7+/v6kGKCeAAAAAnRSTlP/AOW3MEoAAAGVSURBVHja7NrbbsIwDAZg1zn3lPd/25mNbWREqIjW7rY/Vygg9OE4dlJBg/kgEEAAAQQQQAABBBBAAAEEEEAA4WACPRy9z/9FwmMeCCCAAAIIIIBwckLIxgTvmIMtYRqL59hMRaKofXz1lBpBKU8Z9iAU9rffWGSGlAmDc+PX63oCgslCTM1CrJKOTjsdQ5OOtTA1E8cT1tgEQUaSMCxqhCUFR35uJ2cJQ1YjZCb2d79YssGvplGQ/KTL1lTLhRrvmoQkKPlqtyPewyA37tGuLlzbBnmz6vgxxifCcBBhlTCEqkco9wsxZCKerc4L1zC4zVX6dYKcmkJnWqo0LxqEJcjZsduZ183NaocCHabuW5dmtWpEIUdPrrv9NjerHdIxsevmftwYhj12ROyf06RZ8aREmNu68HmPqDGWqkRoq+P38VWxOp7gEJ9va5MJYXZcLC9005gcp+HHPUL1Wiv12SXrRxxp+Y8Peqo9YTgNoSIKIIAAAgjmBPyFQmGAAAIIIIAAAggggAACCCCAAAIIv5zwJsAANN1GDRDcFnMAAAAASUVORK5CYII=" alt="relays" style="background-color: white; height: 80px;">
+                        <strong>Relays</strong>
+                        <table class="table table-sm">
+                            <th>Relay</th><th>State</th><th>Action</th>
+                            <tr>
+                                <td>0</td>
+                                <td>On</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-success btn-sm">On</button>
+                                        <button type="button" class="btn btn-danger btn-sm">Off</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>Off</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-success btn-sm">On</button>
+                                        <button type="button" class="btn btn-danger btn-sm">Off</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Off</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-success btn-sm">On</button>
+                                        <button type="button" class="btn btn-danger btn-sm">Off</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>unexported</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-success btn-sm disabled">On</button>
+                                        <button type="button" class="btn btn-danger btn-sm disabled">Off</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>unexported</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-success btn-sm disabled">On</button>
+                                        <button type="button" class="btn btn-danger btn-sm disabled">Off</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>unexported</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-success btn-sm disabled">On</button>
+                                        <button type="button" class="btn btn-danger btn-sm disabled">Off</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-sm-6">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIIAAACCCAMAAAC93eDPAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABtQTFRFAAAA////IyMjPz8/VVVVjo6OpaWlwMDAysrKGNIi0gAAAAJ0Uk5T/wDltzBKAAAAq0lEQVR42uzWYQ7CIAwG0DI21vuf2BNQDZlx6vv+NsAjBUK0jycQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBDqCQIBAQEBAQHhboQogvBfBN/XWxAy16uXELJH7NNlco/o+WZC38bY+lr1dUKUGa0dMdloxtHaqMd/C+FJI86zakRVvfA4zg9cXf2dS+l1REBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQFjNQ4ABABXOQfluoFSHAAAAAElFTkSuQmCC" alt="relays" style="background-color: white; height: 80px;">
+                        <strong>Swiches</strong>
+                        <button type="button" class="btn btn-dark float-right" data-toggle="modal" data-target="#addswtch">+ Add</button>
+                        <table class="table table-sm">
+                            <th>Name</th><th>Switch</th><th>Relay</th><th>Mode</th><th>Remove</th>
+                            <tr>
+                                <td>Pump 1</td>
+                                <td>0</td>
+                                <td>2</td>
+                                <td>On</td>
+                                <td><a href="?rmswitch=Pump 1|0|2|on|#null" class="btn btn-danger btn-sm">Delete</a></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIIAAACCCAMAAAC93eDPAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjZEQjJEMDUwMTYyODExRTdCQzE1RDhBN0MyODYxREExIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjZEQjJEMDUxMTYyODExRTdCQzE1RDhBN0MyODYxREExIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6NkRCMkQwNEUxNjI4MTFFN0JDMTVEOEE3QzI4NjFEQTEiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6NkRCMkQwNEYxNjI4MTFFN0JDMTVEOEE3QzI4NjFEQTEiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6P3/vOAAAAMFBMVEUAAAD///8QEBAoKCg5OTlaWlp4eHiLi4uZmZmnp6e5ubnR0dHk5OTq6ur19fX+/v5j0JuZAAAAAnRSTlP/AOW3MEoAAAH/SURBVHja7NnZboQwDAVQk5Vs5P//tum0aqc0HgUVQ6ReP45GcDBZ7EDL7UEggAACCCCAAAIIIIAAAggggAACCCCAAMIshO0r7iHk6K1R1EIZ62O+mlCCfdz9O5QN5UJC9rrd1LiQSm1RUnCm/aB9voiwrQ1gfKrPP9bkm0Kv2xWEZBsgdG61hYawSZ4QNf+s7/nRUZoQ1MsHbSlSQZbQBO7lwC/usOEYISry9fVfqicV5QhJk9sLaH+F6kgnKcJmyT69hVq7hKW0v21ChPX58SqXhUeyVhlC7l65Q3i3ZhGCJ7ONETZDXoJQNPVmW4+wBNJFgBC6SegTWhqCAMH2k9sltJdmzydkRWmckEjl0wmRTB0nVEPxdIInt4wTFjc+J0YJbWUMRwhhfIUcJpj+UOAIqT9//kRQVI4QCqnTCUT1CKESCRJoF/+TMBQSBG44cpuawHDkJiVX4wlMSkuHCmOBpYldoJkQWKDZbYoZjRLbFLdZc0NBYLPmShbutQmULFzhxs0ficKNKV8Zrkj5yhTxTBJEinimlWHaLplW5mdD97r7FWro9m0tO2gE29puc/97VZJs7mc44pjhoGeG464ZDv1mOPqc4QB4meAY/DHw7/4Y8JGKmz+JfI6Kmz8MnRYggAACCCCAAAIIIIAAAggggAACCCCAAMKZ8SbAAPPfTZ1oqS4NAAAAAElFTkSuQmCC" alt="relays" style="background-color: white; height: 80px;">
+                        <strong>Schedules</strong>
+                        <button type="button" class="btn btn-dark float-right" data-toggle="modal" data-target="#addschedule">+ Add</button>
+                        <table class="table table-sm">
+                            <th>Name</th><th>Start Time</th><th>End Time</th><th>Days</th><th>Mode</th><th>Remove</th>
+                            <tr>
+                                <td>Geyser-1-on</td>
+                                <td>10:00:00</td>
+                                <td>11:00:00</td>
+                                <td>1 2 3 4 5 6 7</td>
+                                <td>on</td>
+                                <td><a href="?rmschedule=Geyser-1-on|10:00|11:00|1 2 3 4 5 6 7|on" class="btn btn-danger btn-sm">Delete</a></td>
+                            </tr>
+                            <tr>
+                                <td>Geyser-1-off</td>
+                                <td>11:00:00</td>
+                                <td>11:30:00</td>
+                                <td>1 2 3 4 5 6 7</td>
+                                <td>off</td>
+                                <td><a href="?rmschedule=Geyser-1-on|10:00|11:00|1 2 3 4 5 6 7|on" class="btn btn-danger btn-sm">Delete</a></td>
+                            </tr>
+                            <tr>
+                                <td>Geyser-2-on</td>
+                                <td>12:00:00</td>
+                                <td>13:00:00</td>
+                                <td>1 2 3 4 5 6 7</td>
+                                <td>on</td>
+                                <td><a href="?rmschedule=Geyser-1-on|10:00|11:00|1 2 3 4 5 6 7|on" class="btn btn-danger btn-sm">Delete</a></td>
+                            </tr>
+                            <tr>
+                                <td>Geyser-2-off</td>
+                                <td>13:00:00</td>
+                                <td>13:30:00</td>
+                                <td>1 2 3 4 5 6 7</td>
+                                <td>off</td>
+                                <td><a href="?rmschedule=Geyser-1-on|10:00|11:00|1 2 3 4 5 6 7|on" class="btn btn-danger btn-sm">Delete</a></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <p><a href="https://github.com/ReinierNel/relayctl/blob/main/LICENSE">Copyright (c) 2021 ReinierNel</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
