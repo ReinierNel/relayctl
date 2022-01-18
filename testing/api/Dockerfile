@@ -11,7 +11,7 @@ ENV LANGUAGE en_US.UTF-8
 WORKDIR /testing
 
 ADD test-api-endpoints.sh /testing/test-api-endpoints.sh
-RUN chmod +x /testing/setup.sh
+RUN chmod +x /testing/test-api-endpoints.sh
 RUN groupadd gpio
 
-CMD test-api-endpoints.sh
+ENTRYPOINT ["/testing/test-api-endpoints.sh"]
