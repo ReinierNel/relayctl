@@ -11,19 +11,20 @@ tui_h=20
 tui_w=75
 tui_t=6
 
-if [ "$1" = "test" ]
-then
-        testing="true"
-else
-        testing="false"
-fi
+# handel script arguments
+for arg in "$@"
+do
+        case "$arg" in
+                --test|-t)
+                        test="true"
+                ;;
+                --silent|-s)
+                        silent="true"
+                ;;
+        esac
 
-if [ "$1" = "-y" ]
-then
-        yes_2_all="true"
-else
-        yes_2_all="false"
-fi
+done
+
 
 # gitlab repo base url to download raw files
 download_url="https://raw.githubusercontent.com/ReinierNel/relayctl"
@@ -101,7 +102,6 @@ function update_files() {
         #sed -i "s/__IN_GPIO_PIN__/${input_gpio_select[*]}/g" /etc/relayctl/settings.sh
         sed -i "s/__OUT_GPIO_PIN__/$1/g" /etc/relayctl/settings.sh
         sed -i "s/__IN_GPIO_PIN__/$2/g" /etc/relayctl/settings.sh
-        sed -i "s/__SCHEDULAR_FREQUEMCY__/10/g" /etc/relayctl/settings.sh
 }
 
 # update rc.local
@@ -125,13 +125,12 @@ EOF
 function install_api() {
         if [ "$?" = "0" ]
         then
+                # API setup
                 apt-get update
                 apt-get upgrade -y
                 apt-get install -y nginx fcgiwrap jq
-
                 usermod -a -G gpio www-data
                 mkdir -p /usr/lib/cgi-bin
-
                 curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/$1/api/cgi-bin/api.cgi" --output "/usr/lib/cgi-bin/api.cgi"
                 chown www-data:gpio /usr/lib/cgi-bin/api.cgi
                 chmod +x /usr/lib/cgi-bin/api.cgi
@@ -147,11 +146,13 @@ function install_api() {
                 api_key=$(hexdump -n 16 -e '4/4 "%08X" 1 "\n"' /dev/urandom)
                 openssl passwd -6 -salt "$(tr -dc A-Za-z0-9 </dev/urandom | head -c 13 ; echo '')" -stdin -noverify <<< "$api_key" >> /etc/relayctl/api.key
                 chown root:gpio /etc/relayctl/api.key
+                # web UI setup
+                curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/$1/web-ui/index-wireframe.html" --output "/var/www/html/index.html"
         fi
 }
 
 # install everting scip whiptail
-if [ "$yes_2_all" = "true" ]
+if [ "$silent" = "true" ]
 then
         download_files "main"
         update_files "17 18 27 22 23 24" "25 5 6 12 13 26"
@@ -284,7 +285,7 @@ input_gpio_select=$(whiptail --title "Setup Relayctl" --checklist \
 
 check_exit_status "$?" "Switches GPIO Select"
 
-if [ "$testing" = "false" ]
+if [ "$test" = "false" ]
 then
 
         download_files "$branch_selected"
@@ -307,7 +308,7 @@ whiptail --title "Setup Relayctl" --msgbox "$test_msg" "$tui_h" "$tui_w"
 
 # ask sould we setup an API or not
 read -r -d '' api_msg <<'EOF'
-Sould we enable the the REST API required by UniPi
+Sould we enable the the REST API and enable a web interface.
 
 !NOTE! your API key will be show only once on the next screen.
 API key can not be retrieved once setup is done, so copy it
@@ -324,7 +325,7 @@ EOF
 
 install_api=$(whiptail --title "Setup Relayctl" --yesno "$api_msg" 40 75 3>&1 1>&2 2>&3)
 
-if [ "$testing" = "false" ]
+if [ "$test" = "false" ]
 then
         install_api "$branch_selected"
 fi
@@ -346,7 +347,9 @@ Pleaes copy the API Key and store in a safe place.
 
 API key: "$api_key"
 
-for more info goto https://github.com/ReinierNel/relayctl#readme
+Web Interface: http://$(hostname -I | awk '{ print $1 }')/
+
+For more info goto https://github.com/ReinierNel/relayctl/wiki
 
 Your Pi will now reboot
 
@@ -355,7 +358,7 @@ EOF
 
 whiptail --title "Setup Relayctl" --msgbox "$bye_msg" "$tui_h" "$tui_w"
 
-if [ "$testing" = "false" ]
+if [ "$test" = "false" ]
 then
         reboot
 else

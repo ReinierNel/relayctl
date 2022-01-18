@@ -34,41 +34,41 @@ function load_inputs() {
         do
                 if [[ "$inputs" != "#"* ]]
                 then
-                        name=$(cut -d '|' -f 1 <<< "$inputs")
-			input_index=$(cut -d '|' -f 2 <<< "$inputs")
-			relay_index=$(cut -d '|' -f 3 <<< "$inputs")
-			mode=$(cut -d '|' -f 4 <<< "$inputs")
+                    name=$(cut -d '|' -f 1 <<< "$inputs")
+					input_index=$(cut -d '|' -f 2 <<< "$inputs")
+					relay_index=$(cut -d '|' -f 3 <<< "$inputs")
+					mode=$(cut -d '|' -f 4 <<< "$inputs")
 
-			init_gpio "${inputs_gpio[$input_index]}"
-			gpio_pin_value=$(read_gpio_value "${inputs_gpio[$input_index]}")
+					init_gpio "${inputs_gpio[$input_index]}"
+					gpio_pin_value=$(read_gpio_value "${inputs_gpio[$input_index]}")
 
-			case "$mode" in
-                	        on)
-					if [ "$gpio_pin_value" = "1" ]
-					then
-						log "$log_where" i "{ \"script\": \"$0\", \"function\": \"load_inputs()\",\"input_index\":\"$input_index\", \"relay_index\": \"$relay_index\", \"mode\": \"on\" }" "$log_file"
-						"$wokring_dir"/relayctl.sh -r="$relay_index" on
-					else
-						"$wokring_dir"/relayctl.sh -r="$relay_index" off
-					fi
-	                        ;;
-                        	off)
-					if [ "$gpio_pin_value" = "0" ]
-					then
-						log "$log_where" i "{ \"script\": \"$0\", \"function\": \"load_inputs()\",\"input_index\":\"$input_index\", \"relay_index\": \"$relay_index\", \"mode\": \"off\" }" "$log_file"
-                                                "$wokring_dir"/relayctl.sh -r="$relay_index" on
-                                        else
-                                                "$wokring_dir"/relayctl.sh -r="$relay_index" off
-                                        fi
-        	                ;;
-	                        cmd)
-                                	cmd=$(cut -d '|' -f 5 <<< "$inputs")
-					if [ "$gpio_pin_value" = "1" ]
-                                        then
-						log "$log_where" i "{ \"script\": \"$0\", \"function\": \"load_inputs()\",\"input_index\":\"$input_index\", \"relay_index\": \"$relay_index\", \"mode\": \"cmd\" }" "$log_file"
-						evel "$cmd"
-                                        fi
-                        	;;
+					case "$mode" in
+									on)
+							if [ "$gpio_pin_value" = "1" ]
+							then
+								log "$log_where" i "{ \"script\": \"$0\", \"function\": \"load_inputs()\",\"input_index\":\"$input_index\", \"relay_index\": \"$relay_index\", \"mode\": \"on\" }" "$log_file"
+								"$wokring_dir"/relayctl.sh -r="$relay_index" on
+							else
+								"$wokring_dir"/relayctl.sh -r="$relay_index" off
+							fi
+									;;
+									off)
+							if [ "$gpio_pin_value" = "0" ]
+							then
+								log "$log_where" i "{ \"script\": \"$0\", \"function\": \"load_inputs()\",\"input_index\":\"$input_index\", \"relay_index\": \"$relay_index\", \"mode\": \"off\" }" "$log_file"
+														"$wokring_dir"/relayctl.sh -r="$relay_index" on
+												else
+														"$wokring_dir"/relayctl.sh -r="$relay_index" off
+												fi
+									;;
+									cmd)
+											cmd=$(cut -d '|' -f 5 <<< "$inputs")
+							if [ "$gpio_pin_value" = "1" ]
+												then
+								log "$log_where" i "{ \"script\": \"$0\", \"function\": \"load_inputs()\",\"input_index\":\"$input_index\", \"relay_index\": \"$relay_index\", \"mode\": \"cmd\" }" "$log_file"
+								evel "$cmd"
+												fi
+									;;
                 	esac
 
                 fi

@@ -83,13 +83,13 @@ function remove_gpio() {
 function relay_ctl() {
         if [ "$2" = "on" ]
         then
-                log "all" i "{ \"script\": \"$0\", \"function\": \"relay_ctl()\", \"gpio\": \"$1\", \"state\": \"high\" }" "$log_file"
+                log "screen" i "{ \"script\": \"$0\", \"function\": \"relay_ctl()\", \"gpio\": \"$1\", \"state\": \"high\" }" "$log_file"
                 echo "1" > /sys/class/gpio/gpio"$1"/value
         fi
 
         if [ "$2" = "off" ]
         then
-                log "all" i "{ \"script\": \"$0\", \"function\": \"relay_ctl()\", \"gpio\": \"$1\", \"state\": \"low\" }" "$log_file"
+                log "screen" i "{ \"script\": \"$0\", \"function\": \"relay_ctl()\", \"gpio\": \"$1\", \"state\": \"low\" }" "$log_file"
                 echo "0" > /sys/class/gpio/gpio"$1"/value
         fi
 }
@@ -119,12 +119,12 @@ function check_gpio() {
 
                 if [ "$status" = "1" ]
                 then
-                        log "all" i "{ \"script\": \"$0\", \"function\": \"check_gpio()\", \"gpio\": \"$1\", \"state\": \"high\" }" "$log_file"
+                        log "screen" i "{ \"script\": \"$0\", \"function\": \"check_gpio()\", \"gpio\": \"$1\", \"state\": \"high\" }" "$log_file"
                 else
-                        log "all" i "{ \"script\": \"$0\", \"function\": \"check_gpio()\", \"gpio\": \"$1\", \"state\": \"low\" }" "$log_file"
+                        log "screen" i "{ \"script\": \"$0\", \"function\": \"check_gpio()\", \"gpio\": \"$1\", \"state\": \"low\" }" "$log_file"
                 fi
         else
-                log "all" w "{ \"script\": \"$0\", \"function\": \"check_gpio()\", \"gpio\": \"$1\", \"state\": \"unexported\" }" "$log_file"
+                log "screen" w "{ \"script\": \"$0\", \"function\": \"check_gpio()\", \"gpio\": \"$1\", \"state\": \"unexported\" }" "$log_file"
         fi
 }
 

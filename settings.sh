@@ -1,9 +1,9 @@
 #!/bin.bash
 # set the GPIO PIN that each relay is connected to
 # Note that pisition 1 = relay 0 and so on
-relays=("17" "18" "27")
+relays=(__OUT_GPIO_PIN__)
 # external inputs GPIO PINS
-inputs_gpio=("12")
+inputs_gpio=(__IN_GPIO_PIN__)
 # where where is all the scripts located
 wokring_dir="/etc/relayctl"
 # where is your scedule file located
