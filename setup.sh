@@ -17,9 +17,16 @@ do
         case "$arg" in
                 --test|-t)
                         test="true"
+                        silent="false"
                 ;;
                 --silent|-s)
+                        test="false"
                         silent="true"
+
+                ;;
+                *)
+                        test="false"
+                        silent="false"
                 ;;
         esac
 
