@@ -17,16 +17,10 @@ do
         case "$arg" in
                 --test|-t)
                         test="true"
-                        silent="false"
                 ;;
                 --silent|-s)
-                        test="false"
                         silent="true"
 
-                ;;
-                *)
-                        test="false"
-                        silent="false"
                 ;;
         esac
 
@@ -159,7 +153,7 @@ function install_api() {
 }
 
 # install everting scip whiptail
-if [ "$silent" = "true" ]
+if [ -n "$silent" ]
 then
         download_files "main"
         update_files "17 18 27 22 23 24" "25 5 6 12 13 26"
@@ -292,7 +286,7 @@ input_gpio_select=$(whiptail --title "Setup Relayctl" --checklist \
 
 check_exit_status "$?" "Switches GPIO Select"
 
-if [ "$test" = "false" ]
+if [ -z "$test" ]
 then
 
         download_files "$branch_selected"
@@ -332,7 +326,7 @@ EOF
 
 install_api=$(whiptail --title "Setup Relayctl" --yesno "$api_msg" 40 75 3>&1 1>&2 2>&3)
 
-if [ "$test" = "false" ]
+if [ -z "$test" ]
 then
         install_api "$branch_selected"
 fi
@@ -365,7 +359,7 @@ EOF
 
 whiptail --title "Setup Relayctl" --msgbox "$bye_msg" "$tui_h" "$tui_w"
 
-if [ "$test" = "false" ]
+if [ -z "$test" ]
 then
         reboot
 else
