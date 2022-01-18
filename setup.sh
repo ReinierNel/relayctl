@@ -15,9 +15,6 @@ tui_t=6
 for arg in "$@"
 do
         case "$arg" in
-                --test|-t)
-                        test="true"
-                ;;
                 --silent|-s)
                         silent="true"
 
@@ -98,9 +95,6 @@ function update_files() {
         chmod 775 /etc/relayctl/inputs.list
         chmod -x /etc/relayctl/LICENSE
 
-        # update settings.sh
-        #sed -i "s/__OUT_GPIO_PIN__/${gpio_select[*]}/g" /etc/relayctl/settings.sh
-        #sed -i "s/__IN_GPIO_PIN__/${input_gpio_select[*]}/g" /etc/relayctl/settings.sh
         sed -i "s/__OUT_GPIO_PIN__/$1/g" /etc/relayctl/settings.sh
         sed -i "s/__IN_GPIO_PIN__/$2/g" /etc/relayctl/settings.sh
 }
@@ -124,32 +118,29 @@ EOF
 
 # install api
 function install_api() {
-        if [ "$?" = "0" ]
-        then
-                # API setup
-                apt-get update
-                apt-get upgrade -y
-                apt-get install -y nginx fcgiwrap jq
-                usermod -a -G gpio www-data
-                mkdir -p /usr/lib/cgi-bin
-                curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/$1/api/cgi-bin/api.cgi" --output "/usr/lib/cgi-bin/api.cgi"
-                chown www-data:gpio /usr/lib/cgi-bin/api.cgi
-                chmod +x /usr/lib/cgi-bin/api.cgi
-                rm -f /etc/nginx/sites-available/default
-                curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/$1/api/nginx/default" --output "/etc/nginx/sites-available/default"
-                curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/$1/api/nginx/fastcgi_params" --output "/etc/nginx/fastcgi_params"
-                curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/$1/api-key.sh" --output "/etc/relayctl/api-key.sh"
-                chmod 600 /etc/relayctl/api-key.sh
-                chown root:root /etc/relayctl/api-key.sh
-                cp /usr/share/doc/fcgiwrap/examples/nginx.conf /etc/nginx/fcgiwrap.conf
-                sed -i "s/user www-data/user root/g" /etc/nginx/nginx.conf
-                service nginx restart
-                api_key=$(hexdump -n 16 -e '4/4 "%08X" 1 "\n"' /dev/urandom)
-                openssl passwd -6 -salt "$(tr -dc A-Za-z0-9 </dev/urandom | head -c 13 ; echo '')" -stdin -noverify <<< "$api_key" >> /etc/relayctl/api.key
-                chown root:gpio /etc/relayctl/api.key
-                # web UI setup
-                curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/$1/web-ui/index-wireframe.html" --output "/var/www/html/index.html"
-        fi
+        # API setup
+        apt-get update
+        apt-get upgrade -y
+        apt-get install -y nginx fcgiwrap jq
+        usermod -a -G gpio www-data
+        mkdir -p /usr/lib/cgi-bin
+        curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/$1/api/cgi-bin/api.cgi" --output "/usr/lib/cgi-bin/api.cgi"
+        chown www-data:gpio /usr/lib/cgi-bin/api.cgi
+        chmod +x /usr/lib/cgi-bin/api.cgi
+        rm -f /etc/nginx/sites-available/default
+        curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/$1/api/nginx/default" --output "/etc/nginx/sites-available/default"
+        curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/$1/api/nginx/fastcgi_params" --output "/etc/nginx/fastcgi_params"
+        curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/$1/api-key.sh" --output "/etc/relayctl/api-key.sh"
+        chmod 600 /etc/relayctl/api-key.sh
+        chown root:root /etc/relayctl/api-key.sh
+        cp /usr/share/doc/fcgiwrap/examples/nginx.conf /etc/nginx/fcgiwrap.conf
+        sed -i "s/user www-data/user root/g" /etc/nginx/nginx.conf
+        service nginx restart
+        api_key=$(hexdump -n 16 -e '4/4 "%08X" 1 "\n"' /dev/urandom)
+        openssl passwd -6 -salt "$(tr -dc A-Za-z0-9 </dev/urandom | head -c 13 ; echo '')" -stdin -noverify <<< "$api_key" >> /etc/relayctl/api.key
+        chown root:gpio /etc/relayctl/api.key
+        # web UI setup
+        curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/$1/web-ui/index-wireframe.html" --output "/var/www/html/index.html"
 }
 
 # install everting scip whiptail
@@ -286,13 +277,9 @@ input_gpio_select=$(whiptail --title "Setup Relayctl" --checklist \
 
 check_exit_status "$?" "Switches GPIO Select"
 
-if [ -z "$test" ]
-then
-
-        download_files "$branch_selected"
-        update_files "${gpio_select[*]}" "${input_gpio_select[*]}"
-        update_rc_local
-fi
+download_files "$branch_selected"
+update_files "${gpio_select[*]}" "${input_gpio_select[*]}"
+update_rc_local
 
 # testing relays
 read -r -d '' test_msg <<'EOF'
@@ -326,10 +313,7 @@ EOF
 
 install_api=$(whiptail --title "Setup Relayctl" --yesno "$api_msg" 40 75 3>&1 1>&2 2>&3)
 
-if [ -z "$test" ]
-then
-        install_api "$branch_selected"
-fi
+install_api "$branch_selected"
 
 # good bye
 read -r -d '' bye_msg << EOF
@@ -359,20 +343,4 @@ EOF
 
 whiptail --title "Setup Relayctl" --msgbox "$bye_msg" "$tui_h" "$tui_w"
 
-if [ -z "$test" ]
-then
-        reboot
-else
-        read -r -d '' test_report << EOF
-Testing Report
-
-${!testing@} = $testing
-${!branch_selected@} = $branch_selected
-${!gpio_select@} = ${gpio_select[@]}
-${!input_gpio_select@} = ${input_gpio_select[@]}
-${!install_api@} = $install_api
-EOF
-
-        whiptail --title "Setup Relayctl" --msgbox "$test_report" "$tui_h" "$tui_w"
-
-fi
+reboot
