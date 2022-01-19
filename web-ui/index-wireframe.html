@@ -13,6 +13,8 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
     
+    <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIIAAACCCAMAAAC93eDPAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkUzOEM5MzI1MTcyNjExRTdCMDQzQUQyMjk2MTI0MEMyIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkUzOEM5MzI2MTcyNjExRTdCMDQzQUQyMjk2MTI0MEMyIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6RTM4QzkzMjMxNzI2MTFFN0IwNDNBRDIyOTYxMjQwQzIiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6RTM4QzkzMjQxNzI2MTFFN0IwNDNBRDIyOTYxMjQwQzIiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6KHOaBAAAAMFBMVEUAAAD///8REREqKipDQ0NUVFRkZGR6enqUlJSioqK4uLjGxsbY2Njl5eXu7u7+/v6kGKCeAAAAAnRSTlP/AOW3MEoAAAGVSURBVHja7NrbbsIwDAZg1zn3lPd/25mNbWREqIjW7rY/Vygg9OE4dlJBg/kgEEAAAQQQQAABBBBAAAEEEEAA4WACPRy9z/9FwmMeCCCAAAIIIIBwckLIxgTvmIMtYRqL59hMRaKofXz1lBpBKU8Z9iAU9rffWGSGlAmDc+PX63oCgslCTM1CrJKOTjsdQ5OOtTA1E8cT1tgEQUaSMCxqhCUFR35uJ2cJQ1YjZCb2d79YssGvplGQ/KTL1lTLhRrvmoQkKPlqtyPewyA37tGuLlzbBnmz6vgxxifCcBBhlTCEqkco9wsxZCKerc4L1zC4zVX6dYKcmkJnWqo0LxqEJcjZsduZ183NaocCHabuW5dmtWpEIUdPrrv9NjerHdIxsevmftwYhj12ROyf06RZ8aREmNu68HmPqDGWqkRoq+P38VWxOp7gEJ9va5MJYXZcLC9005gcp+HHPUL1Wiv12SXrRxxp+Y8Peqo9YTgNoSIKIIAAAgjmBPyFQmGAAAIIIIAAAggggAACCCCAAAIIv5zwJsAANN1GDRDcFnMAAAAASUVORK5CYII=" />
+
     <style>
         /*body*/
         body {
@@ -39,103 +41,50 @@
               <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <form action="#" method="post">
+                <form>
                     <div class="form-group">
                         <label for="switch">Enter Mapping Name</label>
-                        <input type="text" class="form-control" name="name" required>
+                        <input type="text" id="switch-add-name" class="form-control" name="name" required>
                     </div>
                     <div class="form-group">
                       <label for="switch">Select Switch Index</label>
                       <br>
-                      <div class="form-check-inline">
-                        <label class="form-check-label">
-                          <input type="radio" class="form-check-input" name="switch" value="0">0
-                        </label>
-                      </div>
-                      <div class="form-check-inline">
-                        <label class="form-check-label">
-                          <input type="radio" class="form-check-input" name="switch" value="1">1
-                        </label>
-                      </div>
-                      <div class="form-check-inline">
-                        <label class="form-check-label">
-                          <input type="radio" class="form-check-input" name="switch" value="2">2
-                        </label>
-                      </div>
-                      <div class="form-check-inline">
-                        <label class="form-check-label">
-                          <input type="radio" class="form-check-input" name="switch" value="3">3
-                        </label>
-                      </div>
-                      <div class="form-check-inline">
-                        <label class="form-check-label">
-                          <input type="radio" class="form-check-input" name="switch" value="4">4
-                        </label>
-                      </div>
-                      <div class="form-check-inline">
-                        <label class="form-check-label">
-                          <input type="radio" class="form-check-input" name="switch" value="5">5
-                        </label>
-                      </div>
+                      <select class="form-control" id="switch-add-index">
+                        <option>0</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                      </select>
                     </div>
                     <div class="form-group">
                       <label for="relay">Select Relay Index</label>
                       <br>
-                      <div class="form-check-inline">
-                        <label class="form-check-label">
-                          <input type="radio" class="form-check-input" name="relay" value="0">0
-                        </label>
-                      </div>
-                      <div class="form-check-inline">
-                        <label class="form-check-label">
-                          <input type="radio" class="form-check-input" name="relay" value="1">1
-                        </label>
-                      </div>
-                      <div class="form-check-inline">
-                        <label class="form-check-label">
-                          <input type="radio" class="form-check-input" name="relay" value="2">2
-                        </label>
-                      </div>
-                      <div class="form-check-inline">
-                        <label class="form-check-label">
-                          <input type="radio" class="form-check-input" name="relay" value="3">3
-                        </label>
-                      </div>
-                      <div class="form-check-inline">
-                        <label class="form-check-label">
-                          <input type="radio" class="form-check-input" name="relay" value="4">4
-                        </label>
-                      </div>
-                      <div class="form-check-inline">
-                        <label class="form-check-label">
-                          <input type="radio" class="form-check-input" name="relay" value="5">5
-                        </label>
-                      </div>
+                      <select class="form-control" id="switch-add-relay">
+                        <option>0</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                      </select>
                     </div>
                     <div class="form-group">
                         <label for="relay">Select Mode</label>
                         <br>
-                        <div class="form-check-inline">
-                          <label class="form-check-label">
-                            <input type="radio" class="form-check-input" name="mode" value="on">On
-                          </label>
-                        </div>
-                        <div class="form-check-inline">
-                            <label class="form-check-label">
-                              <input type="radio" class="form-check-input" name="mode" value="off">Off
-                            </label>
-                          </div>
+                        <select class="form-control" id="switch-add-mode">
+                          <option>on</option>
+                          <option>off</option>
+                        </select>
                     </div>
-                    <input type="hidden" value="switch" name="add">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    
                   </form>
             </div>
             <div class="modal-footer">
+              <button onclick="add_switch_mapping()"  class="btn btn-primary">Submit</button>
               <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
-
-            
-            
           </div>
         </div>
       </div>
@@ -147,86 +96,64 @@
             <div class="modal-header">
               <h4 class="modal-title">New Schedule Entry</h4>
               <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-      
+            </div>     
             <div class="modal-body">
-                <form action="#" method="post">
+              <div id="alert-space">
+                
+              </div>
+                <form>
                     <div class="form-group">
                       <label for="name">Enter a Schedule Name</label>
-                      <input type="text" class="form-control" id="name" required>
+                      <input type="text" class="form-control" id="schedule-add-name" required>
                     </div>
                     <div class="form-group">
                       <label for="start">Enter Start Time</label>
-                      <input type="time" class="form-control" id="start" name="start">
+                      <input type="time" class="form-control" id="schedule-add-start-time" required>
                     </div>
                     <div class="form-group">
-                        <label for="end">Enter End Time</label>
-                        <input type="time" class="form-control" id="end" name="end">
+                      <label for="end">Enter End Time</label>
+                      <input type="time" class="form-control" id="schedule-add-end-time" required>
                     </div>
                     <div class="form-group">
-                        <label for="week">Select Days of the Week</label>
+                      <label for="week">Enter Days of the week separated by spaces.</label>
+                      <label for="week">E.g. 1 = Monday, 7 = Sunday</label>
+                      <input type="text" class="form-control" id="schedule-add-days" value="1 2 3 4 5 6 7" required>
+                    </div>
+                      <div class="form-group">
+                        <label for="relay">Select Relay Index</label>
                         <br>
-                        <div class="form-check-inline">
-                            <label class="form-check-label">
-                              <input type="checkbox" class="form-check-input" name="days" value="1">Monday
-                            </label>
-                        </div>
-                        <div class="form-check-inline">
-                            <label class="form-check-label">
-                              <input type="checkbox" class="form-check-input" name="days" value="2">Tuesday
-                            </label>
-                        </div>
-                        <div class="form-check-inline">
-                            <label class="form-check-label">
-                              <input type="checkbox" class="form-check-input" name="days" value="3">Wednesday
-                            </label>
-                        </div>
-                        <div class="form-check-inline">
-                            <label class="form-check-label">
-                              <input type="checkbox" class="form-check-input" name="days" value="4">Thursday
-                            </label>
-                        </div>
-                        <div class="form-check-inline">
-                            <label class="form-check-label">
-                              <input type="checkbox" class="form-check-input" name="days" value="5">Friday
-                            </label>
-                        </div>
-                        <div class="form-check-inline">
-                            <label class="form-check-label">
-                              <input type="checkbox" class="form-check-input" name="days" value="6">Saturday
-                            </label>
-                        </div>
-                        <div class="form-check-inline">
-                            <label class="form-check-label">
-                              <input type="checkbox" class="form-check-input" name="days" value="7">Sunday
-                            </label>
-                        </div>
-                        <div class="form-group">
-                            <label for="relay">Select Mode</label>
+                        <select class="form-control" id="schedule-add-relay">
+                          <option>0</option>
+                          <option>1</option>
+                          <option>2</option>
+                          <option>3</option>
+                          <option>4</option>
+                          <option>5</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                            <label for="relay">Select Action</label>
                             <br>
-                            <div class="form-check-inline">
-                              <label class="form-check-label">
-                                <input type="radio" class="form-check-input" name="mode" value="on">On
-                              </label>
-                            </div>
-                            <div class="form-check-inline">
-                                <label class="form-check-label">
-                                  <input type="radio" class="form-check-input" name="mode" value="off">Off
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                            <select class="form-control" id="schedule-add-action">
+                              <option>on</option>
+                              <option>off</option>
+                            </select>
+                      </div>
+                    
+                    
                 </form>
             </div>
       
             <div class="modal-footer">
+              <button onclick="add_schedule()" class="btn btn-primary">Submit</button>
               <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
       
           </div>
         </div>
       </div>
+
+
     <div class="container">
         <div class="row">
             <div class="col"></div>
@@ -251,66 +178,7 @@
                         <strong>Relays</strong>
                         <table class="table table-sm">
                             <th>Relay</th><th>State</th><th>Action</th>
-                            <tr>
-                                <td>0</td>
-                                <td>On</td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-success btn-sm">On</button>
-                                        <button type="button" class="btn btn-danger btn-sm">Off</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>Off</td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-success btn-sm">On</button>
-                                        <button type="button" class="btn btn-danger btn-sm">Off</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Off</td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-success btn-sm">On</button>
-                                        <button type="button" class="btn btn-danger btn-sm">Off</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>unexported</td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-success btn-sm disabled">On</button>
-                                        <button type="button" class="btn btn-danger btn-sm disabled">Off</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>unexported</td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-success btn-sm disabled">On</button>
-                                        <button type="button" class="btn btn-danger btn-sm disabled">Off</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td>unexported</td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-success btn-sm disabled">On</button>
-                                        <button type="button" class="btn btn-danger btn-sm disabled">Off</button>
-                                    </div>
-                                </td>
-                            </tr>
+                            <tbody id="relays-rows"></tbody>
                         </table>
                     </div>
                     <div class="col-sm-6">
@@ -319,13 +187,8 @@
                         <button type="button" class="btn btn-dark float-right" data-toggle="modal" data-target="#addswtch">+ Add</button>
                         <table class="table table-sm">
                             <th>Name</th><th>Switch</th><th>Relay</th><th>Mode</th><th>Remove</th>
-                            <tr>
-                                <td>Pump 1</td>
-                                <td>0</td>
-                                <td>2</td>
-                                <td>On</td>
-                                <td><a href="?rmswitch=Pump 1|0|2|on|#null" class="btn btn-danger btn-sm">Delete</a></td>
-                            </tr>
+                            <tbody id="swiches-rows"></tbody>
+                            
                         </table>
                     </div>
                 </div>
@@ -335,39 +198,8 @@
                         <strong>Schedules</strong>
                         <button type="button" class="btn btn-dark float-right" data-toggle="modal" data-target="#addschedule">+ Add</button>
                         <table class="table table-sm">
-                            <th>Name</th><th>Start Time</th><th>End Time</th><th>Days</th><th>Mode</th><th>Remove</th>
-                            <tr>
-                                <td>Geyser-1-on</td>
-                                <td>10:00:00</td>
-                                <td>11:00:00</td>
-                                <td>1 2 3 4 5 6 7</td>
-                                <td>on</td>
-                                <td><a href="?rmschedule=Geyser-1-on|10:00|11:00|1 2 3 4 5 6 7|on" class="btn btn-danger btn-sm">Delete</a></td>
-                            </tr>
-                            <tr>
-                                <td>Geyser-1-off</td>
-                                <td>11:00:00</td>
-                                <td>11:30:00</td>
-                                <td>1 2 3 4 5 6 7</td>
-                                <td>off</td>
-                                <td><a href="?rmschedule=Geyser-1-on|10:00|11:00|1 2 3 4 5 6 7|on" class="btn btn-danger btn-sm">Delete</a></td>
-                            </tr>
-                            <tr>
-                                <td>Geyser-2-on</td>
-                                <td>12:00:00</td>
-                                <td>13:00:00</td>
-                                <td>1 2 3 4 5 6 7</td>
-                                <td>on</td>
-                                <td><a href="?rmschedule=Geyser-1-on|10:00|11:00|1 2 3 4 5 6 7|on" class="btn btn-danger btn-sm">Delete</a></td>
-                            </tr>
-                            <tr>
-                                <td>Geyser-2-off</td>
-                                <td>13:00:00</td>
-                                <td>13:30:00</td>
-                                <td>1 2 3 4 5 6 7</td>
-                                <td>off</td>
-                                <td><a href="?rmschedule=Geyser-1-on|10:00|11:00|1 2 3 4 5 6 7|on" class="btn btn-danger btn-sm">Delete</a></td>
-                            </tr>
+                            <th>Name</th><th>Start Time</th><th>End Time</th><th>Days</th><th>Relay</th><th>Action</th><th>Remove</th>
+                            <tbody id="schedule-rows"></tbody>
                         </table>
                     </div>
                 </div>
@@ -380,24 +212,255 @@
         </div>
     </div>
     <script>
-      let api_key = prompt("API Key?");
+      // Functions
 
-      let domain_name = window.location.hostname;
+      // Set a cookie
+      function setCookie(cname, cvalue, exdays) {
+        const d = new Date();
+        d.setTime(d.getTime() + (exdays*24*60*60*1000));
+        let expires = "expires="+ d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+      }
 
-      let request = new XMLHttpRequest();
+      // Get a cookie
+      function getCookie(cname) {
+        let name = cname + "=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(';');
+        for(let i = 0; i <ca.length; i++) {
+          let c = ca[i];
+          while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+          }
+        }
+        return "";
+      }
 
-      request.open("GET", `http://${domain_name}/api/v1/relays/`);
-      request.setRequestHeader("Authorization", `Bearer ${api_key}`);
-      request.send();
-
-      request.onload = () => {
-        console.log(request);
-        if (request.status === 200) {
-          console.log(JSON.parse(request.response));
-        } else {
-          console.log(`error ${request.status} ${request.statusText}`);
+      // Check that the API key cookie is set otherwise ask for key
+      function checkCookieApi() {
+        let api_key = getCookie("relayctl-webui-session");
+        if (api_key == "") {
+          api_key = prompt("API Key?");
+          if (api_key != "" && api_key != null) {
+            setCookie("relayctl-webui-session", api_key, 30);
+          }
         }
       }
+
+      // Get Relay Statys for all configured relays 
+      function status_relays() {
+        let request = new XMLHttpRequest();
+        request.open("GET", `http://${domain_name}/api/v1/relays/`);
+        request.setRequestHeader("Authorization", `Bearer ${api_key}`);
+        request.send();
+
+        request.onload = () => {
+          if (request.status === 200) {
+          
+            let relays = JSON.parse(request.response);  
+            let relays_count=Object.keys(relays).length - 1; // - 2 for status element in json repsonce and index starts at 0
+            document.getElementById("relays-rows").innerHTML = "";
+
+            for (let i = 0; i < relays_count; i++) {
+              let relay_id = "r" + i;
+              relay_on = `<tr><td>${i}</td><td>On</td><td><button type=\"button\" onclick=\"switch_relay('${i}', 'off')\" class=\"btn btn-secondary btn-sm btn-block\">Off</button></td></tr>`;
+              relay_off = `<tr><td>${i}</td><td>Off</td><td><button type=\"button\" onclick=\"switch_relay('${i}', 'on')\" class=\"btn btn-warning btn-sm btn-block\">On</button></td></tr>`;
+              relay_unexported = `<tr><td>${i}</td><td>Unexported</td><td><button type=\"button\" onclick=\"switch_relay('${i}', 'on')\" class=\"btn btn-warning btn-sm btn-block\">On</button></td></tr>`;
+
+              switch(relays[relay_id].state) {
+              case "high":
+                document.getElementById("relays-rows").innerHTML += relay_on;
+                break;
+              case "low":
+                document.getElementById("relays-rows").innerHTML += relay_off;
+                break;
+              default:
+              document.getElementById("relays-rows").innerHTML += relay_off;
+              }
+            }
+          } else {
+            console.log(`error ${request.status} ${request.statusText}`);
+          }
+        }
+
+        request.DONE;
+      }
+
+      // Get all schedules
+      function get_schedules() {
+        let request = new XMLHttpRequest();
+        request.open("GET", `http://${domain_name}/api/v1/schedules/`);
+        request.setRequestHeader("Authorization", `Bearer ${api_key}`);
+        request.send();
+        request.onload = () => {
+          if (request.status === 200) {
+            if ( request.response !== ' {"status": "200 OK",}' ) {
+
+              let schedules = JSON.parse(request.response);  
+              document.getElementById("schedule-rows").innerHTML = "";
+
+              for (schedule in schedules) {
+                if (schedule !== 'status') {
+                  let name = schedules[schedule]['name']
+                  let start_time = schedules[schedule]['start_time']
+                  let end_time = schedules[schedule]['end_time']
+                  let days = schedules[schedule]['days']
+                  let relay = schedules[schedule]['relay']
+                  let action = schedules[schedule]['action']
+
+                  let schedule_rows = `<tr><td>${name}</td><td>${start_time}</td><td>${end_time}</td><td>${days}</td><td>${relay}</td><td>${action}</td><td><button type=\"button\" onclick=\"delete_schedule('${name}', '${start_time}', '${end_time}', '${days}', '${relay}', '${action}')\" class=\"btn btn-danger btn-sm btn-block\">Remove</button></td></tr>`
+                  document.getElementById("schedule-rows").innerHTML += schedule_rows
+                }
+              }
+            }
+          } else {
+            console.log(`error ${request.status} ${request.statusText}`);
+          }
+        }
+        request.DONE;
+      }
+
+      // get list of external switch mappings
+      function get_switch_mappings() {
+        let request = new XMLHttpRequest();
+        request.open("GET", `http://${domain_name}/api/v1/switches/`);
+        request.setRequestHeader("Authorization", `Bearer ${api_key}`);
+        request.send();
+        request.onload = () => {
+          if (request.status === 200) {
+            if ( request.response !== ' {"status": "200 OK",}' ) {
+
+              let swiches = JSON.parse(request.response);  
+              document.getElementById("swiches-rows").innerHTML = "";
+
+              for (sw_data in swiches) {
+                if (sw_data !== 'status') {
+                  let name = swiches[sw_data]['name']
+                  let input_index = swiches[sw_data]['input_index']
+                  let relay_index = swiches[sw_data]['relay_index']
+                  let mode = swiches[sw_data]['mode']
+                  let swiches_row = `<tr><td>${name}</td><td>${input_index}</td><td>${relay_index}</td><td>${mode}</td><td><button type=\"button\" onclick=\"delete_switch_mapping('${name}', '${input_index}', '${relay_index}', '${mode}')\" class=\"btn btn-danger btn-sm btn-block\">Remove</button></td></tr>`
+                  document.getElementById("swiches-rows").innerHTML += swiches_row
+                }
+              }
+            }
+          } else {
+            console.log(`error ${request.status} ${request.statusText}`);
+          }
+        }
+        request.DONE;
+      }
+
+      // Switch relay on or off
+      function switch_relay(relay_index, mode) {
+        let request = new XMLHttpRequest();
+        request.open("GET", `http://${domain_name}/api/v1/relays/${relay_index}/${mode}`);
+        request.setRequestHeader("Authorization", `Bearer ${api_key}`);
+        request.send();
+        request.onload = () => {
+        if (request.status !== 200) {
+            console.log(`error ${request.status} ${request.statusText}`);
+          }
+        }
+        request.DONE;
+        status_relays();
+      }
+
+      // add a switch to relay mapping
+      function add_switch_mapping() {
+        let new_switch_name = input = document.getElementById("switch-add-name").value;
+        let new_switch_index = input = document.getElementById("switch-add-index").value;
+        let new_switch_relay = input = document.getElementById("switch-add-relay").value;
+        let new_switch_mode = input = document.getElementById("switch-add-mode").value;
+        let new_switch_json = `{"name":"${new_switch_name}","input_index":"${new_switch_index}","relay_index":"${new_switch_relay}","mode":"${new_switch_mode}"}`;
+        let request = new XMLHttpRequest();
+        request.open("POST", `http://${domain_name}/api/v1/switches/add`);
+        request.setRequestHeader("Authorization", `Bearer ${api_key}`);
+        request.send(new_switch_json);
+        request.onload = () => {
+        if (request.status === 200) {    
+          get_switch_mappings();
+            $('#addswtch').modal('hide');
+          } else {
+            console.log(`error ${request.status} ${request.statusText}`);
+          }
+        }
+        request.DONE;
+      }
+
+      // delete a switch to relay mapping
+      function delete_switch_mapping(name, sw_index, r_index, mode) {
+        let remove_switch_json = `{"name": "${name}", "input_index": "${sw_index}", "relay_index": "${r_index}", "mode": "${mode}"}`
+        let request = new XMLHttpRequest();
+        request.open("DELETE", `http://${domain_name}/api/v1/switches/delete`);
+        request.setRequestHeader("Authorization", `Bearer ${api_key}`);
+        request.send(remove_switch_json);
+        request.onload = () => {
+        if (request.status === 200) {
+          get_switch_mappings();
+          } else {
+            console.log(`error ${request.status} ${request.statusText}`);
+          }
+        }
+        request.DONE;
+      }
+
+      // Add schedule
+      function add_schedule() {
+        let new_schedule_name = input = document.getElementById("schedule-add-name").value;
+        let new_schedule_start = input = document.getElementById("schedule-add-start-time").value;
+        let new_schedule_end = input = document.getElementById("schedule-add-end-time").value;
+        let new_schedule_days = input = document.getElementById("schedule-add-days").value;
+        let new_schedule_relay = input = document.getElementById("schedule-add-relay").value;
+        let new_schedule_action = input = document.getElementById("schedule-add-action").value;
+        let new_schedule_json = `{"name": "${new_schedule_name}","start_time": "${new_schedule_start}:00","end_time": "${new_schedule_end}:00","days": "${new_schedule_days}","relay_index": "${new_schedule_relay}","action": "${new_schedule_action}"}`;
+        console.log(new_schedule_days)
+
+        let request = new XMLHttpRequest();
+        request.open("POST", `http://${domain_name}/api/v1/schedules/add`);
+        request.setRequestHeader("Authorization", `Bearer ${api_key}`);
+        request.send(new_schedule_json);
+        request.onload = () => {
+        if (request.status === 200) {    
+            get_schedules();
+            $('#addschedule').modal('hide');
+          } else if (request.status === 422) {
+            document.getElementById("alert-space").innerHTML = '<div class="alert alert alert-danger"><strong>Input error</strong> Name must be unique and all fields are mandatory!</div>'
+          } else {
+            console.log(`error ${request.status} ${request.statusText}`);
+          }
+        }
+        request.DONE;
+      }
+
+      // Delete a Scedule
+      function delete_schedule(name, start_time, end_time, days, relay, action) {
+        let remove_schedules_json = `{"name": "${name}","start_time": "${start_time}","end_time": "${end_time}","days": "${days}","relay_index": "${relay}","action": "${action}"}`;
+        let request = new XMLHttpRequest();
+        request.open("DELETE", `http://${domain_name}/api/v1/schedules/delete`);
+        request.setRequestHeader("Authorization", `Bearer ${api_key}`);
+        request.send(remove_schedules_json);
+        request.onload = () => {
+        if (request.status === 200) {
+            get_schedules();
+          } else {
+            console.log(`error ${request.status} ${request.statusText}`);
+          }
+        }
+        request.DONE;
+      }
+
+      // Main logic
+      checkCookieApi();
+      let domain_name = window.location.hostname;
+      let api_key = getCookie("relayctl-webui-session")
+      status_relays();
+      get_switch_mappings();
+      get_schedules();
+      
     </script>
 </body>
 </html>

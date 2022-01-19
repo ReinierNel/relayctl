@@ -98,7 +98,7 @@ function router() {
                                         for pins in "${!relays[@]}"
                                         do
                                                 relays_output=$(/etc/relayctl/relayctl.sh -r="$pins" status)
-                                                gpio_in_use+="\"$pins\": $relays_output,"
+                                                gpio_in_use+="\"r$pins\": $relays_output,"
                                         done
 
                                         gpio_in_use=$(echo "$gpio_in_use" | sed 's/\(.*\),/\1 /')
@@ -108,7 +108,7 @@ function router() {
                                         if [ "$action" = "on" ] || [ "$action" = "off" ] || [ "$action" = "status" ]
                                         then
                                                 relays_output=$(/etc/relayctl/relayctl.sh -r="$slug" "$action")
-                                                request "\"$slug\": $relays_output"
+                                                request "\"r$slug\": $relays_output"
                                         else
                                                 status="${status_code[400]}"
                                                 response_json+="\"status\": \"400 Bad Request\""
@@ -212,7 +212,7 @@ function router() {
                                                                 relay_index=$(cut -d '|' -f 5 <<< "$schedule")
                                                                 action=$(cut -d '|' -f 6 <<< "$schedule")
 
-                                                                schedule_list+="\"$name\": {\"start_time\": \"$start_time\", \"end_time\": \"$end_time\", \"days\": \"$days\", \"relay\": \"$relay_index\", \"action\": \"$action\"},"
+                                                                schedule_list+="\"$name\": {\"name\": \"$name\", \"start_time\": \"$start_time\", \"end_time\": \"$end_time\", \"days\": \"$days\", \"relay\": \"$relay_index\", \"action\": \"$action\"},"
                                                         fi
                                                 done < "/etc/relayctl/schedule.list"
 
@@ -307,7 +307,7 @@ function router() {
                                                                 mode=$(cut -d '|' -f 4 <<< "$switches")
                                                                 cmd=$(cut -d '|' -f 5 <<< "$switches")
 
-                                                                switches_list+="\"$name\": { \"input_index\": \"$input_index\", \"relay_index\": \"$relay_index\", \"mode\": \"$mode\", \"cmd\": \"$cmd\"},"
+                                                                switches_list+="\"$name\": { \"name\": \"$name\", \"input_index\": \"$input_index\", \"relay_index\": \"$relay_index\", \"mode\": \"$mode\", \"cmd\": \"$cmd\"},"
                                                         fi
                                                 done < "/etc/relayctl/inputs.list"
 
