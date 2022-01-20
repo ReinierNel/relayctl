@@ -7,7 +7,6 @@
 
     <title>Relayctl</title>
 
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
@@ -16,7 +15,6 @@
     <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIIAAACCCAMAAAC93eDPAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkUzOEM5MzI1MTcyNjExRTdCMDQzQUQyMjk2MTI0MEMyIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkUzOEM5MzI2MTcyNjExRTdCMDQzQUQyMjk2MTI0MEMyIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6RTM4QzkzMjMxNzI2MTFFN0IwNDNBRDIyOTYxMjQwQzIiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6RTM4QzkzMjQxNzI2MTFFN0IwNDNBRDIyOTYxMjQwQzIiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6KHOaBAAAAMFBMVEUAAAD///8REREqKipDQ0NUVFRkZGR6enqUlJSioqK4uLjGxsbY2Njl5eXu7u7+/v6kGKCeAAAAAnRSTlP/AOW3MEoAAAGVSURBVHja7NrbbsIwDAZg1zn3lPd/25mNbWREqIjW7rY/Vygg9OE4dlJBg/kgEEAAAQQQQAABBBBAAAEEEEAA4WACPRy9z/9FwmMeCCCAAAIIIIBwckLIxgTvmIMtYRqL59hMRaKofXz1lBpBKU8Z9iAU9rffWGSGlAmDc+PX63oCgslCTM1CrJKOTjsdQ5OOtTA1E8cT1tgEQUaSMCxqhCUFR35uJ2cJQ1YjZCb2d79YssGvplGQ/KTL1lTLhRrvmoQkKPlqtyPewyA37tGuLlzbBnmz6vgxxifCcBBhlTCEqkco9wsxZCKerc4L1zC4zVX6dYKcmkJnWqo0LxqEJcjZsduZ183NaocCHabuW5dmtWpEIUdPrrv9NjerHdIxsevmftwYhj12ROyf06RZ8aREmNu68HmPqDGWqkRoq+P38VWxOp7gEJ9va5MJYXZcLC9005gcp+HHPUL1Wiv12SXrRxxp+Y8Peqo9YTgNoSIKIIAAAgjmBPyFQmGAAAIIIIAAAggggAACCCCAAAIIv5zwJsAANN1GDRDcFnMAAAAASUVORK5CYII=" />
 
     <style>
-        /*body*/
         body {
             font: Inconsolata, monospace;
             position: absolute;
@@ -169,6 +167,11 @@
             </div>
             <div class="col"></div>       
         </div>
+        <div class="row">
+          <div class="col-sm-12">
+              <button type="button" class="btn btn-danger float-right">Logout</button>
+          </div>
+        </div>
         <hr>
         <div class="row">
             <div class="col">
@@ -239,13 +242,21 @@
         return "";
       }
 
+      function rot13(str) {
+        let input     = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        let output    = 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm';
+        let index     = x => input.indexOf(x);
+        let translate = x => index(x) > -1 ? output[index(x)] : x;
+        return str.split('').map(translate).join('');
+      }
+
       // Check that the API key cookie is set otherwise ask for key
       function checkCookieApi() {
         let api_key = getCookie("relayctl-webui-session");
         if (api_key == "") {
-          api_key = prompt("API Key?");
+          api_key = prompt("Enter API Key to continue");
           if (api_key != "" && api_key != null) {
-            setCookie("relayctl-webui-session", api_key, 30);
+            setCookie("relayctl-webui-session", api_key, 7);
           }
         }
       }
@@ -256,19 +267,19 @@
         request.open("GET", `http://${domain_name}/api/v1/relays/`);
         request.setRequestHeader("Authorization", `Bearer ${api_key}`);
         request.send();
-
+        document.getElementById("relays-rows").innerHTML = `<tr><td><div class="spinner-border text-dark"></div></td></tr>`;
         request.onload = () => {
           if (request.status === 200) {
           
             let relays = JSON.parse(request.response);  
             let relays_count=Object.keys(relays).length - 1; // - 2 for status element in json repsonce and index starts at 0
             document.getElementById("relays-rows").innerHTML = "";
-
+            
             for (let i = 0; i < relays_count; i++) {
               let relay_id = "r" + i;
-              relay_on = `<tr><td>${i}</td><td>On</td><td><button type=\"button\" onclick=\"switch_relay('${i}', 'off')\" class=\"btn btn-secondary btn-sm btn-block\">Off</button></td></tr>`;
-              relay_off = `<tr><td>${i}</td><td>Off</td><td><button type=\"button\" onclick=\"switch_relay('${i}', 'on')\" class=\"btn btn-warning btn-sm btn-block\">On</button></td></tr>`;
-              relay_unexported = `<tr><td>${i}</td><td>Unexported</td><td><button type=\"button\" onclick=\"switch_relay('${i}', 'on')\" class=\"btn btn-warning btn-sm btn-block\">On</button></td></tr>`;
+              relay_on = `<tr><td>${i}</td><td>On</td><td><button type=\"button\" onclick=\"switch_relay('${i}', 'off')\" class=\"btn btn-warning btn-sm btn-block\">Off</button></td></tr>`;
+              relay_off = `<tr><td>${i}</td><td>Off</td><td><button type=\"button\" onclick=\"switch_relay('${i}', 'on')\" class=\"btn btn-secondary btn-sm btn-block\">On</button></td></tr>`;
+              relay_unexported = `<tr><td>${i}</td><td>Unexported</td><td><button type=\"button\" onclick=\"switch_relay('${i}', 'on')\" class=\"btn btn-secondary btn-sm btn-block\">On</button></td></tr>`;
 
               switch(relays[relay_id].state) {
               case "high":
@@ -285,7 +296,6 @@
             console.log(`error ${request.status} ${request.statusText}`);
           }
         }
-
         request.DONE;
       }
 
@@ -295,6 +305,7 @@
         request.open("GET", `http://${domain_name}/api/v1/schedules/`);
         request.setRequestHeader("Authorization", `Bearer ${api_key}`);
         request.send();
+        document.getElementById("schedule-rows").innerHTML = `<tr><td><div class="spinner-border text-dark"></div></td></tr>`;
         request.onload = () => {
           if (request.status === 200) {
             if ( request.response !== ' {"status": "200 OK",}' ) {
@@ -329,6 +340,7 @@
         request.open("GET", `http://${domain_name}/api/v1/switches/`);
         request.setRequestHeader("Authorization", `Bearer ${api_key}`);
         request.send();
+        document.getElementById("swiches-rows").innerHTML = `<tr><td><div class="spinner-border text-dark"></div></td></tr>`;
         request.onload = () => {
           if (request.status === 200) {
             if ( request.response !== ' {"status": "200 OK",}' ) {
@@ -457,6 +469,7 @@
       checkCookieApi();
       let domain_name = window.location.hostname;
       let api_key = getCookie("relayctl-webui-session")
+      console.log(api_key)
       status_relays();
       get_switch_mappings();
       get_schedules();
