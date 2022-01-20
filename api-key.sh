@@ -24,8 +24,16 @@ do
                 --check-key=*)
                         check_key="${arg#*=}"
                 ;;
+                *)
+                        no_args="true"
         esac
 done
+
+if [ "$no_args" = "true" ]
+then
+        log "$all" e "{ \"error\": \"invalid arguments set\", \"hint\": \"$0 --reset or $0 --check-key=[API KEY TO CHECK]\" }" "$log_file"
+        exit 1
+fi
 
 if [ "$reset" = "true" ] && [ -z "$check_key" ]
 then

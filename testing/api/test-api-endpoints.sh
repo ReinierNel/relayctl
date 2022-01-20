@@ -1,8 +1,9 @@
 #!/bin/bash
 # this script is used to test other scripts and the API to validate that all is in order
 
-API_KEY='F208F23F7C6C4BEEFE8C15150C90107D'
-BASE_URL='http://127.0.0.1/api/v1'
+API_KEY="$2"
+PROTOCOL="http"
+BASE_URL="$PROTOCOL://$1/api/v1"
 
 declare -a get_end_points=(
 	"health/"
