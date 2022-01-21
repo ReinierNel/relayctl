@@ -12,7 +12,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Setup Terraform
-      run:  curl https://releases.hashicorp.com/terraform/1.1.4/terraform_1.1.4_windows_amd64.zip -o testing/on_vm/terraform/terraform.zip
+      run:  curl https://releases.hashicorp.com/terraform/1.1.4/terraform_1.1.4_linux_arm64.zip -o testing/on_vm/terraform/terraform.zip
     - name: Unzipping Terraform
       run: unzip testing/on_vm/terraform/terraform.zip -d testing/on_vm/terraform/
     - name: Run Terraform Plan
