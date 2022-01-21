@@ -31,20 +31,22 @@ jobs:
     container: reiniernel89/relayctl:test-api-endpoints
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v2
     - uses: actions/download-artifact@v2
       with:
         name: ip_address.txt
-    - uses: actions/checkout@v2
-    - name: Exporting SSH Keys
-      run: echo "${{ secrets.TF_VAR_SSH_PRI_KEY }}" >> testing/api/ssh-pri-key && echo "${{ secrets.TF_VAR_SSH_PUB_KEY }}" >> testing/api/ssh-pub-key
+    - name: Check if ip_address.txt exists
+      run: find . -name ip_address.txt
+    #- name: Exporting SSH Keys
+    #  run: echo "${{ secrets.TF_VAR_SSH_PRI_KEY }}" >> testing/api/ssh-pri-key && echo "${{ secrets.TF_VAR_SSH_PUB_KEY }}" >> testing/api/ssh-pub-key
     #- name: Getting SSH Fingerprint
     #  run: ssh-keyscan -H $(cat testing/on_vm/terraform/ip_address.txt) >> ~/.ssh/known_hosts
-    - name: Setting Correct Premissions on Private key
-      run: chmod 600 testing/api/ssh-pri-key
-    - name: Get API Key from VM
-      run: scp -i testing/api/ssh-pri-key pi@$(cat ip_address.txt):/tmp/api.key  testing/api/api.key
-    - name: running Test Agains API
-      run: testing/api/test-api-endpoints.sh $(cat ip_address.txt) $(cat testing/api/api.key)
+    #- name: Setting Correct Premissions on Private key
+    #  run: chmod 600 testing/api/ssh-pri-key
+    #- name: Get API Key from VM
+    #  run: scp -i testing/api/ssh-pri-key pi@$(cat ip_address.txt):/tmp/api.key  testing/api/api.key
+    #- name: running Test Agains API
+    #  run: testing/api/test-api-endpoints.sh $(cat ip_address.txt) $(cat testing/api/api.key)
 
   destroy-debian-vm-azure:
     needs:
