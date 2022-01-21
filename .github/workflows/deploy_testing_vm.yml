@@ -44,7 +44,7 @@ jobs:
     - name: Setting Correct Premissions on Private key
       run: chmod 600 testing/api/ssh-pri-key
     - name: Get API Key from VM
-      run: scp -i testing/api/ssh-pri-key pi@$(cat ip_address.txt):/tmp/api.key  testing/api/api.key
+      run: scp -o "StrictHostKeyChecking no" -i testing/api/ssh-pri-key pi@$(cat ip_address.txt):/tmp/api.key  testing/api/api.key
     - name: running Test Agains API
       run: testing/api/test-api-endpoints.sh $(cat ip_address.txt) $(cat testing/api/api.key)
 
