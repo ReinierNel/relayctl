@@ -1,4 +1,4 @@
-name: Docker Build and Push CI
+name: Docker Build and Push
 
 on:
   push:
@@ -8,10 +8,8 @@ on:
 
 jobs:
 
-  build_push:
-
+  build_push_test-api-endpoints:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Login to Docker Hub
@@ -20,3 +18,16 @@ jobs:
       run: docker build $(pwd)/testing/api/ --tag reiniernel89/relayctl:test-api-endpoints
     - name: Push Docker image to Docker Hub
       run: docker push reiniernel89/relayctl:test-api-endpoints
+
+  build_push_test-setup-schript:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Login to Docker Hub
+      run:  docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password ${{ secrets.DOCKERHUB_TOKEN  }}
+    - name: Copy Setup Script
+      run:  cp setup.sh $(pwd)/testing/setup/
+    - name: Build the Docker image
+      run: docker build $(pwd)/testing/setup/ --tag reiniernel89/relayctl:test-setup-script
+    - name: Push Docker image to Docker Hub
+      run: docker push reiniernel89/relayctl:test-setup-script
