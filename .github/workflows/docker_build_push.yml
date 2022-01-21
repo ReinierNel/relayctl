@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Docker Build and Push CI
 
 on:
   push:
@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Login to Docker Hub
-      run:  docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -P ${{ secrets.DOCKERHUB_TOKEN  }}
+      run:  docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password ${{ secrets.DOCKERHUB_TOKEN  }} 
     - name: Build the Docker image
       run: docker build testing/api/ --file Dockerfile --tag reiniernel89/relayctl:test-api
     - name: Push Docker image to Docker Hub
