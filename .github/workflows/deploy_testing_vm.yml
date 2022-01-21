@@ -16,4 +16,4 @@ jobs:
     - name: Unzipping Terraform
       run: unzip testing/on_vm/terraform/terraform.zip -d testing/on_vm/terraform/ && chmod +x testing/on_vm/terraform/terraform && mv testing/on_vm/terraform/terraform /usr/local/bin/terraform
     - name: Run Terraform Plan
-      run: cd testing/on_vm/terraform/ && terraform init && terraform plan -out=testing/on_vm/terraform/planfile
+      run: env && cd testing/on_vm/terraform/ && terraform init && terraform plan -out=testing/on_vm/terraform/planfile
