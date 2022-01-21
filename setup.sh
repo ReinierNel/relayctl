@@ -19,10 +19,23 @@ do
                         silent="true"
 
                 ;;
+                --from_branch=*|-b=*)
+                        from_branch="${arg#*=}"
+                ;;
         esac
 
 done
 
+# validate arguments
+
+if [ "silent" = "true" ]
+then
+        if [ -z "$from_branch" ]
+        then
+                echo "[error] if --silent is used --from_branch= must also be set"
+                exit 1
+        fi
+fi
 
 # gitlab repo base url to download raw files
 download_url="https://raw.githubusercontent.com/ReinierNel/relayctl"
@@ -91,8 +104,8 @@ function update_files() {
         chown -R root:gpio /etc/relayctl
         chmod 775 /etc/relayctl
 
-        chmod 775 /etc/relayctl/schedule.list
-        chmod 775 /etc/relayctl/inputs.list
+        chmod 777 /etc/relayctl/schedule.list
+        chmod 777 /etc/relayctl/inputs.list
         chmod -x /etc/relayctl/LICENSE
 
         sed -i "s/__OUT_GPIO_PIN__/$1/g" /etc/relayctl/settings.sh
@@ -146,13 +159,13 @@ function install_api() {
 # install everting scip whiptail
 if [ -n "$silent" ]
 then
-        download_files "main"
+        download_files "$from_branch"
         update_files "17 18 27 22 23 24" "25 5 6 12 13 26"
         update_rc_local
-        install_api "main"
+        install_api "$from_branch"
+        echo "$api_key" >> /tmp/api.key
         exit 0
 fi
-
 
 # ask use to install jq if not already presint
 read -r -d '' info_msg <<'EOF'
