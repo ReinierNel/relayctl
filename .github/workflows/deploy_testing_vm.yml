@@ -28,7 +28,6 @@ jobs:
   testing-api-endpoints:
     needs:
     - deploy-debian-vm-azure
-    - build_push_test-api-endpoints
     container: reiniernel89/relayctl:test-api-endpoints
     runs-on: ubuntu-latest
     steps:
@@ -49,7 +48,6 @@ jobs:
 
   destroy-debian-vm-azure:
     needs:
-    - deploy-debian-vm-azure
     - testing-api-endpoints
     runs-on: ubuntu-latest
     steps:
