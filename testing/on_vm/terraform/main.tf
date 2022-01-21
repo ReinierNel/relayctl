@@ -46,7 +46,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
 
   admin_ssh_key {
     username   = "pi"
-    public_key = var.ssh_pub_key
+    public_key = var.SSH_PUB_KEY
   }
 
   os_disk {
@@ -64,7 +64,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
   connection {
     type        = "ssh"
     user        = "pi"
-    private_key = var.ssh_pri_key
+    private_key = var.SSH_PRI_KEY
     host        = azurerm_public_ip.pubip.ip_address
   }
 

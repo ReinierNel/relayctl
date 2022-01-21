@@ -7,5 +7,5 @@ variable "location" {
 variable "rg" {
     default = "relayctl"
 }
-variable "ssh_pub_key" {}
-variable "ssh_pri_key" {}
+variable "SSH_PUB_KEY" {}
+variable "SSH_PRI_KEY" {}
