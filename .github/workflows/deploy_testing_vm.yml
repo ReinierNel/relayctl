@@ -16,4 +16,5 @@ jobs:
     - name: Unzipping Terraform
       run: unzip testing/on_vm/terraform/terraform.zip -d testing/on_vm/terraform/ && chmod +x testing/on_vm/terraform/terraform
     - name: Run Terraform Plan
-      run: ./testing/on_vm/terraform/terraform plan -out=testing/on_vm/terraform/planfile
+      #run: ./testing/on_vm/terraform/terraform plan -out=testing/on_vm/terraform/planfile
+      run: echo $PATH
