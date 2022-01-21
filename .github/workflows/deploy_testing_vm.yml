@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Setup Terraform
-      run:  curl https://releases.hashicorp.com/terraform/1.1.4/terraform_1.1.4_linux_amd64.zip -o testing/on_vm/terraform/terraform.zip
+      run:  pwd && ls -la && curl https://releases.hashicorp.com/terraform/1.1.4/terraform_1.1.4_linux_amd64.zip -o testing/on_vm/terraform/terraform.zip
     - name: Unzipping Terraform
       run: unzip testing/on_vm/terraform/terraform.zip -d testing/on_vm/terraform/ && chmod +x testing/on_vm/terraform/terraform && mv testing/on_vm/terraform/terraform /usr/local/bin/terraform
     - name: Run Terraform Plan
