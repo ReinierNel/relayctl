@@ -64,7 +64,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
   connection {
     type        = "ssh"
     user        = "pi"
-    private_key = var.SSH_PRI_KEY
+    private_key = file("ssh-pri-key")
     host        = azurerm_public_ip.pubip.ip_address
   }
 
