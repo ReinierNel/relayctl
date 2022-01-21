@@ -95,9 +95,11 @@ do
         esac
 
         output=$(curl --silent --location --request DELETE "$BASE_URL/$end_point" \
-        --header "Authorization: Bearer $API_KEY" --data-raw "$payload"| jq -r ."status")
+        --header "Authorization: Bearer $API_KEY" --data-raw "$payload")
 
-        if [ "$output" = "200 OK" ]
+		status=$(echo $output | jq -r ."status")
+
+        if [ "$status" = "200 OK" ]
         then
                 echo "[PASS] [DELETE] [$output] $BASE_URL/$end_point"
         else
