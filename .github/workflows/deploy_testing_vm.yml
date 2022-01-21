@@ -7,6 +7,17 @@ on:
       - '!main'
 jobs:
 
+  build_push_test-api-endpoints:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Login to Docker Hub
+      run:  docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password ${{ secrets.DOCKERHUB_TOKEN  }} 
+    - name: Build the Docker image
+      run: docker build $(pwd)/testing/api/ --tag reiniernel89/relayctl:test-api-endpoints
+    - name: Push Docker image to Docker Hub
+      run: docker push reiniernel89/relayctl:test-api-endpoints
+
   deploy-debian-vm-azure:
     runs-on: ubuntu-latest
     steps:
@@ -17,12 +28,40 @@ jobs:
       run: unzip testing/on_vm/terraform/terraform.zip -d testing/on_vm/terraform/ && chmod +x testing/on_vm/terraform/terraform && mv testing/on_vm/terraform/terraform /usr/local/bin/terraform
     - name: Exporting SSH Keys
       run: echo "${{ secrets.TF_VAR_SSH_PRI_KEY }}" >> testing/on_vm/terraform/ssh-pri-key && echo "${{ secrets.TF_VAR_SSH_PUB_KEY }}" >> testing/on_vm/terraform/ssh-pub-key
-    - name: Run Terraform Plan
-      run: export ARM_CLIENT_ID=${{ secrets.ARM_CLIENT_ID }} && export ARM_CLIENT_SECRET=${{ secrets.ARM_CLIENT_SECRET }} && export ARM_SUBSCRIPTION_ID=${{ secrets.ARM_SUBSCRIPTION_ID }} && export ARM_TENANT_ID=${{ secrets.ARM_TENANT_ID }} && export ARM_ACCESS_KEY=${{ secrets.ARM_ACCESS_KEY }} && cd testing/on_vm/terraform/ && terraform init && terraform plan -out=planfile && terraform apply -auto-approve planfile
+    - name: Run Terraform
+      run: export ARM_CLIENT_ID=${{ secrets.ARM_CLIENT_ID }} && export ARM_CLIENT_SECRET=${{ secrets.ARM_CLIENT_SECRET }} && export ARM_SUBSCRIPTION_ID=${{ secrets.ARM_SUBSCRIPTION_ID }} && export ARM_TENANT_ID=${{ secrets.ARM_TENANT_ID }} && export ARM_ACCESS_KEY=${{ secrets.ARM_ACCESS_KEY }} && cd testing/on_vm/terraform/ && terraform init && terraform plan -out=planfile && terraform apply -auto-approve planfile $$ terraform output -raw public_ip >> ip_address.txt
+    - uses: actions/upload-artifact@v2
+      with:
+        name: ip_address.txt
+        path: testing/on_vm/terraform/ip_address.txt
+    
+
+  testing-api-endpoints:
+    needs:
+    - deploy-debian-vm-azure
+    - build_push_test-api-endpoints
+    container: reiniernel89/relayctl:test-api-endpoints
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/download-artifact@v2
+      with:
+        name: ip_address.txt
+    - uses: actions/checkout@v2
+    - name: Exporting SSH Keys
+      run: echo "${{ secrets.TF_VAR_SSH_PRI_KEY }}" >> testing/api/ssh-pri-key && echo "${{ secrets.TF_VAR_SSH_PUB_KEY }}" >> testing/api/ssh-pub-key
+    - name: Getting SSH Fingerprint
+      run: ssh-keyscan -H $(cat testing/on_vm/terraform/ip_address.txt) >> ~/.ssh/known_hosts
+    - name: Setting Correct Premissions on Private key
+      run: chmod 600 testing/api/ssh-pri-key
+    - name: Get API Key from VM
+      run: scp -i testing/api/ssh-pri-key pi@$(cat testing/on_vm/terraform/ip_address.txt):/tmp/api.key  testing/api/api.key
+    - name: running Test Agains API
+      run: testing/api/test-api-endpoints.sh $(cat testing/on_vm/terraform/ip_address.txt) $(cat testing/api/api.key)
 
   destroy-debian-vm-azure:
     needs:
     - deploy-debian-vm-azure
+    - testing-api-endpoints
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
