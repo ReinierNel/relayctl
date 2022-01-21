@@ -76,6 +76,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
   provisioner "remote-exec" {
     inline = [
       "sudo chmod +x /tmp/setup.sh",
+      "sudo groupadd gpio",
       "sudo bash /tmp/setup.sh --silent",
     ]
   }
