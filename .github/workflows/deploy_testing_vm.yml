@@ -51,6 +51,7 @@ jobs:
   destroy-debian-vm-azure:
     needs:
     - testing-api-endpoints
+    if: always() && (needs.testing-api-endpoints.result == 'failure')
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
