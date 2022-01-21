@@ -17,7 +17,7 @@ jobs:
     - name: run shellcheck on relayctl scripts
       run: shellcheck -S error *.sh
     - name: run shellcheck on api script
-      run: shellcheck -S error ap/cgi-bin/api.cgi
+      run: shellcheck -S error api/cgi-bin/api.cgi
 
   deploy:
     needs:
