@@ -51,7 +51,7 @@ do
 
 	status=$(echo $output | jq -r ."status")
 
-	if [ "$output" = "200 OK" ]
+	if [ "$status" = "200 OK" ]
 	then
 		echo "[PASS] [GET] [$output] $BASE_URL/$end_point"
 	else
