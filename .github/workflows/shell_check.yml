@@ -1,0 +1,19 @@
+name: Shellcheck Shell Scripts
+
+on:
+  push:
+    branches:
+      - '**'
+      - '!main'
+jobs:
+
+  Shellcheck:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install Shellsheck
+      run:  apt update && apt install -y shellcheck
+    - name: run shellcheck on relayctl scripts
+      run: shellcheck -S error *.sh
+    - name: run shellcheck on api script
+      run: shellcheck -S error ap/cgi-bin/api.cgi

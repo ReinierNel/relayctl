@@ -1,4 +1,4 @@
-#!/bin.bash
+#!/bin/bash
 # set the GPIO PIN that each relay is connected to
 # Note that pisition 1 = relay 0 and so on
 relays=(__OUT_GPIO_PIN__)
