@@ -284,7 +284,7 @@ function router() {
 	                                                                response_json+="\"mode\": \"$mode\""
 	                                                        else
 	                                                                status="${status_code[422]}"
-	                                                                response_json="{\"status\": \"422 Unprocessable Entity\", \"hint\": \"switch does not exist\"}"
+	                                                                response_json="{\"status\": \"422 Unprocessable Entity\", \"hint\": \"switch does not exist\""
 	                                                        fi
 							else
 								status="${status_code[422]}"

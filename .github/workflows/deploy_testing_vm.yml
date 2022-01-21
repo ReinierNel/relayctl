@@ -1,4 +1,4 @@
-name: Deploy Testing VM
+name: Testing Agains Debian 11 VM
 
 on:
   push:

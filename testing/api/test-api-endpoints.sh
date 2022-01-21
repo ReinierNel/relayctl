@@ -47,7 +47,9 @@ declare -a delete_end_points=(
 for end_point in "${get_end_points[@]}"
 do
 	output=$(curl --silent --location --request GET "$BASE_URL/$end_point" \
-	--header "Authorization: Bearer $API_KEY" | jq -r ."status")
+	--header "Authorization: Bearer $API_KEY")
+
+	status=$(echo $output | jq -r ."status")
 
 	if [ "$output" = "200 OK" ]
 	then
@@ -71,9 +73,11 @@ do
 	esac
 
         output=$(curl --silent --location --request POST "$BASE_URL/$end_point" \
-        --header "Authorization: Bearer $API_KEY" --data-raw "$payload"| jq -r ."status")
+        --header "Authorization: Bearer $API_KEY" --data-raw "$payload")
 
-        if [ "$output" = "200 OK" ]
+		status=$(echo $output | jq -r ."status")
+
+        if [ "$status" = "200 OK" ]
         then
                 echo "[PASS] [POST] [$output] $BASE_URL/$end_point"
         else
