@@ -16,5 +16,4 @@ jobs:
     - name: Unzipping Terraform
       run: unzip testing/on_vm/terraform/terraform.zip -d testing/on_vm/terraform/ && chmod +x testing/on_vm/terraform/terraform && mv testing/on_vm/terraform/terraform /usr/local/bin/terraform
     - name: Run Terraform Plan
-      #run: export ARM_CLIENT_ID=${{ ARM_CLIENT_ID }} && export ARM_CLIENT_SECRET=${{ ARM_CLIENT_SECRET }} && export ARM_SUBSCRIPTION_ID=${{ ARM_SUBSCRIPTION_ID }} && export ARM_TENANT_ID=${{ ARM_TENANT_ID }} && export ARM_ACCESS_KEY=${{ ARM_ACCESS_KEY }} && cd testing/on_vm/terraform/ && terraform init && terraform plan -out=testing/on_vm/terraform/planfile
-      run: az --help
+      run: az login --service-principal -u ${{ ARM_CLIENT_ID }} -p RM_CLIENT_SECRET --tenant ${{ ARM_TENANT_ID }} && cd testing/on_vm/terraform/ && terraform init && terraform plan -out=testing/on_vm/terraform/planfile
