@@ -19,5 +19,5 @@ jobs:
     - name: Build the Docker image
       #run: docker build /home/runner/work/relayctl/relayctl/testing/api/ --file Dockerfile --tag reiniernel89/relayctl:test-api
       run: pwd && ls -la
-    - name: Push Docker image to Docker Hub
+    #- name: Push Docker image to Docker Hub
       #run: docker push reiniernel89/relayctl:test-api
