@@ -14,7 +14,6 @@ jobs:
     - name: Setup Terraform
       run:  curl https://releases.hashicorp.com/terraform/1.1.4/terraform_1.1.4_linux_arm64.zip -o testing/on_vm/terraform/terraform.zip
     - name: Unzipping Terraform
-      run: unzip testing/on_vm/terraform/terraform.zip -d testing/on_vm/terraform/ && chmod +x testing/on_vm/terraform/terraform
+      run: unzip testing/on_vm/terraform/terraform.zip -d testing/on_vm/terraform/ && chmod +x testing/on_vm/terraform/terraform && mv testing/on_vm/terraform/terraform /usr/local/bin/terraform
     - name: Run Terraform Plan
-      #run: ./testing/on_vm/terraform/terraform plan -out=testing/on_vm/terraform/planfile
-      run: echo $PATH
+      run: cd testing/on_vm/terraform/ && terraform init && terraform plan -out=testing/on_vm/terraform/planfile
