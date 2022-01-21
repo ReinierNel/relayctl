@@ -5,6 +5,8 @@ API_KEY="$2"
 PROTOCOL="http"
 BASE_URL="$PROTOCOL://$1/api/v1"
 
+echo "useing API KEY $API_KEY"
+
 declare -a get_end_points=(
 	"health/"
 	"relays/"
@@ -49,9 +51,9 @@ do
 
 	if [ "$output" = "200 OK" ]
 	then
-		echo "[PASS] [GET] [$output] $end_point"
+		echo "[PASS] [GET] [$output] $BASE_URL/$end_point"
 	else
-		echo "[FAIL] [GET] [$output] $end_point"
+		echo "[FAIL] [GET] [$output] $BASE_URL/$end_point"
 		failed_test="true"
 	fi
 done
@@ -73,9 +75,9 @@ do
 
         if [ "$output" = "200 OK" ]
         then
-                echo "[PASS] [POST] $end_point [$output]"
+                echo "[PASS] [POST] [$output] $BASE_URL/$end_point"
         else
-                echo "[FAIL] [POST] $end_point [$output]"
+                echo "[FAIL] [POST] [$output] $BASE_URL/$end_point"
                 failed_test="true"
         fi
 done
@@ -97,9 +99,9 @@ do
 
         if [ "$output" = "200 OK" ]
         then
-                echo "[PASS] [DELETE] $end_point [$output]"
+                echo "[PASS] [DELETE] [$output] $BASE_URL/$end_point"
         else
-                echo "[FAIL] [DELETE] $end_point [$output]"
+                echo "[FAIL] [DELETE] [$output] $BASE_URL/$end_point"
                 failed_test="true"
         fi
 done
