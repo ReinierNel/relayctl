@@ -63,7 +63,7 @@ jobs:
   cleanup:
     needs:
     - api
-    if: always() && (needs.testing-api-endpoints.result == 'failure')
+    if: always() && (needs.api.result == 'failure')
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
