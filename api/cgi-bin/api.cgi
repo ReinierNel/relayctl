@@ -91,6 +91,8 @@ function router() {
 
                 case "$path" in
                         relays)
+                                regex='^[0-9]+$'
+
                                 if [ "$slug" = "" ]
                                 then
                                         gpio_in_use=""
@@ -103,7 +105,7 @@ function router() {
 
                                         gpio_in_use=$(echo "$gpio_in_use" | sed 's/\(.*\),/\1 /')
                                         request "$gpio_in_use"
-                                elif ! [[ "$slug" =~ ^[0-9]+$ ]]
+                                elif ! [[ "$slug" =~ "$regex" ]]
                                 then
                                         if [ "$action" = "on" ] || [ "$action" = "off" ] || [ "$action" = "status" ]
                                         then
