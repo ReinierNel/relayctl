@@ -18,7 +18,7 @@ jobs:
     - name: Exporting Azure Environment variable
       run: export ARM_CLIENT_ID=${{ secrets.ARM_CLIENT_ID }} && export ARM_CLIENT_SECRET=${{ secrets.ARM_CLIENT_SECRET }} && export ARM_SUBSCRIPTION_ID=${{ secrets.ARM_SUBSCRIPTION_ID }} && export ARM_TENANT_ID=${{ secrets.ARM_TENANT_ID }} && export ARM_ACCESS_KEY=${{ secrets.ARM_ACCESS_KEY }}
     - name: Exporting SSH Keys Environment variable
-      run: export cat << 'EOF'${{ secrets.TF_VAR_SSH_PRI_KEY }}EOF >> testing/on_vm/terraform/ssh-pri-key $$ export TF_VAR_SSH_PUB_KEY="${{ secrets.TF_VAR_SSH_PUB_KEY }}"
+      run: export cat << 'EOF' ${{ secrets.TF_VAR_SSH_PRI_KEY }} EOF >> testing/on_vm/terraform/ssh-pri-key $$ export TF_VAR_SSH_PUB_KEY="${{ secrets.TF_VAR_SSH_PUB_KEY }}"
     - name: Run Terraform Plan
       run: cd testing/on_vm/terraform/ && terraform init && terraform plan -out=testing/on_vm/terraform/planfile
       
