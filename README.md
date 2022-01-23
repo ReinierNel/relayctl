@@ -9,9 +9,9 @@
 ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝   ╚═╝    ╚═════╝   ╚═╝   ╚══════╝
 ```
 
-Simple shell scripts to control relays connected to your raspberry pi with a via CLI, cron like scheduler, external switches and a REST API.
+Simple shell scripts to control relays connected to your raspberry pi with a via CLI, cron like scheduler, external switches REST API and a WEB UI.
 
-![tests](https://github.com/reiniernel/relayctl/actions/workflows/testing.yml/badge.svg)
+![tests](https://github.com/reiniernel/relayctl/actions/workflows/testing.yml/badge.svg) ![version](https://img.shields.io/badge/Version-0.1.4-blue) ![stable branch](https://img.shields.io/badge/stable%20branch-main-lightgrey)
 
 ## Requirements
 
