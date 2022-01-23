@@ -111,4 +111,6 @@ Finaly you will need to delete the CGI api script
 rm -f /usr/lib/cgi-bin/api.cgi
 ```
 
-For more details see the wiki.
+## More
+
+For detailed instructions please see the [Wiki](https://github.com/ReinierNel/relayctl/wiki), If you have an Questions or concerns please create an issue here.
