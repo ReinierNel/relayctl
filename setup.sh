@@ -131,10 +131,13 @@ EOF
 
 # create self singed ssl cert
 function gen_ssl() {
-        password_file="/etc/nginx/relayctl.txt"
-        key_file="/etc/nginx/relayctl.key"
-        csr_file="/etc/nginx/relayctl.csr"
-        crt_file="/etc/nginx/relayctl.crt"
+
+        mkdir /etc/relayclt/ssl
+
+        password_file="/etc/relayclt/ssl/relayctl.txt"
+        key_file="/etc/relayclt/ssl/relayctl.key"
+        csr_file="/etc/relayclt/ssl/relayctl.csr"
+        crt_file="/etc/relayclt/ssl/relayctl.crt"
 
         country="ZA"
         organization="relayctl"
@@ -152,6 +155,7 @@ function gen_ssl() {
         openssl rsa -in "$key_file".backup -passin file:"$password_file" -out "$key_file"
         # Generating a Self-Signed Certificate for 100 years
         openssl x509 -req -days 36500 -in "$csr_file" -signkey "$key_file" -out "$crt_file"
+
 }
 
 # install api
