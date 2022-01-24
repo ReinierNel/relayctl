@@ -129,6 +129,31 @@ EOF
         chmod 755 /etc/rc.local
 }
 
+# create self singed ssl cert
+function gen_ssl() {
+        password_file="/etc/nginx/relayctl.txt"
+        key_file="/etc/nginx/relayctl.key"
+        csr_file="/etc/nginx/relayctl.csr"
+        crt_file="/etc/nginx/relayctl.crt"
+
+        country="ZA"
+        organization="relayctl"
+        organizational_unit="relayctl"
+        common_name=$(hostname)
+
+        # Generate a passphrase
+        openssl rand -base64 48 > "$password_file"
+        # Generate a Private Key
+        openssl genrsa -aes128 -passout file:"$password_file" -out "$key_file" 2048
+        # Generate a CSR (Certificate Signing Request)
+        openssl req -new -passin file:"$password_file" -key "$key_file" -out "$csr_file" -subj "/C=$country/O=$organization/OU=$organizational_unit/CN=$common_name"
+        # Remove Passphrase from Key
+        cp "$key_file" "$key_file".backup
+        openssl rsa -in "$key_file".backup -passin file:"$password_file" -out "$key_file"
+        # Generating a Self-Signed Certificate for 100 years
+        openssl x509 -req -days 36500 -in "$csr_file" -signkey "$key_file" -out "$crt_file"
+}
+
 # install api
 function install_api() {
         # API setup
@@ -162,6 +187,7 @@ then
         download_files "$from_branch"
         update_files "17 18 27 22 23 24" "25 5 6 12 13 26"
         update_rc_local
+        gen_ssl
         install_api "$from_branch"
         echo "$api_key" >> /tmp/api.key
         exit 0
@@ -326,6 +352,7 @@ EOF
 
 install_api=$(whiptail --title "Setup Relayctl" --yesno "$api_msg" 40 75 3>&1 1>&2 2>&3)
 
+gen_ssl
 install_api "$branch_selected"
 
 # good bye

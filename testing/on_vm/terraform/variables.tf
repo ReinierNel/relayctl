@@ -7,3 +7,4 @@ variable "location" {
 variable "rg" {
     default = "relayctl"
 }
+variable "github_branch" {}

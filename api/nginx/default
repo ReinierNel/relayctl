@@ -8,6 +8,9 @@ server {
 
         server_name _;
 
+        ssl_certificate /etc/nginx/relayctl.crt;
+        ssl_certificate_key /etc/nginx/relayctl.key;
+
         # WEB UI
         location / {
                 try_files $uri $uri/ =404;

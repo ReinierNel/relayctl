@@ -77,7 +77,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
     inline = [
       "sudo chmod +x /tmp/setup.sh",
       "sudo groupadd gpio",
-      "sudo bash /tmp/setup.sh --silent --from_branch=testing",
+      "sudo bash /tmp/setup.sh --silent --from_branch=${var.github_branch}",
     ]
   }
 }
