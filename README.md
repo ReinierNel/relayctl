@@ -9,9 +9,9 @@
 ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝   ╚═╝    ╚═════╝   ╚═╝   ╚══════╝
 ```
 
-Simple shell scripts to control relays connected to your raspberry pi with a via CLI, cron like scheduler, external switches and a REST API.
+Simple shell scripts to control relays connected to your raspberry pi with a via CLI, cron like scheduler, external switches REST API and a WEB UI.
 
-![tests](https://github.com/reiniernel/relayctl/actions/workflows/testing.yml/badge.svg) ![version](https://img.shields.io/badge/Version-0.1.5-blue) ![stable branch](https://img.shields.io/badge/stable%20branch-main-lightgrey)
+![tests](https://github.com/reiniernel/relayctl/actions/workflows/testing.yml/badge.svg) ![version](https://img.shields.io/badge/Version-0.1.4-blue) ![stable branch](https://img.shields.io/badge/stable%20branch-main-lightgrey)
 
 ## Requirements
 
@@ -111,4 +111,6 @@ Finaly you will need to delete the CGI api script
 rm -f /usr/lib/cgi-bin/api.cgi
 ```
 
-For more details see the wiki.
+## More
+
+For detailed instructions please see the [Wiki](https://github.com/ReinierNel/relayctl/wiki), If you have any Questions or concerns please create an issue here.
