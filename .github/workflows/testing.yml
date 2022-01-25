@@ -66,6 +66,7 @@ jobs:
   cleanup:
     needs:
     - api
+    if: always()
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2

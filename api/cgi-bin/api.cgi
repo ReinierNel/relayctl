@@ -41,7 +41,7 @@ function validate() {
                         regex='^[0-2]+[0-9]+\:+[0-2]+[0-9]+\:+[0-5]+[0-9]+$'
                 ;;
                 days)
-                        regex='^[1-7\s]+$'
+                        regex='^[1-7]+\s.+$'
                 ;;
                 json)
                         if jq -e . >/dev/null 2>&1 <<< "$2"
@@ -306,6 +306,9 @@ function router() {
                                                                                 response_json+="\"days\": \"$days\","
                                                                                 response_json+="\"relay_index\": \"$relay_index\","
                                                                                 response_json+="\"action\": \"$action\""
+                                                                        else
+                                                                                status="${status_code[400]}"
+                                                                                response_json="{\"status\": \"400 Bad Request\", \"hint\": \"validation failed\""
                                                                         fi
 	                                                        else
 	                                                                status="${status_code[422]}"
@@ -395,6 +398,9 @@ function router() {
                                                                                 response_json+="\"input_index\": \"$input_index\","
                                                                                 response_json+="\"relay_index\": \"$relay_index\","
                                                                                 response_json+="\"mode\": \"$mode\""
+                                                                        else
+                                                                                status="${status_code[400]}"
+                                                                                response_json="{\"status\": \"400 Bad Request\", \"hint\": \"validation failed\""
                                                                         fi
 	                                                        fi
 							else
