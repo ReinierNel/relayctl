@@ -57,8 +57,10 @@ function validate() {
         if [[ "$2" =~  $regex ]]
         then
                 return 0
+                validation='true'
         else
                 return 1
+                validation='false'
         fi
 }
 
@@ -218,14 +220,16 @@ function router() {
 	                                                                status="${status_code[422]}"
 	                                                                response_json="{\"status\": \"422 Unprocessable Entity\", \"hint\": \"name already exist please use a unique name\""
 	                                                        else
-	                                                                echo "$name|$start_time|$end_time|$days|$relay_index|$action" >> /etc/relayctl/schedule.list
-
-	                                                                response_json+="\"name\": \"$name\","
-	                                                                response_json+="\"start_time\": \"$start_time\","
-	                                                                response_json+="\"end_time\": \"$end_time\","
-	                                                                response_json+="\"days\": \"$days\","
-	                                                                response_json+="\"relay_index\": \"$relay_index\","
-	                                                                response_json+="\"action\": \"$action\""
+                                                                        if [ "$validation" = "true" ]
+                                                                        then
+                                                                                echo "$name|$start_time|$end_time|$days|$relay_index|$action" >> /etc/relayctl/schedule.list
+                                                                                response_json+="\"name\": \"$name\","
+                                                                                response_json+="\"start_time\": \"$start_time\","
+                                                                                response_json+="\"end_time\": \"$end_time\","
+                                                                                response_json+="\"days\": \"$days\","
+                                                                                response_json+="\"relay_index\": \"$relay_index\","
+                                                                                response_json+="\"action\": \"$action\""
+                                                                        fi
 	                                                        fi
 							else
 								status="${status_code[422]}"
@@ -290,16 +294,19 @@ function router() {
 
 	                                                        if grep "$name|$start_time|$end_time|$days|$relay_index|$action" /etc/relayctl/schedule.list
 	                                                        then
-	                                                                grep -v "$name|$start_time|$end_time|$days|$relay_index|$action" /etc/relayctl/schedule.list > /tmp/schedule.list.temp
-	                                                                mv /tmp/schedule.list.temp /etc/relayctl/schedule.list
-	                                                                rm -f /tmp/schedule.list.temp
+                                                                        if [ "$validation" = "true" ]
+                                                                        then
+                                                                                grep -v "$name|$start_time|$end_time|$days|$relay_index|$action" /etc/relayctl/schedule.list > /tmp/schedule.list.temp
+                                                                                mv /tmp/schedule.list.temp /etc/relayctl/schedule.list
+                                                                                rm -f /tmp/schedule.list.temp
 
-									response_json+="\"name\": \"$name\","
-                                                                        response_json+="\"start_time\": \"$start_time\","
-                                                                        response_json+="\"end_time\": \"$end_time\","
-                                                                        response_json+="\"days\": \"$days\","
-                                                                        response_json+="\"relay_index\": \"$relay_index\","
-                                                                        response_json+="\"action\": \"$action\""
+                                                                                response_json+="\"name\": \"$name\","
+                                                                                response_json+="\"start_time\": \"$start_time\","
+                                                                                response_json+="\"end_time\": \"$end_time\","
+                                                                                response_json+="\"days\": \"$days\","
+                                                                                response_json+="\"relay_index\": \"$relay_index\","
+                                                                                response_json+="\"action\": \"$action\""
+                                                                        fi
 	                                                        else
 	                                                                status="${status_code[422]}"
 	                                                                response_json="{\"status\": \"422 Unprocessable Entity\", \"hint\": \"scedule does not exist\""
@@ -381,12 +388,14 @@ function router() {
 	                                                                status="${status_code[422]}"
 	                                                                response_json="{\"status\": \"422 Unprocessable Entity\", \"hint\": \"name already exist please use a unique name\""
 	                                                        else
-	                                                                echo "$name|$input_index|$relay_index|$mode|$cmd" >> /etc/relayctl/inputs.list
-
-	                                                                response_json+="\"name\": \"$name\","
-	                                                                response_json+="\"input_index\": \"$input_index\","
-	                                                                response_json+="\"relay_index\": \"$relay_index\","
-	                                                                response_json+="\"mode\": \"$mode\""
+                                                                        if [ "$validation" = "true" ]
+                                                                        then
+                                                                                echo "$name|$input_index|$relay_index|$mode|$cmd" >> /etc/relayctl/inputs.list
+                                                                                response_json+="\"name\": \"$name\","
+                                                                                response_json+="\"input_index\": \"$input_index\","
+                                                                                response_json+="\"relay_index\": \"$relay_index\","
+                                                                                response_json+="\"mode\": \"$mode\""
+                                                                        fi
 	                                                        fi
 							else
 								status="${status_code[422]}"
@@ -437,14 +446,16 @@ function router() {
 
 	                                                        if grep "$name|$input_index|$relay_index|$mode|$cmd" /etc/relayctl/inputs.list
 	                                                        then
-	                                                                grep -v "$name|$input_index|$relay_index|$mode|$cmd" /etc/relayctl/inputs.list > /tmp/inputs.list.temp
-	                                                                mv /tmp/inputs.list.temp /etc/relayctl/inputs.list
-	                                                                rm -f /tmp/inputs.list.temp
-
-									response_json+="\"name\": \"$name\","
-	                                                                response_json+="\"input_index\": \"$input_index\","
-	                                                                response_json+="\"relay_index\": \"$relay_index\","
-	                                                                response_json+="\"mode\": \"$mode\""
+                                                                        if [ "$validation" = "true" ]
+                                                                        then
+                                                                                grep -v "$name|$input_index|$relay_index|$mode|$cmd" /etc/relayctl/inputs.list > /tmp/inputs.list.temp
+                                                                                mv /tmp/inputs.list.temp /etc/relayctl/inputs.list
+                                                                                rm -f /tmp/inputs.list.temp
+                                                                                response_json+="\"name\": \"$name\","
+                                                                                response_json+="\"input_index\": \"$input_index\","
+                                                                                response_json+="\"relay_index\": \"$relay_index\","
+                                                                                response_json+="\"mode\": \"$mode\""
+                                                                        fi
 	                                                        else
 	                                                                status="${status_code[422]}"
 	                                                                response_json="{\"status\": \"422 Unprocessable Entity\", \"hint\": \"switch does not exist\""

@@ -65,10 +65,10 @@ for end_point in "${post_end_points[@]}"
 do
 	case "$end_point" in
 		schedule*)
-			payload="{\"name\": \"unit-test\", \"start_time\": \"00:00:00\", \"end_time\": \"00:10:00\", \"days\": \"1 2 3 4 5 6 7\", \"relay_index\": \"0\", \"action\": \"on\"}"
+			payload="{\"name\": \"unitTest\", \"start_time\": \"00:00:00\", \"end_time\": \"00:10:00\", \"days\": \"1 2 3 4 5 6 7\", \"relay_index\": \"0\", \"action\": \"on\"}"
 		;;
 		switches*)
-			payload="{\"name\": \"unit-test\", \"input_index\": \"0\", \"relay_index\": \"0\", \"mode\": \"on\"}"
+			payload="{\"name\": \"unitTest\", \"input_index\": \"0\", \"relay_index\": \"0\", \"mode\": \"on\"}"
 		;;
 	esac
 
@@ -91,10 +91,10 @@ for end_point in "${delete_end_points[@]}"
 do
         case "$end_point" in
                 schedule*)
-                        payload="{\"name\": \"unit-test\", \"start_time\": \"00:00:00\", \"end_time\": \"00:10:00\", \"days\": \"1 2 3 4 5 6 7\", \"relay_index\": \"0\", \"action\": \"on\"}"
+                        payload="{\"name\": \"unitTest\", \"start_time\": \"00:00:00\", \"end_time\": \"00:10:00\", \"days\": \"1 2 3 4 5 6 7\", \"relay_index\": \"0\", \"action\": \"on\"}"
                 ;;
                 switches*)
-                        payload="{\"name\": \"unit-test\", \"input_index\": \"0\", \"relay_index\": \"0\", \"mode\": \"on\"}"
+                        payload="{\"name\": \"unitTest\", \"input_index\": \"0\", \"relay_index\": \"0\", \"mode\": \"on\"}"
                 ;;
         esac
 
