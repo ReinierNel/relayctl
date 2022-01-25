@@ -1,1 +1,3 @@
  # schedule name | time | end time | day of wheek | relay_index | action
+demoOn|10:00|11:00|1 2 3 4 5 6 7|0|on
+demoOff|11:00|12:00|1 2 3 4 5 6 7|0|off

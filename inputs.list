@@ -1,1 +1,2 @@
 #| name | input index | relay index | mode [on, off or cmd] | cmd
+demo|0|1|on|#null
