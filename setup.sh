@@ -132,12 +132,10 @@ EOF
 # create self singed ssl cert
 function gen_ssl() {
 
-        mkdir /etc/relayclt/ssl
-
-        password_file="/etc/relayclt/ssl/relayctl.txt"
-        key_file="/etc/relayclt/ssl/relayctl.key"
-        csr_file="/etc/relayclt/ssl/relayctl.csr"
-        crt_file="/etc/relayclt/ssl/relayctl.crt"
+        password_file="/etc/nginx/relayctl.txt"
+        key_file="/etc/nginx/relayctl.key"
+        csr_file="/etc/nginx/relayctl.csr"
+        crt_file="/etc/nginx/relayctl.crt"
 
         country="ZA"
         organization="relayctl"
@@ -155,7 +153,6 @@ function gen_ssl() {
         openssl rsa -in "$key_file".backup -passin file:"$password_file" -out "$key_file"
         # Generating a Self-Signed Certificate for 100 years
         openssl x509 -req -days 36500 -in "$csr_file" -signkey "$key_file" -out "$crt_file"
-
 }
 
 # install api
@@ -177,6 +174,7 @@ function install_api() {
         chown root:root /etc/relayctl/api-key.sh
         cp /usr/share/doc/fcgiwrap/examples/nginx.conf /etc/nginx/fcgiwrap.conf
         sed -i "s/user www-data/user root/g" /etc/nginx/nginx.conf
+        gen_ssl
         service nginx restart
         api_key=$(hexdump -n 16 -e '4/4 "%08X" 1 "\n"' /dev/urandom)
         openssl passwd -6 -salt "$(tr -dc A-Za-z0-9 </dev/urandom | head -c 13 ; echo '')" -stdin -noverify <<< "$api_key" >> /etc/relayctl/api.key
@@ -191,7 +189,6 @@ then
         download_files "$from_branch"
         update_files "17 18 27 22 23 24" "25 5 6 12 13 26"
         update_rc_local
-        gen_ssl
         install_api "$from_branch"
         echo "$api_key" >> /tmp/api.key
         exit 0
@@ -356,7 +353,6 @@ EOF
 
 install_api=$(whiptail --title "Setup Relayctl" --yesno "$api_msg" 40 75 3>&1 1>&2 2>&3)
 
-gen_ssl
 install_api "$branch_selected"
 
 # good bye
