@@ -43,23 +43,6 @@ declare -a delete_end_points=(
 )
 
 ## RUN TEST
-### GET endpoints
-for end_point in "${get_end_points[@]}"
-do
-	output=$(curl --insecure --silent --location --request GET "$BASE_URL/$end_point" \
-	--header "Authorization: Bearer $API_KEY")
-
-	status=$(echo $output | jq -r ."status")
-
-	if [ "$status" = "200 OK" ]
-	then
-		echo "[PASS] [GET] [$output] $BASE_URL/$end_point"
-	else
-		echo "[FAIL] [GET] [$output] $BASE_URL/$end_point"
-		failed_test="true"
-	fi
-done
-
 ## POST endpoints
 for end_point in "${post_end_points[@]}"
 do
@@ -110,6 +93,22 @@ do
                 echo "[FAIL] [DELETE] [$output] $BASE_URL/$end_point"
                 failed_test="true"
         fi
+done
+### GET endpoints
+for end_point in "${get_end_points[@]}"
+do
+	output=$(curl --insecure --silent --location --request GET "$BASE_URL/$end_point" \
+	--header "Authorization: Bearer $API_KEY")
+
+	status=$(echo $output | jq -r ."status")
+
+	if [ "$status" = "200 OK" ]
+	then
+		echo "[PASS] [GET] [$output] $BASE_URL/$end_point"
+	else
+		echo "[FAIL] [GET] [$output] $BASE_URL/$end_point"
+		failed_test="true"
+	fi
 done
 
 if [ -n "$failed_test" ]
