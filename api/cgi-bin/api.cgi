@@ -56,11 +56,11 @@ function validate() {
 
         if [[ "$2" =~  $regex ]]
         then
-                return 0
                 validation='true'
+                return 0
         else
-                return 1
                 validation='false'
+                return 1
         fi
 }
 
