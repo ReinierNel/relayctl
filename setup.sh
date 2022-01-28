@@ -65,7 +65,7 @@ function check_exit_status() {
 # fetch branches on github repo
 function fetch-branches() {
         #get_branches=($(curl --silent https://api.github.com/repos/reiniernel/relayctl/branches | jq .[]."name"))
-        
+
         mapfile -t get_branches < <(curl --silent https://api.github.com/repos/reiniernel/relayctl/branches | jq -r .[]."name")
 
         branches=()
@@ -160,7 +160,7 @@ function install_api() {
         # API setup
         apt-get update
         apt-get upgrade -y
-        apt-get install -y nginx fcgiwrap jq
+        apt-get install -y nginx-full fcgiwrap jq
         usermod -a -G gpio www-data
         mkdir -p /usr/lib/cgi-bin
         curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/$1/api/cgi-bin/api.cgi" --output "/usr/lib/cgi-bin/api.cgi"
@@ -173,7 +173,7 @@ function install_api() {
         chmod 600 /etc/relayctl/api-key.sh
         chown root:root /etc/relayctl/api-key.sh
         cp /usr/share/doc/fcgiwrap/examples/nginx.conf /etc/nginx/fcgiwrap.conf
-        sed -i "s/user www-data/user root/g" /etc/nginx/nginx.conf
+        #sed -i "s/user www-data/user root/g" /etc/nginx/nginx.conf
         gen_ssl
         service nginx restart
         api_key=$(hexdump -n 16 -e '4/4 "%08X" 1 "\n"' /dev/urandom)
@@ -181,6 +181,13 @@ function install_api() {
         chown root:gpio /etc/relayctl/api.key
         # web UI setup
         curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/$1/web-ui/index-wireframe.html" --output "/var/www/html/index.html"
+	touch /etc/pam.d/nginx
+        echo 'auth required pam_unix.so' >> /etc/pam.d/nginx
+        echo 'account required pam_unix.so' >> /etc/pam.d/nginx
+        groupadd shadow
+        usermod -a -G shadow www-data
+        chown root:shadow /etc/shadow
+        chmod g+r /etc/shadow
 }
 
 # install everting scip whiptail

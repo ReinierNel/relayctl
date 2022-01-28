@@ -40,7 +40,7 @@ then
 	log "$log_where" w "{ \"date\": \"${date}\", \"api-key\": \"reset\", \"by\": \"$(whoami)\" }" "$log_file"
 	api_key=$(hexdump -n 16 -e '4/4 "%08X" 1 "\n"' /dev/urandom)
 	openssl passwd -6 -salt $(tr -dc A-Za-z0-9 </dev/urandom | head -c 13 ; echo '') -stdin -noverify <<< $(echo $api_key) > /etc/relayctl/api.key
-	echo "API KEY: $api_key"
+	echo "{\"api-key\": \"$api_key\"}"
 	exit 0
 fi
 
@@ -54,7 +54,7 @@ then
 
 	if [ "$key_received" = "$hash" ]
         then
-                log "screen" w "{ \"api-key\": \"true\" }"
+                log "screen" i "{ \"api-key\": \"true\" }"
 		exit 0
         else
 		log "screen" w "{ \"api-key\": \"false\" }"

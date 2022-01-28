@@ -499,6 +499,10 @@ function router() {
                         health)
                                 request "\"$path\": \"$(uptime)\""
                         ;;
+                        auth)
+                                ouptut=$(/etc/relayctl/api-key.sh --reset)
+                                request "\"auth\": $output"
+                        ;;
                         *)
                                 status="${status_code[404]}"
                                 response_json+="\"status\": \"404 Not Found\""
