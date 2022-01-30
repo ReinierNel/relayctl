@@ -117,9 +117,9 @@ function update_rc_local() {
         cat > /tmp/rc.local <<EOF
 $(head -n -1 /etc/rc.local)
 
-/etc/relayctl/relayctl.sh test
 /etc/relayctl/scheduler.sh &
 /etc/relayctl/external.sh &
+$1
 
 exit 0
 EOF
