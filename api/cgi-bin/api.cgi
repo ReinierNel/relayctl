@@ -106,7 +106,7 @@ function auth() {
                 algorithm=$(echo $hash | cut -d '$' -f 2)
                 salt=$(echo $hash | cut -d '$' -f 3)
 
-                key_received=$(openssl passwd -$algorithm -salt $salt -stdin -noverify <<< $(echo $HTTP_AUTHORIZATION))
+                key_received=$(openssl passwd -$algorithm -salt $salt -stdin -noverify <<< $(echo $HTTP_APIKEY))
 
                 if [ "$key_received" = "$hash" ]
                 then

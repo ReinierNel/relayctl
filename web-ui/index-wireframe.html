@@ -255,7 +255,7 @@
       // Get Relay Statys for all configured relays 
       function status_relays() {
         let request = new XMLHttpRequest();
-        request.open("GET", `${protocol}://${domain_name}/api/v1/relays/`);
+        request.open("GET", `/api/v1/relays/`);
         request.setRequestHeader("APIKEY", api_key);
         request.send();
         document.getElementById("relays-rows").innerHTML = `<tr><td><div class="spinner-border text-dark"></div></td></tr>`;
@@ -293,7 +293,7 @@
       // Get all schedules
       function get_schedules() {
         let request = new XMLHttpRequest();
-        request.open("GET", `${protocol}://${domain_name}/api/v1/schedules/`);
+        request.open("GET", `/api/v1/schedules/`);
         request.setRequestHeader("APIKEY", api_key);
         request.send();
         document.getElementById("schedule-rows").innerHTML = `<tr><td><div class="spinner-border text-dark"></div></td></tr>`;
@@ -328,7 +328,7 @@
       // get list of external switch mappings
       function get_switch_mappings() {
         let request = new XMLHttpRequest();
-        request.open("GET", `${protocol}://${domain_name}/api/v1/switches/`);
+        request.open("GET", `/api/v1/switches/`);
         request.setRequestHeader("APIKEY", api_key);
         request.send();
         document.getElementById("swiches-rows").innerHTML = `<tr><td><div class="spinner-border text-dark"></div></td></tr>`;
@@ -360,7 +360,7 @@
       // Switch relay on or off
       function switch_relay(relay_index, mode) {
         let request = new XMLHttpRequest();
-        request.open("GET", `${protocol}://${domain_name}/api/v1/relays/${relay_index}/${mode}`);
+        request.open("GET", `/api/v1/relays/${relay_index}/${mode}`);
         request.setRequestHeader("APIKEY", api_key);
         request.send();
         request.onload = () => {
@@ -398,7 +398,7 @@
       function delete_switch_mapping(name, sw_index, r_index, mode) {
         let remove_switch_json = `{"name": "${name}", "input_index": "${sw_index}", "relay_index": "${r_index}", "mode": "${mode}"}`
         let request = new XMLHttpRequest();
-        request.open("DELETE", `${protocol}://${domain_name}/api/v1/switches/delete`);
+        request.open("DELETE", `/api/v1/switches/delete`);
         request.setRequestHeader("APIKEY", api_key);
         request.send(remove_switch_json);
         request.onload = () => {
@@ -423,7 +423,7 @@
         console.log(new_schedule_days)
 
         let request = new XMLHttpRequest();
-        request.open("POST", `${protocol}://${domain_name}/api/v1/schedules/add`);
+        request.open("POST", `/api/v1/schedules/add`);
         request.setRequestHeader("APIKEY", api_key);
         request.send(new_schedule_json);
         request.onload = () => {
@@ -443,7 +443,7 @@
       function delete_schedule(name, start_time, end_time, days, relay, action) {
         let remove_schedules_json = `{"name": "${name}","start_time": "${start_time}","end_time": "${end_time}","days": "${days}","relay_index": "${relay}","action": "${action}"}`;
         let request = new XMLHttpRequest();
-        request.open("DELETE", `${protocol}://${domain_name}/api/v1/schedules/delete`);
+        request.open("DELETE", `/api/v1/schedules/delete`);
         request.setRequestHeader("APIKEY", api_key);
         request.send(remove_schedules_json);
         request.onload = () => {
@@ -458,13 +458,11 @@
 
       // Main logic
       checkCookieApi();
-      let protocol = location.protocol;
-      let domain_name = window.location.hostname;
       let api_key = getCookie("relayctl-webui-session")
       status_relays();
       get_switch_mappings();
       get_schedules();
-      
+
     </script>
 </body>
 </html>
