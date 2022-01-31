@@ -101,15 +101,10 @@ function download_files() {
 
 # update file prems and settings files
 function update_files() {
-        chown -R root:gpio /etc/relayctl
-        chmod 775 /etc/relayctl
-
-        chmod 777 /etc/relayctl/schedule.list
-        chmod 777 /etc/relayctl/inputs.list
-        chmod -x /etc/relayctl/LICENSE
-
         sed -i "s/__OUT_GPIO_PIN__/$1/g" /etc/relayctl/settings.sh
         sed -i "s/__IN_GPIO_PIN__/$2/g" /etc/relayctl/settings.sh
+        chown -R root:gpio /etc/relayctl
+        chmod -R 777 /etc/relayctl
 }
 
 # update rc.local

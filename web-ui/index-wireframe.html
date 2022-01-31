@@ -380,7 +380,7 @@
         let new_switch_mode = input = document.getElementById("switch-add-mode").value;
         let new_switch_json = `{"name":"${new_switch_name}","input_index":"${new_switch_index}","relay_index":"${new_switch_relay}","mode":"${new_switch_mode}"}`;
         let request = new XMLHttpRequest();
-        request.open("POST", `${protocol}://${domain_name}/api/v1/switches/add`);
+        request.open("POST", `/api/v1/switches/add`);
         request.setRequestHeader("APIKEY", api_key);
         request.send(new_switch_json);
         request.onload = () => {
