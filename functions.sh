@@ -18,15 +18,22 @@ function log() {
                         log_msg="$3"
                 fi
 
+                if [ "$logging_per_users" = "enabled" ]
+                then
+                        file_name="$4/$(whoami)_relayctl.log"
+                else
+                        file_name="$4/relayctl.log"
+                fi
+
                 case "$1" in
                         screen)
                                 echo "$log_msg"
                         ;;
                         file)
-                                echo "$log_msg" >> "$4"
+                                echo "$log_msg" >> "$file_name"
                         ;;
                         *)
-                                echo "$log_msg" | tee -a "$4"
+                                echo "$log_msg" | tee -a "$file_name"
                 esac
         fi
 }

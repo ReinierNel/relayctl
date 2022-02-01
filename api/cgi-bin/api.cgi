@@ -100,13 +100,13 @@ function request() {
 }
 
 function auth() {
-        if [ -n "$HTTP_AUTHORIZATION" ]
+        if [ -n "$HTTP_APIKEY" ]
         then
                 hash=$(</etc/relayctl/api.key)
                 algorithm=$(echo $hash | cut -d '$' -f 2)
                 salt=$(echo $hash | cut -d '$' -f 3)
 
-                key_received=$(openssl passwd -$algorithm -salt $salt -stdin -noverify <<< $(echo $HTTP_AUTHORIZATION | cut -d " " -f 2))
+                key_received=$(openssl passwd -$algorithm -salt $salt -stdin -noverify <<< $(echo $HTTP_APIKEY))
 
                 if [ "$key_received" = "$hash" ]
                 then

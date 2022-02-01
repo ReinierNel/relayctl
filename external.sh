@@ -80,7 +80,7 @@ function main() {
 	while true
 	do
 		load_inputs "$1"
-		sleep 0.1
+		sleep "$external_input_frequency"
 	done
 }
 

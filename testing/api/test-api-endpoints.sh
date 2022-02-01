@@ -56,7 +56,7 @@ do
 	esac
 
         output=$(curl --insecure --silent --location --request POST "$BASE_URL/$end_point" \
-        --header "Authorization: Bearer $API_KEY" --data-raw "$payload")
+        --header "APIKEY: $API_KEY" --data-raw "$payload")
 
 		status=$(echo $output | jq -r ."status")
 
@@ -82,7 +82,7 @@ do
         esac
 
         output=$(curl --insecure --silent --location --request DELETE "$BASE_URL/$end_point" \
-        --header "Authorization: Bearer $API_KEY" --data-raw "$payload")
+        --header "APIKEY: $API_KEY" --data-raw "$payload")
 
 		status=$(echo $output | jq -r ."status")
 
@@ -98,7 +98,7 @@ done
 for end_point in "${get_end_points[@]}"
 do
 	output=$(curl --insecure --silent --location --request GET "$BASE_URL/$end_point" \
-	--header "Authorization: Bearer $API_KEY")
+	--header "APIKEY: $API_KEY")
 
 	status=$(echo $output | jq -r ."status")
 

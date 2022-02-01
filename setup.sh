@@ -65,7 +65,7 @@ function check_exit_status() {
 # fetch branches on github repo
 function fetch-branches() {
         #get_branches=($(curl --silent https://api.github.com/repos/reiniernel/relayctl/branches | jq .[]."name"))
-        
+
         mapfile -t get_branches < <(curl --silent https://api.github.com/repos/reiniernel/relayctl/branches | jq -r .[]."name")
 
         branches=()
@@ -79,7 +79,7 @@ function fetch-branches() {
 # download files
 function download_files() {
         # setup folders
-        mkdir /etc/relayctl
+        mkdir -p /etc/relayctl/{logs}
 
         # download needed files
         dl_count="${#download_url[@]}"
@@ -101,15 +101,10 @@ function download_files() {
 
 # update file prems and settings files
 function update_files() {
-        chown -R root:gpio /etc/relayctl
-        chmod 775 /etc/relayctl
-
-        chmod 777 /etc/relayctl/schedule.list
-        chmod 777 /etc/relayctl/inputs.list
-        chmod -x /etc/relayctl/LICENSE
-
         sed -i "s/__OUT_GPIO_PIN__/$1/g" /etc/relayctl/settings.sh
         sed -i "s/__IN_GPIO_PIN__/$2/g" /etc/relayctl/settings.sh
+        chown -R root:gpio /etc/relayctl
+        chmod -R 777 /etc/relayctl
 }
 
 # update rc.local
@@ -117,9 +112,9 @@ function update_rc_local() {
         cat > /tmp/rc.local <<EOF
 $(head -n -1 /etc/rc.local)
 
-/etc/relayctl/relayctl.sh test
 /etc/relayctl/scheduler.sh &
 /etc/relayctl/external.sh &
+$1
 
 exit 0
 EOF
@@ -160,7 +155,7 @@ function install_api() {
         # API setup
         apt-get update
         apt-get upgrade -y
-        apt-get install -y nginx fcgiwrap jq
+        apt-get install -y nginx-full fcgiwrap jq
         usermod -a -G gpio www-data
         mkdir -p /usr/lib/cgi-bin
         curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/$1/api/cgi-bin/api.cgi" --output "/usr/lib/cgi-bin/api.cgi"
@@ -173,7 +168,7 @@ function install_api() {
         chmod 600 /etc/relayctl/api-key.sh
         chown root:root /etc/relayctl/api-key.sh
         cp /usr/share/doc/fcgiwrap/examples/nginx.conf /etc/nginx/fcgiwrap.conf
-        sed -i "s/user www-data/user root/g" /etc/nginx/nginx.conf
+        #sed -i "s/user www-data/user root/g" /etc/nginx/nginx.conf
         gen_ssl
         service nginx restart
         api_key=$(hexdump -n 16 -e '4/4 "%08X" 1 "\n"' /dev/urandom)
@@ -181,6 +176,13 @@ function install_api() {
         chown root:gpio /etc/relayctl/api.key
         # web UI setup
         curl --silent "https://raw.githubusercontent.com/ReinierNel/relayctl/$1/web-ui/index-wireframe.html" --output "/var/www/html/index.html"
+	touch /etc/pam.d/nginx
+        echo 'auth required pam_unix.so' >> /etc/pam.d/nginx
+        echo 'account required pam_unix.so' >> /etc/pam.d/nginx
+        groupadd shadow
+        usermod -a -G shadow www-data
+        chown root:shadow /etc/shadow
+        chmod g+r /etc/shadow
 }
 
 # install everting scip whiptail
