@@ -241,13 +241,25 @@
         return "";
       }
 
+      function base64(action, string) {
+        if (action === "encode") {
+          output = btoa(string)
+        }
+
+        if (action === "decode") {
+          output = atob(string)
+        }
+
+        return output
+      }
+
       // Check that the API key cookie is set otherwise ask for key
       function checkCookieApi() {
         let api_key = getCookie("relayctl-webui-session");
         if (api_key == "") {
           api_key = prompt("Enter API Key to continue");
           if (api_key != "" && api_key != null) {
-            setCookie("relayctl-webui-session", api_key, 7);
+            setCookie("relayctl-webui-session", base64("encode", api_key), 7);
           }
         }
       }
@@ -458,7 +470,7 @@
 
       // Main logic
       checkCookieApi();
-      let api_key = getCookie("relayctl-webui-session")
+      let api_key = base64("decode", getCookie("relayctl-webui-session"))
       status_relays();
       get_switch_mappings();
       get_schedules();
