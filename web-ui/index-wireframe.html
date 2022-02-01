@@ -169,7 +169,7 @@
         </div>
         <div class="row">
           <div class="col-sm-12">
-              <button type="button" class="btn btn-danger float-right">Logout</button>
+              <button type="button" onclick="update_api_key()" class="btn btn-secondary float-right">Update API Key</button>
           </div>
         </div>
         <hr>
@@ -187,7 +187,7 @@
                     <div class="col-sm-6">
                         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIIAAACCCAMAAAC93eDPAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABtQTFRFAAAA////IyMjPz8/VVVVjo6OpaWlwMDAysrKGNIi0gAAAAJ0Uk5T/wDltzBKAAAAq0lEQVR42uzWYQ7CIAwG0DI21vuf2BNQDZlx6vv+NsAjBUK0jycQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBDqCQIBAQEBAQHhboQogvBfBN/XWxAy16uXELJH7NNlco/o+WZC38bY+lr1dUKUGa0dMdloxtHaqMd/C+FJI86zakRVvfA4zg9cXf2dS+l1REBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQFjNQ4ABABXOQfluoFSHAAAAAElFTkSuQmCC" alt="relays" style="background-color: white; height: 80px;">
                         <strong>Swiches</strong>
-                        <button type="button" class="btn btn-dark float-right" data-toggle="modal" data-target="#addswtch">+ Add</button>
+                        <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#addswtch">+ Add</button>
                         <table class="table table-sm">
                             <th>Name</th><th>Switch</th><th>Relay</th><th>Mode</th><th>Remove</th>
                             <tbody id="swiches-rows"></tbody>
@@ -199,7 +199,7 @@
                     <div class="col">
                         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIIAAACCCAMAAAC93eDPAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjZEQjJEMDUwMTYyODExRTdCQzE1RDhBN0MyODYxREExIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjZEQjJEMDUxMTYyODExRTdCQzE1RDhBN0MyODYxREExIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6NkRCMkQwNEUxNjI4MTFFN0JDMTVEOEE3QzI4NjFEQTEiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6NkRCMkQwNEYxNjI4MTFFN0JDMTVEOEE3QzI4NjFEQTEiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6P3/vOAAAAMFBMVEUAAAD///8QEBAoKCg5OTlaWlp4eHiLi4uZmZmnp6e5ubnR0dHk5OTq6ur19fX+/v5j0JuZAAAAAnRSTlP/AOW3MEoAAAH/SURBVHja7NnZboQwDAVQk5Vs5P//tum0aqc0HgUVQ6ReP45GcDBZ7EDL7UEggAACCCCAAAIIIIAAAggggAACCCCAAMIshO0r7iHk6K1R1EIZ62O+mlCCfdz9O5QN5UJC9rrd1LiQSm1RUnCm/aB9voiwrQ1gfKrPP9bkm0Kv2xWEZBsgdG61hYawSZ4QNf+s7/nRUZoQ1MsHbSlSQZbQBO7lwC/usOEYISry9fVfqicV5QhJk9sLaH+F6kgnKcJmyT69hVq7hKW0v21ChPX58SqXhUeyVhlC7l65Q3i3ZhGCJ7ONETZDXoJQNPVmW4+wBNJFgBC6SegTWhqCAMH2k9sltJdmzydkRWmckEjl0wmRTB0nVEPxdIInt4wTFjc+J0YJbWUMRwhhfIUcJpj+UOAIqT9//kRQVI4QCqnTCUT1CKESCRJoF/+TMBQSBG44cpuawHDkJiVX4wlMSkuHCmOBpYldoJkQWKDZbYoZjRLbFLdZc0NBYLPmShbutQmULFzhxs0ficKNKV8Zrkj5yhTxTBJEinimlWHaLplW5mdD97r7FWro9m0tO2gE29puc/97VZJs7mc44pjhoGeG464ZDv1mOPqc4QB4meAY/DHw7/4Y8JGKmz+JfI6Kmz8MnRYggAACCCCAAAIIIIAAAggggAACCCCAAMKZ8SbAAPPfTZ1oqS4NAAAAAElFTkSuQmCC" alt="relays" style="background-color: white; height: 80px;">
                         <strong>Schedules</strong>
-                        <button type="button" class="btn btn-dark float-right" data-toggle="modal" data-target="#addschedule">+ Add</button>
+                        <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#addschedule">+ Add</button>
                         <table class="table table-sm">
                             <th>Name</th><th>Start Time</th><th>End Time</th><th>Days</th><th>Relay</th><th>Action</th><th>Remove</th>
                             <tbody id="schedule-rows"></tbody>
@@ -251,6 +251,29 @@
         }
 
         return output
+      }
+
+      function update_api_key() {
+        api_key = prompt("Enter API Key to continue");
+        setCookie("relayctl-webui-session", base64("encode", api_key), 7);
+        location.reload();
+      }
+
+      function test_api_key() {
+        let request = new XMLHttpRequest();
+        request.open("GET", `/api/v1/health/`);
+        request.setRequestHeader("APIKEY", api_key);
+        request.send();
+        request.onload = () => {
+          if (request.status === 403) {
+            update_api_key();
+          }
+
+          if (request.status === 401) {
+            update_api_key();
+          }
+        }
+        request.DONE;
       }
 
       // Check that the API key cookie is set otherwise ask for key
@@ -471,6 +494,7 @@
       // Main logic
       checkCookieApi();
       let api_key = base64("decode", getCookie("relayctl-webui-session"))
+      test_api_key();
       status_relays();
       get_switch_mappings();
       get_schedules();
