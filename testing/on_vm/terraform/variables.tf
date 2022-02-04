@@ -8,3 +8,4 @@ variable "rg" {
     default = "relayctl"
 }
 variable "github_branch" {}
+variable "VM_PASSWORD" {}

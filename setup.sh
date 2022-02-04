@@ -79,7 +79,7 @@ function fetch-branches() {
 # download files
 function download_files() {
         # setup folders
-        mkdir -p /etc/relayctl/{logs}
+        mkdir -p /etc/relayctl/logs
 
         # download needed files
         dl_count="${#download_url[@]}"

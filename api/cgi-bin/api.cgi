@@ -35,10 +35,10 @@ function validate() {
                         regex='^[0-9]+$'
                 ;;
                 no_special)
-                        regex='^[a-zA-Z0-9]+$'
+                        regex='^[a-zA-Z0-9_\-]+$'
                 ;;
                 time)
-                        regex='^[0-2]+[0-9]+\:+[0-2]+[0-9]+\:+[0-5]+[0-9]+$'
+                        regex='^[0-9]+[0-9]+\:+[0-9]+[0-9]+\:+[0-9]+[0-9]+$'
                 ;;
                 days)
                         regex='^[1-7]+\s.+$'
@@ -182,37 +182,49 @@ function router() {
                                                                 if ! validate 'no_special' "$name" 
                                                                 then
                                                                         status="${status_code[400]}"
-                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"name alphanumeric characters only\""
+                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"name alphanumeric characters only\"}"
+                                                                        content "$status" "$response_json"
+                                                                        exit 1
                                                                 fi
 
                                                                 if ! validate 'time' "$start_time" 
                                                                 then
                                                                         status="${status_code[400]}"
-                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"start time malformed\""
+                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"start time malformed\"}"
+                                                                        content "$status" "$response_json"
+                                                                        exit 1
                                                                 fi
 
                                                                 if ! validate 'time' "$end_time" 
                                                                 then
                                                                         status="${status_code[400]}"
-                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"end time malformed\""
+                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"end time malformed\"}"
+                                                                        content "$status" "$response_json"
+                                                                        exit 1
                                                                 fi
 
                                                                 if ! validate 'days' "$days" 
                                                                 then
                                                                         status="${status_code[400]}"
-                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"days malformed\""
+                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"days malformed\"}"
+                                                                        content "$status" "$response_json"
+                                                                        exit 1
                                                                 fi
 
                                                                 if ! validate 'int' "$relay_index" 
                                                                 then
                                                                         status="${status_code[400]}"
-                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"relay_index can only be a int\""
+                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"relay_index can only be a int\"}"
+                                                                        content "$status" "$response_json"
+                                                                        exit 1
                                                                 fi
 
                                                                 if ! validate 'no_special' "$action" 
                                                                 then
                                                                         status="${status_code[400]}"
-                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"action alphanumeric characters only\""
+                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"action alphanumeric characters only\"}"
+                                                                        content "$status" "$response_json"
+                                                                        exit 1
                                                                 fi
 
 	                                                        if grep "$name|" /etc/relayctl/schedule.list
@@ -259,37 +271,49 @@ function router() {
                                                                 if ! validate 'no_special' "$name" 
                                                                 then
                                                                         status="${status_code[400]}"
-                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"name alphanumeric characters only\""
+                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"name alphanumeric characters only\"}"
+                                                                        content "$status" "$response_json"
+                                                                        exit 1
                                                                 fi
 
                                                                 if ! validate 'time' "$start_time" 
                                                                 then
                                                                         status="${status_code[400]}"
-                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"start time malformed\""
+                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"start time malformed\"}"
+                                                                        content "$status" "$response_json"
+                                                                        exit 1
                                                                 fi
 
                                                                 if ! validate 'time' "$end_time" 
                                                                 then
                                                                         status="${status_code[400]}"
-                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"end time malformed\""
+                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"end time malformed\"}"
+                                                                        content "$status" "$response_json"
+                                                                        exit 1
                                                                 fi
 
                                                                 if ! validate 'days' "$days" 
                                                                 then
                                                                         status="${status_code[400]}"
-                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"days malformed\""
+                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"days malformed\"}"
+                                                                        content "$status" "$response_json"
+                                                                        exit 1
                                                                 fi
 
                                                                 if ! validate 'int' "$relay_index" 
                                                                 then
                                                                         status="${status_code[400]}"
-                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"relay_index can only be a int\""
+                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"relay_index can only be a int\"}"
+                                                                        content "$status" "$response_json"
+                                                                        exit 1
                                                                 fi
 
                                                                 if ! validate 'no_special' "$action" 
                                                                 then
                                                                         status="${status_code[400]}"
-                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"action alphanumeric characters only\""
+                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"action alphanumeric characters only\"}"
+                                                                        content "$status" "$response_json"
+                                                                        exit 1
                                                                 fi
 
 	                                                        if grep "$name|$start_time|$end_time|$days|$relay_index|$action" /etc/relayctl/schedule.list
@@ -364,25 +388,33 @@ function router() {
                                                                 if ! validate 'no_special' "$name" 
                                                                 then
                                                                         status="${status_code[400]}"
-                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"name alphanumeric characters only\""
+                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"name alphanumeric characters only\"}"
+                                                                        content "$status" "$response_json"
+                                                                        exit 1
                                                                 fi
 
                                                                 if ! validate 'int' "$input_index" 
                                                                 then
                                                                         status="${status_code[400]}"
-                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"input_index can only be a int\""
+                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"input_index can only be a int\"}"
+                                                                        content "$status" "$response_json"
+                                                                        exit 1
                                                                 fi
 
                                                                 if ! validate 'int' "$relay_index" 
                                                                 then
                                                                         status="${status_code[400]}"
-                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"relay_index can only be a int\""
+                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"relay_index can only be a int\"}"
+                                                                        content "$status" "$response_json"
+                                                                        exit 1
                                                                 fi
 
                                                                 if ! validate 'no_special' "$mode" 
                                                                 then
                                                                         status="${status_code[400]}"
-                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"mode lphanumeric characters only\""
+                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"mode lphanumeric characters only\"}"
+                                                                        content "$status" "$response_json"
+                                                                        exit 1
                                                                 fi
 
 
@@ -429,25 +461,33 @@ function router() {
                                                                 if ! validate 'no_special' "$name" 
                                                                 then
                                                                         status="${status_code[400]}"
-                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"name alphanumeric characters only\""
+                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"name alphanumeric characters only\"}"
+                                                                        content "$status" "$response_json"
+                                                                        exit 1
                                                                 fi
 
                                                                 if ! validate 'int' "$input_index" 
                                                                 then
                                                                         status="${status_code[400]}"
-                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"input_index can only be a int\""
+                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"input_index can only be a int\"}"
+                                                                        content "$status" "$response_json"
+                                                                        exit 1
                                                                 fi
 
                                                                 if ! validate 'int' "$relay_index" 
                                                                 then
                                                                         status="${status_code[400]}"
-                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"relay_index can only be a int\""
+                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"relay_index can only be a int\"}"
+                                                                        content "$status" "$response_json"
+                                                                        exit 1
                                                                 fi
 
                                                                 if ! validate 'no_special' "$mode" 
                                                                 then
                                                                         status="${status_code[400]}"
-                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"mode lphanumeric characters only\""
+                                                                        response_json="{\"status\": \"400 Bad Request\", \"hint\": \"mode lphanumeric characters only\"}"
+                                                                        content "$status" "$response_json"
+                                                                        exit 1
                                                                 fi
 
 	                                                        if grep "$name|$input_index|$relay_index|$mode|$cmd" /etc/relayctl/inputs.list
