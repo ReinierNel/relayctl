@@ -167,11 +167,6 @@
             </div>
             <div class="col"></div>       
         </div>
-        <div class="row">
-          <div class="col-sm-12">
-              <button type="button" onclick="update_api_key()" class="btn btn-secondary float-right">Update API Key</button>
-          </div>
-        </div>
         <hr>
         <div class="row">
             <div class="col">
@@ -468,7 +463,8 @@
           } else if (request.status === 422) {
             document.getElementById("alert-space").innerHTML = '<div class="alert alert alert-danger"><strong>Input error</strong> Name must be unique and all fields are mandatory!</div>'
           } else {
-            console.log(`error ${request.status} ${request.statusText}`);
+            //console.log(`error ${request.status} ${request.statusText}`);
+            console.log(request)
           }
         }
         request.DONE;

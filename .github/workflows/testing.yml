@@ -52,6 +52,7 @@ jobs:
     - uses: actions/download-artifact@v2
       with:
         name: ip_address.txt
+        time: '600'
     - name: Setup ssh client
       run: apt update && apt install -y openssh-client jq curl
     - name: Exporting SSH Keys
