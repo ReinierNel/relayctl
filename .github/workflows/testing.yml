@@ -52,7 +52,6 @@ jobs:
     - uses: actions/download-artifact@v2
       with:
         name: ip_address.txt
-        time: '600'
     - name: Setup ssh client
       run: apt update && apt install -y openssh-client jq curl
     - name: Exporting SSH Keys
@@ -71,6 +70,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: wait before destroy
+      run: COUNTER=0; while [  $COUNTER -lt 601 ]; do echo "waiting for $COUNTER/600 seconds"; ((COUNTER=COUNTER+1)); sleep 1; done
     - name: Setup Terraform
       run:  pwd && ls -la && curl https://releases.hashicorp.com/terraform/1.1.4/terraform_1.1.4_linux_amd64.zip -o testing/on_vm/terraform/terraform.zip
     - name: Unzipping Terraform
