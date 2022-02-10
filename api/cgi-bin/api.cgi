@@ -153,7 +153,13 @@ function router() {
                                         if [ "$action" = "on" ] || [ "$action" = "off" ] || [ "$action" = "status" ]
                                         then
                                                 echo "$slug,$action" > /tmp/relayctl/relay.action
-                                                request "\"r$slug\": \"relay\": \"$slug\", \"action\": \"$action\""
+                                                if [ "$action" = "on" ]
+                                                then
+                                                        gpio_status="high"
+                                                else
+                                                        gpio_status="low"
+                                                fi
+                                                request "\"r$slug\": \"relay_index\": \"$slug\", \"action\": \"$action\", \"state\":\"$gpio_status\""
                                         else
                                                 status="${status_code[400]}"
                                                 response_json+="\"status\": \"400 Bad Request\""
