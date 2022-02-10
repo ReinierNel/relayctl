@@ -152,8 +152,8 @@ function router() {
                                 then
                                         if [ "$action" = "on" ] || [ "$action" = "off" ] || [ "$action" = "status" ]
                                         then
-                                                relays_output=$(/etc/relayctl/relayctl.sh -r="$slug" "$action")
-                                                request "\"r$slug\": $relays_output"
+                                                echo "$slug,$action" > /tmp/relayctl/relay.action
+                                                request "\"r$slug\": \"relay\": \"$slug\", \"action\": \"$action\""
                                         else
                                                 status="${status_code[400]}"
                                                 response_json+="\"status\": \"400 Bad Request\""

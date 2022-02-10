@@ -24,3 +24,5 @@ log_file_path="/etc/relayctl/logs"
 logging_metadata="disabled"
 # Sould a log file be crated for each user that uses the scripts.
 logging_per_users="enabled"
+# temp directory used by the API
+temp_dir="/tmp/relayctl/"

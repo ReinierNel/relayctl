@@ -51,6 +51,7 @@ declare -a download_files=(
 	"external.sh"
 	"inputs.list"
         "api-key.sh"
+        "api-listener.sh"
 )
 
 # check if status is 0 else exit 1
@@ -114,6 +115,7 @@ $(head -n -1 /etc/rc.local)
 
 /etc/relayctl/scheduler.sh &
 /etc/relayctl/external.sh &
+/etc/relayctl/api-listener.sh &
 $1
 
 exit 0
