@@ -3,8 +3,7 @@ name: Testing
 on:
   push:
     branches:
-      - '**'
-      - '!main'
+      - 'testing'
 jobs:
 
   shellcheck:
@@ -32,11 +31,26 @@ jobs:
     - name: Setup Terraform
       run:  curl https://releases.hashicorp.com/terraform/1.1.4/terraform_1.1.4_linux_amd64.zip -o testing/on_vm/terraform/terraform.zip
     - name: Unzipping Terraform
-      run: unzip testing/on_vm/terraform/terraform.zip -d testing/on_vm/terraform/ && chmod +x testing/on_vm/terraform/terraform && mv testing/on_vm/terraform/terraform /usr/local/bin/terraform
+      run: |
+        unzip testing/on_vm/terraform/terraform.zip -d testing/on_vm/terraform/ && \
+        chmod +x testing/on_vm/terraform/terraform && \
+        mv testing/on_vm/terraform/terraform /usr/local/bin/terraform
     - name: Exporting SSH Keys
-      run: echo "${{ secrets.TF_VAR_SSH_PRI_KEY }}" >> testing/on_vm/terraform/ssh-pri-key && echo "${{ secrets.TF_VAR_SSH_PUB_KEY }}" >> testing/on_vm/terraform/ssh-pub-key
+      run: |
+        echo "${{ secrets.TF_VAR_SSH_PRI_KEY }}" >> testing/on_vm/terraform/ssh-pri-key && \
+        echo "${{ secrets.TF_VAR_SSH_PUB_KEY }}" >> testing/on_vm/terraform/ssh-pub-key
     - name: Run Terraform
-      run: export TF_VAR_VM_PASSWORD=${{ secrets.TF_VAR_VM_PASSWORD }} && export ARM_CLIENT_ID=${{ secrets.ARM_CLIENT_ID }} && export ARM_CLIENT_SECRET=${{ secrets.ARM_CLIENT_SECRET }} && export ARM_SUBSCRIPTION_ID=${{ secrets.ARM_SUBSCRIPTION_ID }} && export ARM_TENANT_ID=${{ secrets.ARM_TENANT_ID }} && export ARM_ACCESS_KEY=${{ secrets.ARM_ACCESS_KEY }} && cd testing/on_vm/terraform/ && terraform init && terraform plan -var="github_branch=${{ steps.extract_branch.outputs.branch }}" -out=planfile && terraform apply -auto-approve planfile && terraform output -raw public_ip >> ip_address.txt
+      run: |
+        export TF_VAR_VM_PASSWORD=${{ secrets.TF_VAR_VM_PASSWORD }} && \
+        export ARM_CLIENT_ID=${{ secrets.ARM_CLIENT_ID }} && \
+        export ARM_CLIENT_SECRET=${{ secrets.ARM_CLIENT_SECRET }} && \
+        export ARM_SUBSCRIPTION_ID=${{ secrets.ARM_SUBSCRIPTION_ID }} && \
+        export ARM_TENANT_ID=${{ secrets.ARM_TENANT_ID }} && \
+        export ARM_ACCESS_KEY=${{ secrets.ARM_ACCESS_KEY }} && \
+        cd testing/on_vm/terraform/ && \
+        terraform init && \
+        terraform plan -var="github_branch=${{ steps.extract_branch.outputs.branch }}" -out=planfile && \
+        terraform apply -auto-approve planfile && terraform output -raw public_ip >> ip_address.txt
     - uses: actions/upload-artifact@v2
       with:
         name: ip_address.txt
@@ -53,15 +67,22 @@ jobs:
       with:
         name: ip_address.txt
     - name: Setup ssh client
-      run: apt update && apt install -y openssh-client jq curl
+      run: |
+        apt update && \
+        apt install -y openssh-client jq curl
     - name: Exporting SSH Keys
-      run: echo "${{ secrets.TF_VAR_SSH_PRI_KEY }}" >> testing/api/ssh-pri-key && echo "${{ secrets.TF_VAR_SSH_PUB_KEY }}" >> testing/api/ssh-pub-key
+      run: |
+        echo "${{ secrets.TF_VAR_SSH_PRI_KEY }}" >> testing/api/ssh-pri-key && \
+        echo "${{ secrets.TF_VAR_SSH_PUB_KEY }}" >> testing/api/ssh-pub-key
     - name: Setting Correct Premissions on Private key
       run: chmod 600 testing/api/ssh-pri-key
     - name: Get API Key from VM
-      run: scp -o "StrictHostKeyChecking no" -i testing/api/ssh-pri-key pi@$(cat ip_address.txt):/tmp/api.key  testing/api/api.key
+      run: |
+        scp -o "StrictHostKeyChecking no" -i testing/api/ssh-pri-key pi@$(cat ip_address.txt):/tmp/api.key testing/api/api.key
     - name: running Test Agains API
-      run: chmod +x testing/api/test-api-endpoints.sh && testing/api/test-api-endpoints.sh $(cat ip_address.txt) $(cat testing/api/api.key)
+      run: |
+        chmod +x testing/api/test-api-endpoints.sh && \
+        testing/api/test-api-endpoints.sh $(cat ip_address.txt) $(cat testing/api/api.key)
 
   cleanup:
     needs:
@@ -70,13 +91,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: wait before destroy
-      run: COUNTER=0; while [  $COUNTER -lt 601 ]; do echo "waiting for $COUNTER/600 seconds"; ((COUNTER=COUNTER+1)); sleep 1; done
     - name: Setup Terraform
-      run:  pwd && ls -la && curl https://releases.hashicorp.com/terraform/1.1.4/terraform_1.1.4_linux_amd64.zip -o testing/on_vm/terraform/terraform.zip
+      run: |
+        pwd && ls -la && \
+        curl https://releases.hashicorp.com/terraform/1.1.4/terraform_1.1.4_linux_amd64.zip -o testing/on_vm/terraform/terraform.zip
     - name: Unzipping Terraform
-      run: unzip testing/on_vm/terraform/terraform.zip -d testing/on_vm/terraform/ && chmod +x testing/on_vm/terraform/terraform && mv testing/on_vm/terraform/terraform /usr/local/bin/terraform
+      run: |
+        unzip testing/on_vm/terraform/terraform.zip -d testing/on_vm/terraform/ && \
+        chmod +x testing/on_vm/terraform/terraform && \
+        mv testing/on_vm/terraform/terraform /usr/local/bin/terraform
     - name: Exporting SSH Keys
-      run: echo "${{ secrets.TF_VAR_SSH_PRI_KEY }}" >> testing/on_vm/terraform/ssh-pri-key && echo "${{ secrets.TF_VAR_SSH_PUB_KEY }}" >> testing/on_vm/terraform/ssh-pub-key
+      run: |
+        echo "${{ secrets.TF_VAR_SSH_PRI_KEY }}" >> testing/on_vm/terraform/ssh-pri-key && \
+        echo "${{ secrets.TF_VAR_SSH_PUB_KEY }}" >> testing/on_vm/terraform/ssh-pub-key
     - name: Run Terraform Destroy
-      run: export ARM_CLIENT_ID=${{ secrets.ARM_CLIENT_ID }} && export ARM_CLIENT_SECRET=${{ secrets.ARM_CLIENT_SECRET }} && export ARM_SUBSCRIPTION_ID=${{ secrets.ARM_SUBSCRIPTION_ID }} && export ARM_TENANT_ID=${{ secrets.ARM_TENANT_ID }} && export ARM_ACCESS_KEY=${{ secrets.ARM_ACCESS_KEY }} && cd testing/on_vm/terraform/ && terraform init && terraform destroy -var="github_branch=${{ steps.extract_branch.outputs.branch }}" -auto-approve
+      run: |
+        export TF_VAR_VM_PASSWORD=${{ secrets.TF_VAR_VM_PASSWORD }} && \
+        export ARM_CLIENT_ID=${{ secrets.ARM_CLIENT_ID }} && \
+        export ARM_CLIENT_SECRET=${{ secrets.ARM_CLIENT_SECRET }} && \
+        export ARM_SUBSCRIPTION_ID=${{ secrets.ARM_SUBSCRIPTION_ID }} && \
+        export ARM_TENANT_ID=${{ secrets.ARM_TENANT_ID }} && \
+        export ARM_ACCESS_KEY=${{ secrets.ARM_ACCESS_KEY }} && \
+        cd testing/on_vm/terraform/ && terraform init && \
+        terraform destroy -var="github_branch=${{ steps.extract_branch.outputs.branch }}" -auto-approve
