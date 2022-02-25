@@ -1,0 +1,3 @@
+(fp_lib_table
+  (lib (name relayctl-hat)(type KiCad)(uri ${KIPRJMOD}/relayctl-hat.pretty)(options "")(descr ""))
+)
