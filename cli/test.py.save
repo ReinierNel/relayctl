@@ -1,0 +1,14 @@
+import typer
+import requests
+
+app = typer.Typer()
+
+@app.command()
+def verb():
+    typer.echo("ver acction")
+
+    
+
+
+if __name__ == "__main__":
+    app()
