@@ -7,3 +7,4 @@ sudo apt install sqlite3
 pip install fastapi
 pip install "uvicorn[standard]"
 pip install typer
+pip install tabulate

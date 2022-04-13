@@ -56,7 +56,7 @@ def delete_relay(id):
     connect = sqlite3.connect(db_path)
     cursor = connect.cursor()
     sql = ''' DELETE FROM relays WHERE id = ?; '''
-    cursor.execute(sql, str(id))
+    cursor.execute(sql, (str(id),))
     connect.commit()
     connect.close()
 
@@ -208,7 +208,7 @@ def relays_delete(id: int):
 
 @app.get("/relays/{id}")
 def relay_status(id: int):
-    return {"id": id, "gpio": relay["gpio"], "status": GPIO.input(fetch_relay(id))}
+    return {"id": id, "gpio": fetch_relay(id), "status": GPIO.input(fetch_relay(id))}
 
 @app.get("/relays/{id}/on")
 def relay_on(id: int):
