@@ -4,11 +4,15 @@ import sqlite3
 from typing import Optional
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
+from fastapi.responses import HTMLResponse
+from pathlib import Path
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 
+
 db_path = "../db/relayctl.db"
+html_path = "../web"
 
 def init_gpio(gpio):
     GPIO.setup(init_relay["gpio"], GPIO.OUT)
@@ -263,3 +267,11 @@ def schedule_add(schedule: Schedule):
 def schedules_delete(id: int):
     delete_schedule(id)
     return {"id" : id, "status": "delete"}
+
+
+# web ui
+
+@app.get("/web/", response_class=HTMLResponse)
+async def read_items():
+    html = Path(f"{html_path}/index.html").read_text()
+    return html

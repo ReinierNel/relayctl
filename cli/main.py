@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import typer
 import requests
 import json
