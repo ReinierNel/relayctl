@@ -1,326 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Relayctl</title>
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIIAAACCCAMAAAC93eDPAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkUzOEM5MzI1MTcyNjExRTdCMDQzQUQyMjk2MTI0MEMyIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkUzOEM5MzI2MTcyNjExRTdCMDQzQUQyMjk2MTI0MEMyIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6RTM4QzkzMjMxNzI2MTFFN0IwNDNBRDIyOTYxMjQwQzIiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6RTM4QzkzMjQxNzI2MTFFN0IwNDNBRDIyOTYxMjQwQzIiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6KHOaBAAAAMFBMVEUAAAD///8REREqKipDQ0NUVFRkZGR6enqUlJSioqK4uLjGxsbY2Njl5eXu7u7+/v6kGKCeAAAAAnRSTlP/AOW3MEoAAAGVSURBVHja7NrbbsIwDAZg1zn3lPd/25mNbWREqIjW7rY/Vygg9OE4dlJBg/kgEEAAAQQQQAABBBBAAAEEEEAA4WACPRy9z/9FwmMeCCCAAAIIIIBwckLIxgTvmIMtYRqL59hMRaKofXz1lBpBKU8Z9iAU9rffWGSGlAmDc+PX63oCgslCTM1CrJKOTjsdQ5OOtTA1E8cT1tgEQUaSMCxqhCUFR35uJ2cJQ1YjZCb2d79YssGvplGQ/KTL1lTLhRrvmoQkKPlqtyPewyA37tGuLlzbBnmz6vgxxifCcBBhlTCEqkco9wsxZCKerc4L1zC4zVX6dYKcmkJnWqo0LxqEJcjZsduZ183NaocCHabuW5dmtWpEIUdPrrv9NjerHdIxsevmftwYhj12ROyf06RZ8aREmNu68HmPqDGWqkRoq+P38VWxOp7gEJ9va5MJYXZcLC9005gcp+HHPUL1Wiv12SXrRxxp+Y8Peqo9YTgNoSIKIIAAAgjmBPyFQmGAAAIIIIAAAggggAACCCCAAAIIv5zwJsAANN1GDRDcFnMAAAAASUVORK5CYII=" />
-
-    <style>
-        body {
-            font: Inconsolata, monospace;
-            position: absolute;
-            margin: auto;
-            left: 0;
-            right: 0;
-        }
-
-        basic-spacer {
-            height: 25px;
-        }
-    </style>
-
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>relayctl</title>
 </head>
 <body>
+  <h1>Relays</h1>
+  <label for="addRelayGPIO">GPIO:</label>
+  <input type="number" id="addRelayGPIO" style="width: 60px;">
+  <button type="button" onclick="addRelay()">Add</button>
+  <br>
+  <span style="display: none;" id="addRelayStatus"></span>
+  <br>
+  <br>
+  <table>
+    <th>ID</th><th>GPIO</th><th>Status</th><th>Action</th><th>Remove</th>
+    <tbody id="relays-data"></tbody>
 
-  <div class="modal" id="addrelay">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title">New Relay</h4>
+  </table>
+  <h1>Switches</h1>
 
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-        <div class="modal-body">
-            <form>
-                <div class="form-group">
-                    <label for="relay-gpio">Enter GPIO number Relay is conencted to</label>
-                    <input type="number" id="relay-gpio" class="form-control" name="relay-gpio" required>
-                </div>
-              </form>
-        </div>
-        <div class="modal-footer">
-          <button onclick="add_relay()"  class="btn btn-primary">Submit</button>
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-</div>
-
-    <div class="modal" id="addswtch">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title">New Switch to Relay Mapping</h4>
-
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <label for="switch">Enter Mapping Name</label>
-                        <input type="text" id="switch-add-name" class="form-control" name="name" required>
-                    </div>
-                    <div class="form-group">
-                      <label for="switch">Select Switch Index</label>
-                      <br>
-                      <select class="form-control" id="switch-add-index">
-                        <option>0</option>
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                      </select>
-                    </div>
-                    <div class="form-group">
-                      <label for="relay">Select Relay Index</label>
-                      <br>
-                      <select class="form-control" id="switch-add-relay">
-                        <option>0</option>
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                      </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="relay">Select Mode</label>
-                        <br>
-                        <select class="form-control" id="switch-add-mode">
-                          <option>on</option>
-                          <option>off</option>
-                        </select>
-                    </div>
-                    
-                  </form>
-            </div>
-            <div class="modal-footer">
-              <button onclick="add_switch_mapping()"  class="btn btn-primary">Submit</button>
-              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-    </div>
-
-    <div class="modal" id="addschedule">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          
-          <div class="modal-header">
-            <h4 class="modal-title">New Schedule Entry</h4>
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-          </div>     
-          <div class="modal-body">
-            <div id="alert-space">
-              
-            </div>
-              <form>
-                  <div class="form-group">
-                    <label for="name">Enter a Schedule Name</label>
-                    <input type="text" class="form-control" id="schedule-add-name" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="start">Enter Start Time</label>
-                    <input type="time" class="form-control" id="schedule-add-start-time" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="end">Enter End Time</label>
-                    <input type="time" class="form-control" id="schedule-add-end-time" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="week">Enter Days of the week separated by spaces.</label>
-                    <label for="week">E.g. 1 = Monday, 7 = Sunday</label>
-                    <input type="text" class="form-control" id="schedule-add-days" value="1 2 3 4 5 6 7" required>
-                  </div>
-                    <div class="form-group">
-                      <label for="relay">Select Relay Index</label>
-                      <br>
-                      <select class="form-control" id="schedule-add-relay">
-                        <option>0</option>
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                      </select>
-                    </div>
-                    <div class="form-group">
-                          <label for="relay">Select Action</label>
-                          <br>
-                          <select class="form-control" id="schedule-add-action">
-                            <option>on</option>
-                            <option>off</option>
-                          </select>
-                    </div>
-                  
-                  
-              </form>
-          </div>
-    
-          <div class="modal-footer">
-            <button onclick="add_schedule()" class="btn btn-primary">Submit</button>
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-          </div>
-    
-        </div>
-      </div>
-    </div>
-
-
-    <div class="container">
-        <div class="row">
-            <div class="col"></div>
-            <div class="col">
-                <pre>
-
-██████╗ ███████╗██╗      █████╗ ██╗   ██╗ ██████╗████████╗██╗     
-██╔══██╗██╔════╝██║     ██╔══██╗╚██╗ ██╔╝██╔════╝╚══██╔══╝██║     
-██████╔╝█████╗  ██║     ███████║ ╚████╔╝ ██║        ██║   ██║     
-██╔══██╗██╔══╝  ██║     ██╔══██║  ╚██╔╝  ██║        ██║   ██║     
-██║  ██║███████╗███████╗██║  ██║   ██║   ╚██████╗   ██║   ███████╗
-╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝   ╚═╝    ╚═════╝   ╚═╝   ╚══════╝</pre>
-            </div>
-            <div class="col"></div>       
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIIAAACCCAMAAAC93eDPAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkUzOEM5MzI1MTcyNjExRTdCMDQzQUQyMjk2MTI0MEMyIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkUzOEM5MzI2MTcyNjExRTdCMDQzQUQyMjk2MTI0MEMyIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6RTM4QzkzMjMxNzI2MTFFN0IwNDNBRDIyOTYxMjQwQzIiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6RTM4QzkzMjQxNzI2MTFFN0IwNDNBRDIyOTYxMjQwQzIiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6KHOaBAAAAMFBMVEUAAAD///8REREqKipDQ0NUVFRkZGR6enqUlJSioqK4uLjGxsbY2Njl5eXu7u7+/v6kGKCeAAAAAnRSTlP/AOW3MEoAAAGVSURBVHja7NrbbsIwDAZg1zn3lPd/25mNbWREqIjW7rY/Vygg9OE4dlJBg/kgEEAAAQQQQAABBBBAAAEEEEAA4WACPRy9z/9FwmMeCCCAAAIIIIBwckLIxgTvmIMtYRqL59hMRaKofXz1lBpBKU8Z9iAU9rffWGSGlAmDc+PX63oCgslCTM1CrJKOTjsdQ5OOtTA1E8cT1tgEQUaSMCxqhCUFR35uJ2cJQ1YjZCb2d79YssGvplGQ/KTL1lTLhRrvmoQkKPlqtyPewyA37tGuLlzbBnmz6vgxxifCcBBhlTCEqkco9wsxZCKerc4L1zC4zVX6dYKcmkJnWqo0LxqEJcjZsduZ183NaocCHabuW5dmtWpEIUdPrrv9NjerHdIxsevmftwYhj12ROyf06RZ8aREmNu68HmPqDGWqkRoq+P38VWxOp7gEJ9va5MJYXZcLC9005gcp+HHPUL1Wiv12SXrRxxp+Y8Peqo9YTgNoSIKIIAAAgjmBPyFQmGAAAIIIIAAAggggAACCCCAAAIIv5zwJsAANN1GDRDcFnMAAAAASUVORK5CYII=" alt="relays" style="background-color: white; height: 80px;">
-                        <strong>Relays</strong>
-                        <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#addrelay">+ Add</button>
-                        <table class="table table-sm">
-                            <th>ID</th><th>GPIO</th><th>Status</th><th>Action</th><th>Remove</th>
-                            <tbody id="relays-rows"></tbody>
-                        </table>
-                    </div>
-                    <div class="col-sm-6">
-                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIIAAACCCAMAAAC93eDPAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABtQTFRFAAAA////IyMjPz8/VVVVjo6OpaWlwMDAysrKGNIi0gAAAAJ0Uk5T/wDltzBKAAAAq0lEQVR42uzWYQ7CIAwG0DI21vuf2BNQDZlx6vv+NsAjBUK0jycQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBDqCQIBAQEBAQHhboQogvBfBN/XWxAy16uXELJH7NNlco/o+WZC38bY+lr1dUKUGa0dMdloxtHaqMd/C+FJI86zakRVvfA4zg9cXf2dS+l1REBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQFjNQ4ABABXOQfluoFSHAAAAAElFTkSuQmCC" alt="relays" style="background-color: white; height: 80px;">
-                        <strong>Swiches</strong>
-                        <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#addswtch">+ Add</button>
-                        <table class="table table-sm">
-                            <th>ID</th><th>Relay ID</th><th>Mode</th><th>Action</th><th>Remove</th>
-                            <tbody id="swiches-rows"></tbody>
-                            
-                        </table>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIIAAACCCAMAAAC93eDPAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjZEQjJEMDUwMTYyODExRTdCQzE1RDhBN0MyODYxREExIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjZEQjJEMDUxMTYyODExRTdCQzE1RDhBN0MyODYxREExIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6NkRCMkQwNEUxNjI4MTFFN0JDMTVEOEE3QzI4NjFEQTEiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6NkRCMkQwNEYxNjI4MTFFN0JDMTVEOEE3QzI4NjFEQTEiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6P3/vOAAAAMFBMVEUAAAD///8QEBAoKCg5OTlaWlp4eHiLi4uZmZmnp6e5ubnR0dHk5OTq6ur19fX+/v5j0JuZAAAAAnRSTlP/AOW3MEoAAAH/SURBVHja7NnZboQwDAVQk5Vs5P//tum0aqc0HgUVQ6ReP45GcDBZ7EDL7UEggAACCCCAAAIIIIAAAggggAACCCCAAMIshO0r7iHk6K1R1EIZ62O+mlCCfdz9O5QN5UJC9rrd1LiQSm1RUnCm/aB9voiwrQ1gfKrPP9bkm0Kv2xWEZBsgdG61hYawSZ4QNf+s7/nRUZoQ1MsHbSlSQZbQBO7lwC/usOEYISry9fVfqicV5QhJk9sLaH+F6kgnKcJmyT69hVq7hKW0v21ChPX58SqXhUeyVhlC7l65Q3i3ZhGCJ7ONETZDXoJQNPVmW4+wBNJFgBC6SegTWhqCAMH2k9sltJdmzydkRWmckEjl0wmRTB0nVEPxdIInt4wTFjc+J0YJbWUMRwhhfIUcJpj+UOAIqT9//kRQVI4QCqnTCUT1CKESCRJoF/+TMBQSBG44cpuawHDkJiVX4wlMSkuHCmOBpYldoJkQWKDZbYoZjRLbFLdZc0NBYLPmShbutQmULFzhxs0ficKNKV8Zrkj5yhTxTBJEinimlWHaLplW5mdD97r7FWro9m0tO2gE29puc/97VZJs7mc44pjhoGeG464ZDv1mOPqc4QB4meAY/DHw7/4Y8JGKmz+JfI6Kmz8MnRYggAACCCCAAAIIIIAAAggggAACCCCAAMKZ8SbAAPPfTZ1oqS4NAAAAAElFTkSuQmCC" alt="relays" style="background-color: white; height: 80px;">
-                        <strong>Schedules</strong>
-                        <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#addschedule">+ Add</button>
-                        <table class="table table-sm">
-                            <th>Name</th><th>Start Time</th><th>End Time</th><th>Days</th><th>Relay</th><th>Action</th><th>Remove</th>
-                            <tbody id="schedule-rows"></tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <p><a href="https://github.com/ReinierNel/relayctl/blob/main/LICENSE">Copyright (c) 2021 ReinierNel</a></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-      // Get Relay Statys for all configured relays 
-      function get_relays() {
-        let request = new XMLHttpRequest();
-        request.open("GET", `/relays`);
-        request.send();
-        document.getElementById("relays-rows").innerHTML = `<tr><td><div class="spinner-border text-dark"></div></td></tr>`;
-        request.onload = () => {
-          if (request.status === 200) {
-            let relays = JSON.parse(request.response);  
-            let relays_count=Object.keys(relays).length;
-            document.getElementById("relays-rows").innerHTML = "";    
-            for (relay in relays) {
-              let id = relays[relay]['relay']
-              let gpio = relays[relay]['gpio']
-              let status = relays[relay]['status']
-              let rm = `<button type=\"button\" onclick=\"remove_relay('${id}')\" class=\"btn btn-danger btn-sm btn-block\">Remove</button>`;
-              let action
-              if (status == 0) {
-                action = `<button type=\"button\" onclick=\"switch_relay('${id}', 'on')\" class=\"btn btn-secondary btn-sm btn-block\">On</button>`;
-              } else {
-                action = `<button type=\"button\" onclick=\"switch_relay('${id}', 'off')\" class=\"btn btn-warning btn-sm btn-block\">Off</button>`;
-              }
-
-              document.getElementById("relays-rows").innerHTML += `<tr><td>${id}</td><td>${gpio}</td><td>${status}</td><td>${action}</td><td>${rm}</td></tr>`
-
-            }
-          } else {
-            console.log(`error ${request.status} ${request.statusText}`);
-          }
-        }
-        request.DONE;
-      }
-
-      // Switch relay on or off
-      function switch_relay(relay_index, mode) {
-        let request = new XMLHttpRequest();
-        request.open("GET", `/relays/${relay_index}/${mode}`);
-        request.send();
-        request.onload = () => {
-        if (request.status !== 200) {
-            console.log(`error ${request.status} ${request.statusText}`);
-          }
-        }
-        request.DONE;
-        get_relays();
-      }
-
-      // Add relay
-      function add_relay() {
-        let relay_gpio = input = document.getElementById("relay-gpio").value;
-        let new_relay_json = `{"gpio": ${relay_gpio}}`;
-        let request = new XMLHttpRequest();
-        request.open("POST", `/relays/add`);
-        request.setRequestHeader("Content-Type", "application/json");
-        request.send(new_relay_json);
-        request.onload = () => {
-        if (request.status === 200) {    
-          get_relays();
-            $('#addrelay').modal('hide');
-          } else {
-            console.log(`error ${request.status} ${request.statusText}`);
-          }
-        }
-        request.DONE;
-      }
-
-      // Remove Relay
-      // Switch relay on or off
-      function remove_relay(id) {
-        let request = new XMLHttpRequest();
-        request.open("DELETE", `/relays/delete/${id}`);
-        request.send();
-        request.onload = () => {
-        if (request.status !== 200) {
-            console.log(`error ${request.status} ${request.statusText}`);
-          }
-        }
-        request.DONE;
-
-        get_relays();
-      }
-
-      get_relays();
-
-    </script>
+  <h1>Scedules</h1>
 </body>
+
+<script>
+  async function getRelays() {
+    let url = '/relays';
+    try {
+        let res = await fetch(url);
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+  }
+
+  async function relayTable() {
+    let relays = await getRelays();
+    let html = '';
+    relays.forEach(relay => {
+        if (relay.status == 0) {
+          sw_button = `<button type="button" onclick="switchRelay('on', ${relay.relay})">Switch</button>`
+        } else {
+          sw_button = `<button type="button" onclick="switchRelay('off', ${relay.relay})">Switch</button>`
+        }
+        let htmlSegment = `<tr>
+                            <td>${relay.relay}</td>
+                            <td>${relay.gpio}</td>
+                            <td>${relay.status}</td>
+                            <td>${sw_button}</td>
+                            <td><button type="button" onclick="removeRelay(${relay.relay})">Remove</button></td>
+                          </tr>`;
+
+        html += htmlSegment;
+    });
+
+    let container = document.getElementById('relays-data');
+    container.innerHTML = html;
+  }
+
+  async function addRelaysRes(gpio_pin) {
+    let url = '/relays/add';
+    data = JSON.stringify({"gpio": parseInt(gpio_pin)})
+    try {
+        let res = await fetch(url, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: data
+        });
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+  }
+
+  async function addRelay() {
+    //let gpio = 32
+    let gpio = input = document.getElementById("addRelayGPIO").value;
+    let add = await addRelaysRes(gpio);
+    
+    if (add.status == "add") {
+      document.getElementById("addRelayStatus").style = "color: green;";
+      document.getElementById("addRelayStatus").innerHTML = ` Added new relay ID: ${add.id}`;
+    }
+
+    relayTable()
+  }
+
+  async function switchRelay(mode, id) {
+
+    if (mode == "off") {
+      url = `/relays/${id}/off`;
+      try {
+        let res = await fetch(url);
+      } catch (error) {
+          console.log(error);
+      }
+    }
+    
+    if (mode == "on") {
+      url = `/relays/${id}/on`;
+      try {
+        let res = await fetch(url);
+      } catch (error) {
+          console.log(error);
+      }
+    }
+    relayTable()
+  }
+  
+  async function removeRelayRes(id) {
+    let url = `/relays/delete/${id}`;
+    try {
+        let res = await fetch(url, {
+          method: 'DELETE',
+          headers: {'Content-Type': 'application/json'}
+        });
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+  }
+
+  async function removeRelay(relay_id) {
+    
+    let remove = await removeRelayRes(relay_id);
+    
+    if (remove.status == "delete") {
+      document.getElementById("addRelayStatus").style = "color: red;";
+      document.getElementById("addRelayStatus").innerHTML = ` Relay ID: ${remove.id} removed`;
+    }
+
+    relayTable()
+  }
+
+  relayTable()
+
+</script>
+
 </html>
