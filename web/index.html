@@ -21,16 +21,13 @@
 
   <h1>Switches</h1>
   <label for="addSwitchRID">Relay ID:</label>
-  <!-- <input type="number" id="addSwitchRID" style="width: 60px;"> -->
   <select id="addSwitchRID" style="width: 60px;"></select>
   <label for="addSwitchMode">Mode:</label>
   <select id="addSwitchMode" style="width: 60px;">
     <option value="1">on</option>
     <option value="0">off</option>
   </select>
-  <!-- <input type="number" id="addSwitchMode" style="width: 60px;"> -->
   <label for="addSwitchAction">Action:</label>
-  <!-- <input type="number" id="addSwitchAction" style="width: 60px;"> -->
   <select id="addSwitchAction" style="width: 60px;">
     <option value="1">on</option>
     <option value="0">off</option>
@@ -46,11 +43,8 @@
 
   <h1>Schedules</h1>
   <label for="addSchedulesRID">Relay ID:</label>
-  <!-- <input type="number" id="addSwitchRID" style="width: 60px;"> -->
   <select id="addSchedulesRID" style="width: 60px;"></select>
-  <!-- <input type="number" id="addSwitchMode" style="width: 60px;"> -->
   <label for="addSchedulesAction">Action:</label>
-  <!-- <input type="number" id="addSwitchAction" style="width: 60px;"> -->
   <select id="addSchedulesAction" style="width: 60px;">
     <option value="1">on</option>
     <option value="0">off</option>
@@ -107,8 +101,8 @@
 </body>
 
 <script>
-  async function getRelays() {
-    let url = '/relays';
+  // API Functions
+  async function apiGet(url) {
     try {
         let res = await fetch(url);
         return await res.json();
@@ -117,8 +111,35 @@
     }
   }
 
+  async function apiAdd(url, json) {
+    data = JSON.stringify(json)
+    try {
+        let res = await fetch(url, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: data
+        });
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+  }
+
+  async function apiRm(url, id) {
+    try {
+        let res = await fetch(url + id, {
+          method: 'DELETE',
+          headers: {'Content-Type': 'application/json'}
+        });
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+  }
+
+  // Relays Functions
   async function relayTable() {
-    let relays = await getRelays();
+    let relays = await apiGet('/relays');
     let html = '';
     relays.forEach(relay => {
         if (relay.status == 0) {
@@ -141,25 +162,10 @@
     container.innerHTML = html;
   }
 
-  async function addRelaysRes(gpio_pin) {
-    let url = '/relays/add';
-    data = JSON.stringify({"gpio": parseInt(gpio_pin)})
-    try {
-        let res = await fetch(url, {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: data
-        });
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-  }
-
   async function addRelay() {
-    //let gpio = 32
+    
     let gpio = input = document.getElementById("addRelayGPIO").value;
-    let add = await addRelaysRes(gpio);
+    let add = await apiAdd('/relays/add', {"gpio": parseInt(gpio)});
     
     if (add.status == "add") {
       document.getElementById("addRelayStatus").style = "color: green;";
@@ -191,22 +197,9 @@
     relayTable()
   }
   
-  async function removeRelayRes(id) {
-    let url = `/relays/delete/${id}`;
-    try {
-        let res = await fetch(url, {
-          method: 'DELETE',
-          headers: {'Content-Type': 'application/json'}
-        });
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-  }
-
-  async function removeRelay(relay_id) {
+  async function removeRelay(id) {
     
-    let remove = await removeRelayRes(relay_id);
+    let remove = await apiRm('/relays/delete/', id);
     
     if (remove.status == "delete") {
       document.getElementById("addRelayStatus").style = "color: red;";
@@ -216,18 +209,9 @@
     relayTable()
   }
 
-  async function getSwicthes() {
-    let url = '/switches';
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-  }
-
+  // Switches Functions
   async function switchTable() {
-    let switches = await getSwicthes();
+    let switches = await apiGet('/switches');
     let html = '';
     switches.forEach(sw => {
         let htmlSegment = `<tr>
@@ -245,27 +229,15 @@
     container.innerHTML = html;
   }
 
-  async function addSwitchRes(relay_id, mode, action) {
-    let url = '/switches/add';
-    data = JSON.stringify({"relay_id": parseInt(relay_id), "mode": parseInt(mode), "action": parseInt(action)})
-    try {
-        let res = await fetch(url, {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: data
-        });
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-  }
-
   async function addSwitch() {
     let relay_id = input = document.getElementById("addSwitchRID").value;
     let mode = input = document.getElementById("addSwitchMode").value;
     let action = input = document.getElementById("addSwitchAction").value;
 
-    let add = await addSwitchRes(relay_id, mode, action);
+    let add = await apiAdd('/switches/add', {
+      "relay_id": parseInt(relay_id),
+      "mode": parseInt(mode),
+      "action": parseInt(action)});
     
     if (add.status == "add") {
       document.getElementById("addSwitchStatus").style = "color: green;";
@@ -275,22 +247,9 @@
     switchTable()
   }
 
-  async function removeSwitchRes(id) {
-    let url = `/switches/delete/${id}`;
-    try {
-        let res = await fetch(url, {
-          method: 'DELETE',
-          headers: {'Content-Type': 'application/json'}
-        });
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-  }
-
-  async function removeSwitch(switch_id) {
+  async function removeSwitch(id) {
     
-    let remove = await removeSwitchRes(switch_id);
+    let remove = await apiRm('/switches/delete/', id);
     
     if (remove.status == "delete") {
       document.getElementById("addSwitchStatus").style = "color: red;";
@@ -300,19 +259,9 @@
     switchTable()
   }
 
-  //Schedules
-  async function getSchedules() {
-    let url = '/schedules';
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-  }
-
+  //Schedules Functions
   async function scheduleTable() {
-    let schedules = await getSchedules();
+    let schedules = await apiGet('/schedules');
     let html = '';
     schedules.forEach(schedule => {
         let htmlSegment = `<tr>
@@ -338,33 +287,6 @@
     container.innerHTML = html;
   }
 
-  async function addScheduleRes(relay_id, action, start, end, mon, tue, wed, thu, fri, sat, sun) {
-    let url = '/schedules/add';
-    data = JSON.stringify({
-      "relay_id": parseInt(relay_id),
-      "action": parseInt(action),
-      "start": start,
-      "end": end,
-      "mon": parseInt(mon),
-      "tue": parseInt(tue),
-      "wed": parseInt(wed),
-      "thu": parseInt(thu),
-      "fri": parseInt(fri),
-      "sat": parseInt(sat),
-      "sun": parseInt(sun)
-    })
-    try {
-        let res = await fetch(url, {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: data
-        });
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-  }
-
   async function addSchedules() {
     let relay_id = input = document.getElementById("addSchedulesRID").value;
     let action = input = document.getElementById("addSchedulesAction").value;
@@ -378,7 +300,19 @@
     let sat = input = document.getElementById("addSchedulesSat").value;
     let sun = input = document.getElementById("addSchedulesSun").value;
 
-    let add = await addScheduleRes(relay_id, action, start, end, mon, tue, wed, thu, fri, sat, sun);
+    let add = await apiAdd('/schedules/add', {
+      "relay_id": parseInt(relay_id),
+      "action": parseInt(action),
+      "start": start,
+      "end": end,
+      "mon": parseInt(mon),
+      "tue": parseInt(tue),
+      "wed": parseInt(wed),
+      "thu": parseInt(thu),
+      "fri": parseInt(fri),
+      "sat": parseInt(sat),
+      "sun": parseInt(sun)
+    });
     
     if (add.status == "add") {
       document.getElementById("addSchedulesStatus").style = "color: green;";
@@ -388,22 +322,9 @@
     scheduleTable()
   }
 
-  async function removeScheduleRes(id) {
-    let url = `/schedules/delete/${id}`;
-    try {
-        let res = await fetch(url, {
-          method: 'DELETE',
-          headers: {'Content-Type': 'application/json'}
-        });
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-  }
-
-  async function removeSchedule(schedule_id) {
+  async function removeSchedule(id) {
     
-    let remove = await removeScheduleRes(schedule_id);
+    let remove = await apiRm('/schedules/delete/', id); 
     
     if (remove.status == "delete") {
       document.getElementById("addSchedulesStatus").style = "color: red;";
@@ -413,9 +334,9 @@
     scheduleTable()
   }
 
-  // Misc
+  // Misc Functions
   async function UpdateRelayIdForAdd() {
-    let relays = await getRelays();
+    let relays = await apiGet('/relays');
     let html = '';
     relays.forEach(relay => {
         let htmlSegment = `<option value="${relay.relay}">${relay.relay}</option>`;
