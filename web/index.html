@@ -44,7 +44,66 @@
     <tbody id="switches-data"></tbody>
   </table>
 
-  <h1>Scedules</h1>
+  <h1>Schedules</h1>
+  <label for="addSchedulesRID">Relay ID:</label>
+  <!-- <input type="number" id="addSwitchRID" style="width: 60px;"> -->
+  <select id="addSchedulesRID" style="width: 60px;"></select>
+  <!-- <input type="number" id="addSwitchMode" style="width: 60px;"> -->
+  <label for="addSchedulesAction">Action:</label>
+  <!-- <input type="number" id="addSwitchAction" style="width: 60px;"> -->
+  <select id="addSchedulesAction" style="width: 60px;">
+    <option value="1">on</option>
+    <option value="0">off</option>
+  </select>
+  <label for="addSchedulesStart">Start Time:</label>
+  <input type="time" id="addSchedulesStart" style="width: 80px;">
+  <label for="addSchedulesEnd">End Time:</label>
+  <input type="time" id="addSchedulesEnd" style="width: 80px;">
+  <br>
+  <label for="addSchedulesMon">Mon:</label>
+  <select id="addSchedulesMon" style="width: 60px;">
+    <option value="1">on</option>
+    <option value="0">off</option>
+  </select>
+  <label for="addSchedulesTue">Tue:</label>
+  <select id="addSchedulesTue" style="width: 60px;">
+    <option value="1">on</option>
+    <option value="0">off</option>
+  </select>
+  <label for="addSchedulesWed">Wed:</label>
+  <select id="addSchedulesWed" style="width: 60px;">
+    <option value="1">on</option>
+    <option value="0">off</option>
+  </select>
+  <label for="addSchedulesThu">Thu:</label>
+  <select id="addSchedulesThu" style="width: 60px;">
+    <option value="1">on</option>
+    <option value="0">off</option>
+  </select>
+  <label for="addSchedulesFri">Fri:</label>
+  <select id="addSchedulesFri" style="width: 60px;">
+    <option value="1">on</option>
+    <option value="0">off</option>
+  </select>
+  <label for="addSchedulesSat">Sat:</label>
+  <select id="addSchedulesSat" style="width: 60px;">
+    <option value="1">on</option>
+    <option value="0">off</option>
+  </select>
+  <label for="addSchedulesSun">Sun:</label>
+  <select id="addSchedulesSun" style="width: 60px;">
+    <option value="1">on</option>
+    <option value="0">off</option>
+  </select>
+  <br>
+  <button type="button" onclick="addSchedules()">Add</button>
+  <br>
+  <span style="display: none;" id="addSchedulesStatus"></span>
+  <br>
+  <table>
+    <th>ID</th><th>Relay ID</th><th>Action</th><th>Start</th><th>End</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
+    <tbody id="schedules-data"></tbody>
+  </table>
 </body>
 
 <script>
@@ -186,18 +245,6 @@
     container.innerHTML = html;
   }
 
-  async function swUpdateRelayIdForAdd() {
-    let relays = await getRelays();
-    let html = '';
-    relays.forEach(relay => {
-        let htmlSegment = `<option value="${relay.relay}">${relay.relay}</option>`;
-        html += htmlSegment;
-    });
-
-    let container = document.getElementById('addSwitchRID');
-    container.innerHTML = html;
-  }
-
   async function addSwitchRes(relay_id, mode, action) {
     let url = '/switches/add';
     data = JSON.stringify({"relay_id": parseInt(relay_id), "mode": parseInt(mode), "action": parseInt(action)})
@@ -253,9 +300,139 @@
     switchTable()
   }
 
+  //Schedules
+  async function getSchedules() {
+    let url = '/schedules';
+    try {
+        let res = await fetch(url);
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+  }
+
+  async function scheduleTable() {
+    let schedules = await getSchedules();
+    let html = '';
+    schedules.forEach(schedule => {
+        let htmlSegment = `<tr>
+                            <td>${schedule.id}</td>
+                            <td>${schedule.relay_id}</td>
+                            <td>${schedule.action}</td>
+                            <td>${schedule.start}</td>
+                            <td>${schedule.end}</td>
+                            <td>${schedule.mon}</td>
+                            <td>${schedule.tue}</td>
+                            <td>${schedule.wed}</td>
+                            <td>${schedule.thu}</td>
+                            <td>${schedule.fri}</td>
+                            <td>${schedule.sat}</td>
+                            <td>${schedule.sun}</td>
+                            <td><button type="button" onclick="removeSchedule(${schedule.id})">Remove</button></td>
+                          </tr>`;
+
+        html += htmlSegment;
+    });
+
+    let container = document.getElementById('schedules-data');
+    container.innerHTML = html;
+  }
+
+  async function addScheduleRes(relay_id, action, start, end, mon, tue, wed, thu, fri, sat, sun) {
+    let url = '/schedules/add';
+    data = JSON.stringify({
+      "relay_id": parseInt(relay_id),
+      "action": parseInt(action),
+      "start": start,
+      "end": end,
+      "mon": parseInt(mon),
+      "tue": parseInt(tue),
+      "wed": parseInt(wed),
+      "thu": parseInt(thu),
+      "fri": parseInt(fri),
+      "sat": parseInt(sat),
+      "sun": parseInt(sun)
+    })
+    try {
+        let res = await fetch(url, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: data
+        });
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+  }
+
+  async function addSchedules() {
+    let relay_id = input = document.getElementById("addSchedulesRID").value;
+    let action = input = document.getElementById("addSchedulesAction").value;
+    let start = input = document.getElementById("addSchedulesStart").value;
+    let end = input = document.getElementById("addSchedulesEnd").value;
+    let mon = input = document.getElementById("addSchedulesMon").value;
+    let tue = input = document.getElementById("addSchedulesTue").value;
+    let wed = input = document.getElementById("addSchedulesWed").value;
+    let thu = input = document.getElementById("addSchedulesThu").value;
+    let fri = input = document.getElementById("addSchedulesFri").value;
+    let sat = input = document.getElementById("addSchedulesSat").value;
+    let sun = input = document.getElementById("addSchedulesSun").value;
+
+    let add = await addScheduleRes(relay_id, action, start, end, mon, tue, wed, thu, fri, sat, sun);
+    
+    if (add.status == "add") {
+      document.getElementById("addSchedulesStatus").style = "color: green;";
+      document.getElementById("addSchedulesStatus").innerHTML = ` Added Switch ID: ${add.id}`;
+    }
+
+    scheduleTable()
+  }
+
+  async function removeScheduleRes(id) {
+    let url = `/schedules/delete/${id}`;
+    try {
+        let res = await fetch(url, {
+          method: 'DELETE',
+          headers: {'Content-Type': 'application/json'}
+        });
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+  }
+
+  async function removeSchedule(schedule_id) {
+    
+    let remove = await removeScheduleRes(schedule_id);
+    
+    if (remove.status == "delete") {
+      document.getElementById("addSchedulesStatus").style = "color: red;";
+      document.getElementById("addSchedulesStatus").innerHTML = ` Schedule ID: ${remove.id} removed`;
+    }
+
+    scheduleTable()
+  }
+
+  // Misc
+  async function UpdateRelayIdForAdd() {
+    let relays = await getRelays();
+    let html = '';
+    relays.forEach(relay => {
+        let htmlSegment = `<option value="${relay.relay}">${relay.relay}</option>`;
+        html += htmlSegment;
+    });
+
+    let switches = document.getElementById('addSwitchRID');
+    switches.innerHTML = html;
+
+    let schedules = document.getElementById('addSchedulesRID');
+    schedules.innerHTML = html;
+  }
+
   relayTable()
   switchTable()
-  swUpdateRelayIdForAdd()
+  scheduleTable()
+  UpdateRelayIdForAdd()
 
 </script>
 </html>
