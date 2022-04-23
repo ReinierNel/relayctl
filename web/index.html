@@ -81,48 +81,12 @@
   <label for="addSchedulesEnd">End Time:</label>
   <input type="time" id="addSchedulesEnd" style="width: 80px;">
   <br>
-  <label for="addSchedulesMon">Mon:</label>
-  <select id="addSchedulesMon" style="width: 60px;">
-    <option value="1">on</option>
-    <option value="0">off</option>
-  </select>
-  <label for="addSchedulesTue">Tue:</label>
-  <select id="addSchedulesTue" style="width: 60px;">
-    <option value="1">on</option>
-    <option value="0">off</option>
-  </select>
-  <label for="addSchedulesWed">Wed:</label>
-  <select id="addSchedulesWed" style="width: 60px;">
-    <option value="1">on</option>
-    <option value="0">off</option>
-  </select>
-  <label for="addSchedulesThu">Thu:</label>
-  <select id="addSchedulesThu" style="width: 60px;">
-    <option value="1">on</option>
-    <option value="0">off</option>
-  </select>
-  <label for="addSchedulesFri">Fri:</label>
-  <select id="addSchedulesFri" style="width: 60px;">
-    <option value="1">on</option>
-    <option value="0">off</option>
-  </select>
-  <label for="addSchedulesSat">Sat:</label>
-  <select id="addSchedulesSat" style="width: 60px;">
-    <option value="1">on</option>
-    <option value="0">off</option>
-  </select>
-  <label for="addSchedulesSun">Sun:</label>
-  <select id="addSchedulesSun" style="width: 60px;">
-    <option value="1">on</option>
-    <option value="0">off</option>
-  </select>
-  <br>
   <button type="button" onclick="addSchedules()">Add</button>
   <br>
   <span style="display: none;" id="addSchedulesStatus"></span>
   <br>
   <table>
-    <th>ID</th><th>Relay ID</th><th>Action</th><th>Start</th><th>End</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
+    <th>ID</th><th>Relay ID</th><th>Action</th><th>Start</th><th>End</th><th>Remove</th>
     <tbody id="schedules-data"></tbody>
   </table>
 </body>
@@ -304,13 +268,6 @@
                             <td>${schedule.action}</td>
                             <td>${schedule.start}</td>
                             <td>${schedule.end}</td>
-                            <td>${schedule.mon}</td>
-                            <td>${schedule.tue}</td>
-                            <td>${schedule.wed}</td>
-                            <td>${schedule.thu}</td>
-                            <td>${schedule.fri}</td>
-                            <td>${schedule.sat}</td>
-                            <td>${schedule.sun}</td>
                             <td><button type="button" onclick="removeSchedule(${schedule.id})">Remove</button></td>
                           </tr>`;
 
@@ -326,26 +283,12 @@
     let action = input = document.getElementById("addSchedulesAction").value;
     let start = input = document.getElementById("addSchedulesStart").value;
     let end = input = document.getElementById("addSchedulesEnd").value;
-    let mon = input = document.getElementById("addSchedulesMon").value;
-    let tue = input = document.getElementById("addSchedulesTue").value;
-    let wed = input = document.getElementById("addSchedulesWed").value;
-    let thu = input = document.getElementById("addSchedulesThu").value;
-    let fri = input = document.getElementById("addSchedulesFri").value;
-    let sat = input = document.getElementById("addSchedulesSat").value;
-    let sun = input = document.getElementById("addSchedulesSun").value;
 
     let add = await apiAdd('/schedules/add', {
       "relay_id": parseInt(relay_id),
       "action": parseInt(action),
       "start": start,
-      "end": end,
-      "mon": parseInt(mon),
-      "tue": parseInt(tue),
-      "wed": parseInt(wed),
-      "thu": parseInt(thu),
-      "fri": parseInt(fri),
-      "sat": parseInt(sat),
-      "sun": parseInt(sun)
+      "end": end
     });
     
     if (add.status == "add") {

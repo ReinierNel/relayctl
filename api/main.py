@@ -79,7 +79,7 @@ def fetch_switches():
                 try:
                     formated["status"] = GPIO.input(format_switch_mappings)
                 except:
-                    GPIO.setup(format_switch_mappings, GPIO.IN)
+                    GPIO.setup(format_switch_mappings, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
                     formated["status"] = GPIO.input(format_switch_mappings)
             if counter == 2:
                 formated["relay_id"] = format_switch_mappings
@@ -104,7 +104,7 @@ def fetch_switch(id):
     try:
         GPIO.input(data[1])
     except:
-        GPIO.setup(data[1])
+        GPIO.setup(data[1], GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
     return {"id": data[0], "gpio": data[1], "status": GPIO.input(data[1]),"relay_id": data[2], "mode": data[3], "action": data[4]}
 
 def add_switch(data):
@@ -129,7 +129,7 @@ def fetch_schedules():
     connect = sqlite3.connect(db_path)
     cursor = connect.cursor()
     data = []
-    for schedules_mapping in cursor.execute(''' SELECT id, relay_id, action, start, end, mon, tue, wed, thu, fri, sat, sun FROM schedules; '''):
+    for schedules_mapping in cursor.execute(''' SELECT id, relay_id, action, start, end FROM schedules; '''):
         formated = {}
         counter = 0
         for format_schedules_mappings in schedules_mapping:
@@ -143,20 +143,6 @@ def fetch_schedules():
                 formated["start"] = format_schedules_mappings
             if counter == 4:
                 formated["end"] = format_schedules_mappings
-            if counter == 5:
-                formated["mon"] = format_schedules_mappings
-            if counter == 6:
-                formated["tue"] = format_schedules_mappings
-            if counter == 7:
-                formated["wed"] = format_schedules_mappings
-            if counter == 8:
-                formated["thu"] = format_schedules_mappings
-            if counter == 9:
-                formated["fri"] = format_schedules_mappings
-            if counter == 10:
-                formated["sat"] = format_schedules_mappings
-            if counter == 11:
-                formated["sun"] = format_schedules_mappings
             counter = counter + 1
         data.append(formated)
     connect.commit()
@@ -166,7 +152,7 @@ def fetch_schedules():
 def add_schedule(data):
     connect = sqlite3.connect(db_path)
     cursor = connect.cursor()
-    sql = ''' INSERT into schedules (relay_id, action, start, end, mon, tue, wed, thu, fri, sat, sun) VALUES (?,?,?,?,?,?,?,?,?,?,?); '''
+    sql = ''' INSERT into schedules (relay_id, action, start, end) VALUES (?,?,?,?); '''
     cursor.execute(sql, data)
     schedule_id = cursor.lastrowid
     connect.commit()
@@ -200,13 +186,6 @@ class Schedule(BaseModel):
     action: int
     start: str
     end: str
-    mon: int
-    tue: int
-    wed: int
-    thu: int
-    fri: int
-    sat: int
-    sun: int
 
 # init relays
 for init_relay in fetch_relays():
@@ -214,7 +193,7 @@ for init_relay in fetch_relays():
 
 # init switches
 for init_switches in fetch_switches():
-    GPIO.setup(init_switches["gpio"], GPIO.IN)
+    GPIO.setup(init_switches["gpio"], GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 app = FastAPI()
 
@@ -283,14 +262,7 @@ def schedule_add(schedule: Schedule):
         schedule.relay_id,
         schedule.action,
         schedule.start,
-        schedule.end,
-        schedule.mon,
-        schedule.tue,
-        schedule.wed,
-        schedule.thu,
-        schedule.fri,
-        schedule.sat,
-        schedule.sun
+        schedule.end
     ))
     return {"id" : new_schedule_id, "status": "add"}
 
