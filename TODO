@@ -1,0 +1,20 @@
+api:
+    - add friendly names for relays, switches and schedules
+    - add authentication via token
+web:
+    - make it more pretty
+
+cli:
+    - add config file support that contained the following
+        - api url setting
+        - auth settings
+
+daemon:
+    - create daemon to check schedules and switches 
+
+terraform:
+    - create terraform provider for api
+
+setup:
+    - complete setup scripts
+    - test setup scripts

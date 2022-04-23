@@ -5,39 +5,66 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>relayctl</title>
+  <style>
+
+    div.form {
+      width: 460px;
+      background-color: red;
+    }
+
+    div.form-lable {
+      width: 60px;
+    }
+
+    div.form-input {
+      width: 200px;
+    }
+
+    div.form-button {
+      width: 100px;
+    }
+
+    label.form {
+      background-color: aqua;
+    }
+
+    input.form {
+      background-color: cadetblue;
+    }
+  </style>
 </head>
 <body>
+
   <h1>Relays</h1>
-  <label for="addRelayGPIO">GPIO:</label>
-  <input type="number" id="addRelayGPIO" style="width: 60px;">
-  <button type="button" onclick="addRelay()">Add</button>
-  <br>
-  <span style="display: none;" id="addRelayStatus"></span>
-  <br>
+
+  <label class="form" for="addRelayGPIO">GPIO:</label>
+  <input class="form" type="number" id="addRelayGPIO">
+  <button class="form" type="button" onclick="addRelay()">Add</button><span style="display: none;" id="addRelayStatus"></span>
+  
   <table>
     <th>ID</th><th>GPIO</th><th>Status</th><th>Action</th><th>Remove</th>
     <tbody id="relays-data"></tbody>
   </table>
 
   <h1>Switches</h1>
+  <label class="form" for="addSwitchGPIO">GPIO:</label>
+  <input class="form" type="number" id="addSwitchGPIO"><br>
   <label for="addSwitchRID">Relay ID:</label>
-  <select id="addSwitchRID" style="width: 60px;"></select>
+  <select id="addSwitchRID" style="width: 60px;"></select><br>
   <label for="addSwitchMode">Mode:</label>
   <select id="addSwitchMode" style="width: 60px;">
     <option value="1">on</option>
     <option value="0">off</option>
-  </select>
+  </select><br>
   <label for="addSwitchAction">Action:</label>
   <select id="addSwitchAction" style="width: 60px;">
     <option value="1">on</option>
     <option value="0">off</option>
-  </select>
-  <button type="button" onclick="addSwitch()">Add</button>
-  <br>
-  <span style="display: none;" id="addSwitchStatus"></span>
+  </select><br>
+  <button type="button" onclick="addSwitch()">Add</button><span style="display: none;" id="addSwitchStatus"></span><br>
   <br>
   <table>
-    <th>ID</th><th>RELAY ID</th><th>Mode</th><th>Action</th><th>Remove</th>
+    <th>ID</th><th>GPIO</th><th>RELAY ID</th><th>Mode</th><th>Action</th><th>Status</th><th>Remove</th>
     <tbody id="switches-data"></tbody>
   </table>
 
@@ -173,6 +200,7 @@
     }
 
     relayTable()
+    UpdateRelayIdForAdd()
   }
 
   async function switchRelay(mode, id) {
@@ -207,6 +235,7 @@
     }
 
     relayTable()
+    UpdateRelayIdForAdd()
   }
 
   // Switches Functions
@@ -216,9 +245,11 @@
     switches.forEach(sw => {
         let htmlSegment = `<tr>
                             <td>${sw.id}</td>
+                            <td>${sw.gpio}</td>
                             <td>${sw.relay_id}</td>
                             <td>${sw.mode}</td>
                             <td>${sw.action}</td>
+                            <td>${sw.status}</td>
                             <td><button type="button" onclick="removeSwitch(${sw.id})">Remove</button></td>
                           </tr>`;
 
@@ -233,11 +264,14 @@
     let relay_id = input = document.getElementById("addSwitchRID").value;
     let mode = input = document.getElementById("addSwitchMode").value;
     let action = input = document.getElementById("addSwitchAction").value;
+    let gpio = input = document.getElementById("addSwitchGPIO").value;
 
     let add = await apiAdd('/switches/add', {
       "relay_id": parseInt(relay_id),
       "mode": parseInt(mode),
-      "action": parseInt(action)});
+      "action": parseInt(action),
+      "gpio": parseInt(gpio)
+    });
     
     if (add.status == "add") {
       document.getElementById("addSwitchStatus").style = "color: green;";

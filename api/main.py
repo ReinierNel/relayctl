@@ -1,3 +1,4 @@
+import os
 import RPi.GPIO as GPIO
 import time
 import sqlite3
@@ -10,9 +11,8 @@ from pathlib import Path
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 
-
-db_path = "../db/relayctl.db"
-html_path = "../web"
+db_path = os.environ.get("RELAYCTL_DB_PATH")
+html_path = os.environ.get("RELAYCTL_HTML_PATH")
 
 def init_gpio(gpio):
     GPIO.setup(init_relay["gpio"], GPIO.OUT)
@@ -68,17 +68,24 @@ def fetch_switches():
     connect = sqlite3.connect(db_path)
     cursor = connect.cursor()
     data = []
-    for switch_mapping in cursor.execute(''' SELECT id, relay_id, mode, action FROM switches; '''):
+    for switch_mapping in cursor.execute(''' SELECT id, gpio, relay_id, mode, action FROM switches; '''):
         formated = {}
         counter = 0
         for format_switch_mappings in switch_mapping:
             if counter == 0:
                 formated["id"] = format_switch_mappings
             if counter == 1:
-                formated["relay_id"] = format_switch_mappings
+                formated["gpio"] = format_switch_mappings
+                try:
+                    formated["status"] = GPIO.input(format_switch_mappings)
+                except:
+                    GPIO.setup(format_switch_mappings, GPIO.IN)
+                    formated["status"] = GPIO.input(format_switch_mappings)
             if counter == 2:
-                formated["mode"] = format_switch_mappings
+                formated["relay_id"] = format_switch_mappings
             if counter == 3:
+                formated["mode"] = format_switch_mappings
+            if counter == 4:
                 formated["action"] = format_switch_mappings
             counter = counter + 1
         data.append(formated)
@@ -86,10 +93,24 @@ def fetch_switches():
     connect.close()
     return data
 
+def fetch_switch(id):
+    connect = sqlite3.connect(db_path)
+    cursor = connect.cursor()
+    sql = ''' SELECT id, gpio, relay_id, mode, action FROM switches WHERE id = ?; '''
+    cursor.execute(sql, (str(id),))
+    data = cursor.fetchone()
+    connect.commit()
+    connect.close()
+    try:
+        GPIO.input(data[1])
+    except:
+        GPIO.setup(data[1])
+    return {"id": data[0], "gpio": data[1], "status": GPIO.input(data[1]),"relay_id": data[2], "mode": data[3], "action": data[4]}
+
 def add_switch(data):
     connect = sqlite3.connect(db_path)
     cursor = connect.cursor()
-    sql = ''' INSERT into switches (id, relay_id, mode, action) VALUES (?,?,?,?); '''
+    sql = ''' INSERT into switches (id, gpio, relay_id, mode, action) VALUES (?,?,?,?,?); '''
     cursor.execute(sql, data)
     switch_id = cursor.lastrowid
     connect.commit()
@@ -163,12 +184,15 @@ def delete_schedule(id):
 class Relay(BaseModel):
     id: Optional[int]
     gpio: int
+    status: Optional[int]
 
 class Switch(BaseModel):
     id: Optional[int]
+    gpio: int
     relay_id: int
     mode: int
     action: int
+    status: Optional[int]
 
 class Schedule(BaseModel):
     id: Optional[int]
@@ -187,6 +211,10 @@ class Schedule(BaseModel):
 # init relays
 for init_relay in fetch_relays():
     GPIO.setup(init_relay["gpio"], GPIO.OUT)
+
+# init switches
+for init_switches in fetch_switches():
+    GPIO.setup(init_switches["gpio"], GPIO.IN)
 
 app = FastAPI()
 
@@ -225,14 +253,17 @@ def relay_off(id: int):
     return {"relay": id, "status": 0}
 
 # switches
-
 @app.get("/switches")
 def switches_status():
     return fetch_switches()
 
+@app.get("/switches/{id}")
+def switch_status(id: int):
+    return fetch_switch(id)
+
 @app.post("/switches/add")
 def switches_add(switch: Switch):
-    new_switch_id = add_switch((switch.id, switch.relay_id, switch.mode, switch.action))
+    new_switch_id = add_switch((switch.id, switch.gpio, switch.relay_id, switch.mode, switch.action))
     return {"id" : new_switch_id, "status": "add"}
 
 @app.delete("/switches/delete/{id}")
@@ -270,8 +301,7 @@ def schedules_delete(id: int):
 
 
 # web ui
-
-@app.get("/web/", response_class=HTMLResponse)
+@app.get("/", response_class=HTMLResponse)
 async def read_items():
     html = Path(f"{html_path}/index.html").read_text()
     return html
