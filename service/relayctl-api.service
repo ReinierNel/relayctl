@@ -1,0 +1,6 @@
+[Unit]
+Description=relayctl API service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/bash /etc/relayctl/start-api.sh

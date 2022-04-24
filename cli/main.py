@@ -105,7 +105,7 @@ def get_switches ():
 
 @app.command()
 def add_switch (relay_id: int, mode: int, action: int):
-    body = {"relay_id": relay_id,"mode": mode,"action": action}
+    body = {"relay_id": relay_id, "action": action}
     response = requests.post(f"http://127.0.0.1:8000/switches/add", json = body)
 
     if response.status_code == 200:
@@ -154,19 +154,12 @@ def get_schedules ():
 
 
 @app.command()
-def add_schedules (relay_id: int, action: int, start: str, end: str, mon: int, tue: int, wed: int, thu: int, fri: int, sat: int, sun: int):
+def add_schedules (relay_id: int, action: int, start: str, end: str):
     body = {
         "relay_id": relay_id,
         "action": action,
         "start": start,
-        "end": end,
-        "mon": mon,
-        "tue": tue,
-        "wed": wed,
-        "thu": thu,
-        "fri": fri,
-        "sat": sat,
-        "sun": sun
+        "end": end
     }
 
     response = requests.post(f"http://127.0.0.1:8000/schedules/add", json = body)

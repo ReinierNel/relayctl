@@ -32,7 +32,7 @@ def main():
         current_time =  datetime.now().hour*60 + datetime.now().minute
 
         for sw in switches():
-            if sw["status"] == sw["mode"]:
+            if sw["status"] == sw["action"]:
                 relay_on(sw["relay_id"])
             else:
                 relay_off(sw["relay_id"])

@@ -51,11 +51,6 @@
   <input class="form" type="number" id="addSwitchGPIO"><br>
   <label for="addSwitchRID">Relay ID:</label>
   <select id="addSwitchRID" style="width: 60px;"></select><br>
-  <label for="addSwitchMode">Mode:</label>
-  <select id="addSwitchMode" style="width: 60px;">
-    <option value="1">on</option>
-    <option value="0">off</option>
-  </select><br>
   <label for="addSwitchAction">Action:</label>
   <select id="addSwitchAction" style="width: 60px;">
     <option value="1">on</option>
@@ -64,7 +59,7 @@
   <button type="button" onclick="addSwitch()">Add</button><span style="display: none;" id="addSwitchStatus"></span><br>
   <br>
   <table>
-    <th>ID</th><th>GPIO</th><th>RELAY ID</th><th>Mode</th><th>Action</th><th>Status</th><th>Remove</th>
+    <th>ID</th><th>GPIO</th><th>RELAY ID</th><th>Action</th><th>Status</th><th>Remove</th>
     <tbody id="switches-data"></tbody>
   </table>
 
@@ -211,7 +206,6 @@
                             <td>${sw.id}</td>
                             <td>${sw.gpio}</td>
                             <td>${sw.relay_id}</td>
-                            <td>${sw.mode}</td>
                             <td>${sw.action}</td>
                             <td>${sw.status}</td>
                             <td><button type="button" onclick="removeSwitch(${sw.id})">Remove</button></td>

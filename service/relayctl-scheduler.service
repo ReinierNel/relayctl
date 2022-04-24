@@ -1,0 +1,6 @@
+[Unit]
+Description=relayctl scheduler service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python /etc/relayctl/service/main.py

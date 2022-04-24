@@ -68,7 +68,7 @@ def fetch_switches():
     connect = sqlite3.connect(db_path)
     cursor = connect.cursor()
     data = []
-    for switch_mapping in cursor.execute(''' SELECT id, gpio, relay_id, mode, action FROM switches; '''):
+    for switch_mapping in cursor.execute(''' SELECT id, gpio, relay_id, action FROM switches; '''):
         formated = {}
         counter = 0
         for format_switch_mappings in switch_mapping:
@@ -84,8 +84,6 @@ def fetch_switches():
             if counter == 2:
                 formated["relay_id"] = format_switch_mappings
             if counter == 3:
-                formated["mode"] = format_switch_mappings
-            if counter == 4:
                 formated["action"] = format_switch_mappings
             counter = counter + 1
         data.append(formated)
@@ -96,7 +94,7 @@ def fetch_switches():
 def fetch_switch(id):
     connect = sqlite3.connect(db_path)
     cursor = connect.cursor()
-    sql = ''' SELECT id, gpio, relay_id, mode, action FROM switches WHERE id = ?; '''
+    sql = ''' SELECT id, gpio, relay_id, action FROM switches WHERE id = ?; '''
     cursor.execute(sql, (str(id),))
     data = cursor.fetchone()
     connect.commit()
@@ -110,7 +108,7 @@ def fetch_switch(id):
 def add_switch(data):
     connect = sqlite3.connect(db_path)
     cursor = connect.cursor()
-    sql = ''' INSERT into switches (id, gpio, relay_id, mode, action) VALUES (?,?,?,?,?); '''
+    sql = ''' INSERT into switches (id, gpio, relay_id, action) VALUES (?,?,?,?); '''
     cursor.execute(sql, data)
     switch_id = cursor.lastrowid
     connect.commit()
@@ -176,7 +174,6 @@ class Switch(BaseModel):
     id: Optional[int]
     gpio: int
     relay_id: int
-    mode: int
     action: int
     status: Optional[int]
 
@@ -242,7 +239,7 @@ def switch_status(id: int):
 
 @app.post("/switches/add")
 def switches_add(switch: Switch):
-    new_switch_id = add_switch((switch.id, switch.gpio, switch.relay_id, switch.mode, switch.action))
+    new_switch_id = add_switch((switch.id, switch.gpio, switch.relay_id, switch.action))
     return {"id" : new_switch_id, "status": "add"}
 
 @app.delete("/switches/delete/{id}")
