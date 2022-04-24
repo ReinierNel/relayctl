@@ -22,5 +22,5 @@ sudo chmod +x /usr/bin/relayctl
 sudo docker build /etc/relayctl -t relayctl:1.0.0
 
 # service
-chmod +x /etc/relayctl/api/start.sh
+sudo chmod +x /etc/relayctl/api/start.sh
 sudo /etc/relayctl/start-api.sh
