@@ -1,6 +1,5 @@
 import os
 import RPi.GPIO as GPIO
-import time
 import sqlite3
 from typing import Optional
 from fastapi import FastAPI
