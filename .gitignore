@@ -3,3 +3,7 @@
 *.swp
 *__pycache__
 *.db
+*.terraform
+*terraform.tfstate
+*terraform.tfstate.backup
+*.terraform.lock.hcl
