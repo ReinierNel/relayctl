@@ -3,16 +3,13 @@
 # install deps
 sudo apt update
 sudo apt upgrade -y
-sudo apt install sqlite3 git docker.io
-
-#pip install fastapi
-#pip install "uvicorn[standard]"
-pip install typer
-pip install tabulate
-#pip install daemonize
+sudo apt install -y sqlite3 git docker.io
 
 # clone files
 sudo git clone -b 1.0.0 https://github.com/ReinierNel/relayctl.git /etc/relayctl
+
+# install cli deps
+pip install --no-cache-dir --upgrade -r /etc/relayctl/cli/requirements.txt
 
 # setup db
 sudo python /etc/relayctl/db/setup.py
@@ -23,3 +20,7 @@ sudo chmod +x /usr/bin/relayctl
 
 # start services
 sudo docker build /etc/relayctl -t relayctl:1.0.0
+
+# service
+chmod +x /etc/relayctl/start.sh
+sudo /etc/relayctl/start-api.sh

@@ -48,7 +48,7 @@ def main():
                     relay_off(sch["relay_id"])
 
         # set sleep to debug output with 
-        # use ps -aux | grep main.py | grep -v grep | cut -d ' ' -f 9 | xargs strace -e write -p
+        # use ps -aux | grep scheduler.py | grep -v grep | cut -d ' ' -f 9 | xargs strace -e write -p
         # to see output
         sleep(0.2)
 

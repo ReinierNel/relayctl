@@ -2,3 +2,4 @@ fastapi
 uvicorn
 rpi.gpio
 daemonize
+requests
